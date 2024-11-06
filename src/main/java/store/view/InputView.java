@@ -20,4 +20,10 @@ public class InputView {
         return inputParser.parseProducts(input);
     }
 
+    public String readAnswer() {
+        String input = Console.readLine();
+        inputValidator.validateAnswer(input);
+        return input;
+    }
+
 }

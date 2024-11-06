@@ -13,11 +13,11 @@ public class ProductDTO {
         return new ProductDTO(name, count);
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public int getCount(){
+    public int getCount() {
         return count;
     }
 }

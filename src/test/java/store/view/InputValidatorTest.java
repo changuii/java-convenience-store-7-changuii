@@ -26,7 +26,23 @@ public class InputValidatorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"[김치-1]", "[김치-2],[참치-3]", "[김치-2],[참치-3],[꽁치-56213]"})
-    void 올바른_형식의_상품들이_입력으로_들어오면_예외가_발생하지_않는다(String products){
+    void 올바른_형식의_상품들이_입력으로_들어오면_예외가_발생하지_않는다(String products) {
         inputValidator.validateProducts(products);
     }
+
+    @ParameterizedTest
+    @EmptySource
+    @ValueSource(strings = {"Y ", "N ", " Y", " N", "A", "[", "]", "-", "W", "0", "q", "n", "y"})
+    void Y혹은N_외의_입력이_들어오면_예외가_발생한다(String answer) {
+        assertThatThrownBy(() -> inputValidator.validateAnswer(answer))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining(ErrorMessage.INVALID_FORMAT.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Y", "N"})
+    void Y혹은N이_입력으로_들어오면_예외가_발생하지_않는다(String answer) {
+        inputValidator.validateAnswer(answer);
+    }
+
 }

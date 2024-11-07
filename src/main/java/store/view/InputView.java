@@ -2,7 +2,7 @@ package store.view;
 
 import camp.nextstep.edu.missionutils.Console;
 import java.util.List;
-import store.dto.ProductDTO;
+import store.dto.PurchaseProductDTO;
 
 public class InputView {
 
@@ -14,7 +14,7 @@ public class InputView {
         this.inputParser = inputParser;
     }
 
-    public List<ProductDTO> readProducts() {
+    public List<PurchaseProductDTO> readProducts() {
         String input = Console.readLine();
         inputValidator.validateProducts(input);
         return inputParser.parseProducts(input);

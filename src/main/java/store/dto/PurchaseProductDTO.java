@@ -1,16 +1,16 @@
 package store.dto;
 
-public class ProductDTO {
+public class PurchaseProductDTO {
     private final String name;
     private final int count;
 
-    private ProductDTO(final String name, final int count) {
+    private PurchaseProductDTO(final String name, final int count) {
         this.name = name;
         this.count = count;
     }
 
-    public static ProductDTO of(final String name, final int count) {
-        return new ProductDTO(name, count);
+    public static PurchaseProductDTO of(final String name, final int count) {
+        return new PurchaseProductDTO(name, count);
     }
 
     public String getName() {

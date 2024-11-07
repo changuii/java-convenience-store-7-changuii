@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import store.dto.ProductDTO;
+import store.dto.PurchaseProductDTO;
 import store.enums.ErrorMessage;
 
 public class InputParserTest {
@@ -23,14 +23,14 @@ public class InputParserTest {
     private static Stream<Arguments> provideProductsAndParsingProducts() {
         return Stream.of(
                 Arguments.of("[감자-1]",
-                        List.of(ProductDTO.of("감자", 1))),
+                        List.of(PurchaseProductDTO.of("감자", 1))),
                 Arguments.of("[감자-1],[김치-1]",
-                        List.of(ProductDTO.of("감자", 1),
-                                ProductDTO.of("김치", 1))),
+                        List.of(PurchaseProductDTO.of("감자", 1),
+                                PurchaseProductDTO.of("김치", 1))),
                 Arguments.of("[감자-1],[김치-2],[꽁치-3]",
-                        List.of(ProductDTO.of("감자", 1),
-                                ProductDTO.of("김치", 2),
-                                ProductDTO.of("꽁치", 3))));
+                        List.of(PurchaseProductDTO.of("감자", 1),
+                                PurchaseProductDTO.of("김치", 2),
+                                PurchaseProductDTO.of("꽁치", 3))));
     }
 
     @ParameterizedTest
@@ -43,8 +43,8 @@ public class InputParserTest {
 
     @ParameterizedTest
     @MethodSource("provideProductsAndParsingProducts")
-    void 상품들을_나타내는_문자열을_상품DTO_리스트로_파싱한다(String products, List<ProductDTO> expectedProducts) {
-        List<ProductDTO> actualProducts = inputParser.parseProducts(products);
+    void 상품들을_나타내는_문자열을_상품DTO_리스트로_파싱한다(String products, List<PurchaseProductDTO> expectedProducts) {
+        List<PurchaseProductDTO> actualProducts = inputParser.parseProducts(products);
 
         assertThat(actualProducts)
                 .usingRecursiveComparison()

@@ -12,6 +12,7 @@ public class StoreController {
     public StoreController(final InputView inputView, final ConvenienceStoreGnerator ConvenienceStoreGnerator) {
         this.inputView = inputView;
         this.convenienceStoreGnerator = ConvenienceStoreGnerator;
+
     }
 
 

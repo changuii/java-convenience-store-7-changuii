@@ -175,9 +175,9 @@ PromotionGenerator
   - [x] 이벤트 수량이 int type의 범위를 벗어난 경우
 
 ProductGenerator
-- [ ] 파일의 형식을 지키지 않은 경우
-  - [ ] 상품 형식이 잘못된 경우
-  - [ ] 재고 수량이 int type의 범위를 벗어난 경우
-  - [ ] 상품 가격이 int type의 범위를 벗어난 경우
-- [ ] 존재하지 않는 Promotion을 가진 경우
+- [x] 파일의 형식을 지키지 않은 경우
+  - [x] 상품 형식이 잘못된 경우
+  - [x] 재고 수량이 int type의 범위를 벗어난 경우
+  - [x] 상품 가격이 int type의 범위를 벗어난 경우
+- [x] 존재하지 않는 Promotion을 가진 경우
    

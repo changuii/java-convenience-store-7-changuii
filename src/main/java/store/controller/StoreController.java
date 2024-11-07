@@ -3,14 +3,18 @@ package store.controller;
 import store.component.ConvenienceStoreGnerator;
 import store.domain.ConvenienceStore;
 import store.view.InputView;
+import store.view.OutputView;
 
 public class StoreController {
 
     private final InputView inputView;
+    private final OutputView outputView;
     private final ConvenienceStoreGnerator convenienceStoreGnerator;
 
-    public StoreController(final InputView inputView, final ConvenienceStoreGnerator ConvenienceStoreGnerator) {
+    public StoreController(final InputView inputView, final OutputView outputView,
+                           final ConvenienceStoreGnerator ConvenienceStoreGnerator) {
         this.inputView = inputView;
+        this.outputView = outputView;
         this.convenienceStoreGnerator = ConvenienceStoreGnerator;
 
     }
@@ -18,6 +22,10 @@ public class StoreController {
 
     public void run() {
         ConvenienceStore convenienceStore = convenienceStoreGnerator.generate();
+    }
+
+    private void requestConvenienceStore(){
+        outputView.printWelcomeMessage();
     }
 
 }

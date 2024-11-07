@@ -13,6 +13,7 @@ public class OutputView {
     private static final String PRODUCT_QUANTITY_FORMAT = "%d개";
     private static final String PRODUCT_QUANTITY_ZERO = "재고 없음";
     private static final DecimalFormat DECIMAL_FORMATTER = new DecimalFormat("###,###,###,###");
+    private static final String CONTINUE_CHECKOUT_MESSAGE = "감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)";
 
 
     public void printWelcomeMessage() {
@@ -23,7 +24,14 @@ public class OutputView {
         System.out.println(INTRODUCE_STORE_PRODUCTS_MESSAGE);
         printLineBreak();
         printStoreProducts(convenienceStoreDTO);
+        printLineBreak();
     }
+
+    public void printRequestContinueCheckoutMessage(){
+        System.out.println(CONTINUE_CHECKOUT_MESSAGE);
+    }
+
+
 
     private void printStoreProducts(ConvenienceStoreDTO convenienceStoreDTO) {
         Map<String, ProductDTO> products = convenienceStoreDTO.getProducts();
@@ -55,7 +63,7 @@ public class OutputView {
         return String.format(PRODUCT_QUANTITY_FORMAT, quantity);
     }
 
-    private void printLineBreak() {
+    public void printLineBreak() {
         System.out.println();
     }
 

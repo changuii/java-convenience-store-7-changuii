@@ -172,7 +172,7 @@ PromotionGenerator
 - [x] 파일의 형식을 지키지 않은 경우
   - [x] 날짜의 형식이 잘못된 경우
   - [x] 프로모션의 형식이 잘못된 경우
-  - [ ] 이벤트 수량이 int type의 범위를 벗어난 경우
+  - [x] 이벤트 수량이 int type의 범위를 벗어난 경우
 
 ProductGenerator
 - [ ] 파일의 형식을 지키지 않은 경우

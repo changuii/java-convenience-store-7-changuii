@@ -1,7 +1,5 @@
 package store.domain;
 
-import java.util.Map;
-import java.util.Optional;
 
 public class Promotion {
     private final String promotionName;
@@ -18,8 +16,8 @@ public class Promotion {
         return new Promotion(promotionName, purchaseCount, dateRange);
     }
 
-    public void registerPromotion(final Map<String, Optional<Promotion>> promotions) {
-        promotions.put(promotionName, Optional.of(this));
+    public String getPromotionName() {
+        return promotionName;
     }
 
     @Override

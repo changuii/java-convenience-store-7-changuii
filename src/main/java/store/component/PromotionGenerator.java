@@ -21,12 +21,12 @@ public class PromotionGenerator {
         return promotions;
     }
 
-    private void validatePromotionLines(final List<String> promotionLines){
+    private void validatePromotionLines(final List<String> promotionLines) {
         promotionLines.forEach(this::validatePromotionLineFormat);
     }
 
-    private void validatePromotionLineFormat(final String promotionLine){
-        if(!promotionLine.matches(StoreConfig.PROMOTION_VALUE_REGEX.getValue())){
+    private void validatePromotionLineFormat(final String promotionLine) {
+        if (!promotionLine.matches(StoreConfig.PROMOTION_VALUE_REGEX.getValue())) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
         }
     }
@@ -34,7 +34,7 @@ public class PromotionGenerator {
     private void registerPromotions(Map<String, Optional<Promotion>> promotions, List<String> promotionLines) {
         promotionLines.stream()
                 .map(this::parsePromotion)
-                .forEach(promotion -> promotion.registerPromotion(promotions));
+                .forEach(promotion -> promotions.put(promotion.getPromotionName(), Optional.of(promotion)));
     }
 
     private Map<String, Optional<Promotion>> initPromotions() {
@@ -51,7 +51,7 @@ public class PromotionGenerator {
             DateRange dateRange = parseDateRange(column[3], column[4]);
 
             return Promotion.of(promotionName, purchaseCount, dateRange);
-        } catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
         }
     }
@@ -61,7 +61,7 @@ public class PromotionGenerator {
             LocalDate start = LocalDate.parse(startDate);
             LocalDate end = LocalDate.parse(endDate);
             return DateRange.of(start, end);
-        } catch (DateTimeParseException e){
+        } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
         }
     }

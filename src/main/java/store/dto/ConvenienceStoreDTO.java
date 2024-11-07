@@ -1,27 +1,19 @@
 package store.dto;
 
-import java.util.Map;
+import java.util.List;
 
 public class ConvenienceStoreDTO {
-    private final Map<String, ProductDTO> products;
-    private final Map<String, ProductDTO> promotionProducts;
+    private final List<ProductDTO> productInventory;
 
-    private ConvenienceStoreDTO(final Map<String, ProductDTO> products,
-                                final Map<String, ProductDTO> promotionProducts) {
-        this.products = products;
-        this.promotionProducts = promotionProducts;
+    private ConvenienceStoreDTO(final List<ProductDTO> productInventory) {
+        this.productInventory = productInventory;
     }
 
-    public static ConvenienceStoreDTO of(final Map<String, ProductDTO> products,
-                                         final Map<String, ProductDTO> promotionProducts) {
-        return new ConvenienceStoreDTO(products, promotionProducts);
+    public static ConvenienceStoreDTO from(final List<ProductDTO> productInventory) {
+        return new ConvenienceStoreDTO(productInventory);
     }
 
-    public Map<String, ProductDTO> getProducts() {
-        return products;
-    }
-
-    public Map<String, ProductDTO> getPromotionProducts() {
-        return promotionProducts;
+    public List<ProductDTO> getProductInventory() {
+        return productInventory;
     }
 }

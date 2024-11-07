@@ -1,8 +1,6 @@
 package store.domain;
 
-import java.util.Map;
 import java.util.Optional;
-import store.dto.ProductDTO;
 
 public class Product {
     private final String name;
@@ -22,7 +20,7 @@ public class Product {
         return new Product(name, price, quantity, promotion);
     }
 
-    public boolean isPromotionProduct(){
+    public boolean isPromotionProduct() {
         return promotion.isPresent();
     }
 
@@ -34,13 +32,12 @@ public class Product {
         return price;
     }
 
-    public ProductDTO toDTO() {
-        String promotionName = "";
-        if (promotion.isPresent()) {
-            promotionName = promotion.get().toString();
-        }
-        return ProductDTO.of(name, price, quantity, promotionName);
+    public int getQuantity() {
+        return quantity;
     }
 
+    public Optional<Promotion> getPromotion() {
+        return promotion;
+    }
 
 }

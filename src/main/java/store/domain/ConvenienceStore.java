@@ -1,9 +1,7 @@
 package store.domain;
 
-import java.util.LinkedHashMap;
+import java.util.Collections;
 import java.util.Map;
-import store.dto.ConvenienceStoreDTO;
-import store.dto.ProductDTO;
 
 public class ConvenienceStore {
     private final Map<String, Product> products;
@@ -19,23 +17,11 @@ public class ConvenienceStore {
         return new ConvenienceStore(products, promotionProducts);
     }
 
-
-    public ConvenienceStoreDTO toDTO() {
-        Map<String, ProductDTO> productDTOs = new LinkedHashMap<>();
-        Map<String, ProductDTO> promotionProductDTOs = new LinkedHashMap<>();
-
-        products.keySet().stream()
-                .forEach(productName -> registerProductDTO(productDTOs, promotionProductDTOs, productName));
-        return ConvenienceStoreDTO.of(productDTOs, promotionProductDTOs);
+    public Map<String, Product> getProducts() {
+        return Collections.unmodifiableMap(products);
     }
 
-    private void registerProductDTO(final Map<String, ProductDTO> productDTOs,
-                                    final Map<String, ProductDTO> promotionProductDTOs, String productName) {
-        productDTOs.put(productName, products.get(productName).toDTO());
-        if (promotionProducts.containsKey(productName)) {
-            promotionProductDTOs.put(productName, promotionProducts.get(productName).toDTO());
-        }
+    public Map<String, Product> getPromotionProducts() {
+        return Collections.unmodifiableMap(promotionProducts);
     }
-
-
 }

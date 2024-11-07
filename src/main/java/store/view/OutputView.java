@@ -1,7 +1,6 @@
 package store.view;
 
 import java.text.DecimalFormat;
-import java.util.Map;
 import store.dto.ConvenienceStoreDTO;
 import store.dto.ProductDTO;
 
@@ -20,36 +19,23 @@ public class OutputView {
         System.out.println(WELCOME_MESSAGE);
     }
 
-    public void printStoreIntroduce(ConvenienceStoreDTO convenienceStoreDTO) {
+    public void printStoreIntroduce(final ConvenienceStoreDTO convenienceStoreDTO) {
         System.out.println(INTRODUCE_STORE_PRODUCTS_MESSAGE);
         printLineBreak();
         printStoreProducts(convenienceStoreDTO);
         printLineBreak();
     }
 
-    public void printRequestContinueCheckoutMessage(){
+    public void printRequestContinueCheckoutMessage() {
         System.out.println(CONTINUE_CHECKOUT_MESSAGE);
     }
 
 
-
-    private void printStoreProducts(ConvenienceStoreDTO convenienceStoreDTO) {
-        Map<String, ProductDTO> products = convenienceStoreDTO.getProducts();
-        Map<String, ProductDTO> promotionProducts = convenienceStoreDTO.getPromotionProducts();
-
-        products.keySet().stream()
-                .forEach(productName -> printProducts(products, promotionProducts, productName));
+    private void printStoreProducts(final ConvenienceStoreDTO convenienceStoreDTO) {
+        convenienceStoreDTO.getProductInventory().forEach(this::printProduct);
     }
 
-    private void printProducts(final Map<String, ProductDTO> products,
-                               final Map<String, ProductDTO> promotionProducts, final String productName) {
-        if (promotionProducts.containsKey(productName)) {
-            printProduct(promotionProducts.get(productName));
-        }
-        printProduct(products.get(productName));
-    }
-
-    private void printProduct(ProductDTO productDTO) {
+    private void printProduct(final ProductDTO productDTO) {
         String price = DECIMAL_FORMATTER.format(productDTO.getPrice());
         String quantity = formatProductQuantity(productDTO.getQuantity());
         System.out.println(

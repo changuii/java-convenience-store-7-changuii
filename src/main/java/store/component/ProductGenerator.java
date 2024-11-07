@@ -17,7 +17,17 @@ public class ProductGenerator {
         validate(productLines);
         productLines.stream()
                 .map(productLine -> parseProduct(productLine, promotions))
-                .forEach(product -> product.registerProduct(products, promotionProducts));
+                .forEach(product -> registerProduct(product, products, promotionProducts));
+    }
+
+    private void registerProduct(final Product product, final Map<String, Product> products,
+                                 final Map<String, Product> promotionProducts) {
+        if (product.isPromotionProduct()) {
+            products.put(product.getName(), Product.of(product.getName(), product.getPrice(), 0, Optional.empty()));
+            promotionProducts.put(product.getName(), product);
+            return;
+        }
+        products.put(product.getName(), product);
     }
 
     private void validate(final List<String> productLines) {

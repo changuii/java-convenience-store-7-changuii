@@ -22,13 +22,16 @@ public class Product {
         return new Product(name, price, quantity, promotion);
     }
 
-    public void registerProduct(final Map<String, Product> products, final Map<String, Product> promotionProducts) {
-        Product product = this;
-        if (promotion.isPresent()) {
-            product = new Product(name, price, 0, Optional.empty());
-            promotionProducts.put(name, this);
-        }
-        products.put(name, product);
+    public boolean isPromotionProduct(){
+        return promotion.isPresent();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPrice() {
+        return price;
     }
 
     public ProductDTO toDTO() {

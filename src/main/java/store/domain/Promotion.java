@@ -18,7 +18,12 @@ public class Promotion {
         return new Promotion(promotionName, purchaseCount, dateRange);
     }
 
-    public void registerPromotion(Map<String, Optional<Promotion>> promotions) {
+    public void registerPromotion(final Map<String, Optional<Promotion>> promotions) {
         promotions.put(promotionName, Optional.of(this));
+    }
+
+    @Override
+    public String toString() {
+        return promotionName;
     }
 }

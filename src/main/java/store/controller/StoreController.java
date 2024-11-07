@@ -18,14 +18,14 @@ public class StoreController {
         this.convenienceStoreGnerator = ConvenienceStoreGnerator;
 
     }
-
-
     public void run() {
         ConvenienceStore convenienceStore = convenienceStoreGnerator.generate();
+        printConvenienceStore(convenienceStore);
     }
 
-    private void requestConvenienceStore(){
+    private void printConvenienceStore(ConvenienceStore convenienceStore){
         outputView.printWelcomeMessage();
+        outputView.printStoreIntroduce(convenienceStore.toDTO());
     }
 
 }

@@ -1,6 +1,7 @@
 package store.factory;
 
 import store.component.ConvenienceStoreGnerator;
+import store.component.DTOConverter;
 import store.component.FileParser;
 import store.component.ProductInventoryGenerator;
 import store.component.PromotionGenerator;
@@ -15,7 +16,7 @@ public abstract class StoreControllerFactory {
 
     public static StoreController create() {
         return new StoreController(createInputView(), createOutputView(), createConvenienceStoreGenerator(),
-                createRetryHandle());
+                createRetryHandle(), createDTOConverter());
     }
 
     private static InputView createInputView() {
@@ -27,10 +28,15 @@ public abstract class StoreControllerFactory {
     }
 
     private static ConvenienceStoreGnerator createConvenienceStoreGenerator() {
-        return new ConvenienceStoreGnerator(new FileParser(), new PromotionGenerator(), new ProductInventoryGenerator());
+        return new ConvenienceStoreGnerator(new FileParser(), new PromotionGenerator(),
+                new ProductInventoryGenerator());
     }
 
     private static RetryHandler createRetryHandle() {
         return new RetryHandler();
+    }
+
+    private static DTOConverter createDTOConverter() {
+        return new DTOConverter();
     }
 }

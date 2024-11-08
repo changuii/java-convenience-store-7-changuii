@@ -23,7 +23,7 @@ public class ConvenienceStoreGnerator {
     }
 
     public ConvenienceStoreService generate() {
-        return ConvenienceStoreService.from(generateProductInventory(generatePromotion()));
+        return ConvenienceStoreService.of(generateProductInventory(generatePromotion()), new TodayGenerator());
     }
 
     private Map<String, Optional<Promotion>> generatePromotion() {

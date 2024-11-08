@@ -1,7 +1,7 @@
 package store.domain;
 
+import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public class ProductInventory {
@@ -26,9 +26,10 @@ public class ProductInventory {
         return infos.containsKey(productName);
     }
 
-    public boolean isLessThanQuantity(final String productName, final int quantity) {
+    public boolean isLessThanQuantity(final String productName, final int quantity, final LocalDate today) {
         if (promotionQuantities.containsKey(productName)) {
-            return promotionQuantities.get(productName).isLessThanQuantity(quantity, this.quantities.get(productName));
+            return promotionQuantities.get(productName)
+                    .isLessThanQuantity(quantity, this.quantities.get(productName), today);
         }
         return this.quantities.get(productName).isLessThanQuantity(quantity);
     }

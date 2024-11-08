@@ -1,7 +1,7 @@
 package store.domain;
 
 
-import camp.nextstep.edu.missionutils.DateTimes;
+import java.time.LocalDate;
 
 public class Promotion {
     private final String promotionName;
@@ -18,8 +18,8 @@ public class Promotion {
         return new Promotion(promotionName, buyGet, dateRange);
     }
 
-    public boolean isValidNow() {
-        return dateRange.isInRangeNow(DateTimes.now().toLocalDate());
+    public boolean isValidNow(LocalDate today) {
+        return dateRange.isInRangeNow(today);
     }
 
     public String getPromotionName() {

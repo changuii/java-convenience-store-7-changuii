@@ -1,5 +1,7 @@
 package store.domain;
 
+import java.time.LocalDate;
+
 public class PromotionProductQuantity {
     private int quantity;
     private final Promotion promotion;
@@ -13,8 +15,9 @@ public class PromotionProductQuantity {
         return new PromotionProductQuantity(quantity, promotion);
     }
 
-    public boolean isLessThanQuantity(final int quantity, final ProductQuantity productQuantity){
-        if(promotion.isValidNow()){
+    public boolean isLessThanQuantity(final int quantity, final ProductQuantity productQuantity,
+                                      final LocalDate today) {
+        if (promotion.isValidNow(today)) {
             return productQuantity.isLessThanQuantity(quantity - this.quantity);
         }
         return productQuantity.isLessThanQuantity(quantity);

@@ -1,6 +1,5 @@
 package store.domain;
 
-import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDate;
 
 public class DateRange {
@@ -16,8 +15,7 @@ public class DateRange {
         return new DateRange(startDate, endDate);
     }
 
-    public boolean isInRangeNow() {
-        LocalDate today = DateTimes.now().toLocalDate();
+    public boolean isInRangeNow(LocalDate today) {
         return isGreaterThanStartDate(today) && isLessThanEndDate(today);
     }
 

@@ -39,7 +39,7 @@ public class StoreController {
 
     private boolean isTerminationCheckout() {
         outputView.printRequestContinueCheckoutMessage();
-        String answer = inputView.readAnswer();
+        String answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
         outputView.printLineBreak();
         if (answer.equals("Y")) {
             return false;

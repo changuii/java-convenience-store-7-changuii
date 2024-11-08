@@ -23,15 +23,19 @@ public class OutputView {
         System.out.println(WELCOME_MESSAGE);
     }
 
+    public void printRequestContinueCheckoutMessage() {
+        System.out.println(CONTINUE_CHECKOUT_MESSAGE);
+    }
+
+    public void printErrorMessage(IllegalArgumentException e) {
+        System.out.println(e.getMessage());
+    }
+
     public void printStoreIntroduce(final ProductInventoryDTO productInventoryDTO) {
         System.out.println(INTRODUCE_STORE_PRODUCTS_MESSAGE);
         printLineBreak();
         printStoreProducts(productInventoryDTO);
         printLineBreak();
-    }
-
-    public void printRequestContinueCheckoutMessage() {
-        System.out.println(CONTINUE_CHECKOUT_MESSAGE);
     }
 
 

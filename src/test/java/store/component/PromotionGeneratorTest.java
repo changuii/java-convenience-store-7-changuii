@@ -13,6 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import store.domain.BuyGet;
 import store.domain.DateRange;
 import store.domain.Promotion;
 import store.enums.ErrorMessage;
@@ -27,13 +28,13 @@ public class PromotionGeneratorTest {
     private static Stream<Arguments> proviedeReadLinesAndPromotions() {
         return Stream.of(
                 Arguments.of(List.of("탄산2+1,2,1,2024-01-01,2024-12-31"),
-                        Promotion.of("탄산2+1", 2,
+                        Promotion.of("탄산2+1", BuyGet.of(2, 1),
                                 DateRange.of(LocalDate.parse("2024-01-01"), LocalDate.parse("2024-12-31"))), "탄산2+1"),
                 Arguments.of(List.of("MD추천상품,1,1,2024-01-01,2024-12-31"),
-                        Promotion.of("MD추천상품", 1,
+                        Promotion.of("MD추천상품", BuyGet.of(1, 1),
                                 DateRange.of(LocalDate.parse("2024-01-01"), LocalDate.parse("2024-12-31"))), "MD추천상품"),
                 Arguments.of(List.of("반짝할인,1,1,2024-11-01,2024-11-30"),
-                        Promotion.of("반짝할인", 1,
+                        Promotion.of("반짝할인", BuyGet.of(1, 1),
                                 DateRange.of(LocalDate.parse("2024-11-01"), LocalDate.parse("2024-11-30"))), "반짝할인")
         );
     }
@@ -58,7 +59,7 @@ public class PromotionGeneratorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"10000000000", "100000000000", "1000000000000", "-1000000000000"})
-    void 프로모션_수량이_int의_범위를_벗어난_경우_예외가_발생한다(String input){
+    void 프로모션_수량이_int의_범위를_벗어난_경우_예외가_발생한다(String input) {
         String format = "탄산2+1,%s,1,2024-01-01,2024-12-31";
 
         assertThatThrownBy(() -> promotionGenerator.generate(List.of(String.format(format, input))))

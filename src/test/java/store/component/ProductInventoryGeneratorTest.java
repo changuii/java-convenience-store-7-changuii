@@ -15,6 +15,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import store.domain.BuyGet;
 import store.domain.DateRange;
 import store.domain.ProductInfo;
 import store.domain.ProductInventory;
@@ -51,7 +52,7 @@ public class ProductInventoryGeneratorTest {
 
     private static Promotion makePromotion(final String name) {
         DateRange dateRange = DateRange.of(LocalDate.parse("2023-11-01"), LocalDate.parse("2023-12-01"));
-        return Promotion.of(name, 10, dateRange);
+        return Promotion.of(name, BuyGet.of(1, 1), dateRange);
     }
 
     @BeforeEach

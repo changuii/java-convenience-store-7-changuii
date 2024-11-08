@@ -22,12 +22,13 @@ public class InputValidator {
         }
     }
 
-    public void validatePurchaseProductDTOs(List<PurchaseProductDTO> purchaseProductDTOs){
+    public void validatePurchaseProductDTOs(List<PurchaseProductDTO> purchaseProductDTOs) {
         validateDuplicationPurchaseProductDTOs(purchaseProductDTOs);
     }
 
-    private void validateDuplicationPurchaseProductDTOs(List<PurchaseProductDTO> purchaseProductDTOs){
-        if(purchaseProductDTOs.stream().map(PurchaseProductDTO::getName).count() != purchaseProductDTOs.size()){
+    private void validateDuplicationPurchaseProductDTOs(List<PurchaseProductDTO> purchaseProductDTOs) {
+        if (purchaseProductDTOs.stream().map(PurchaseProductDTO::getName).distinct().count()
+                != purchaseProductDTOs.size()) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FORMAT.getMessage());
         }
     }

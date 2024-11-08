@@ -2,7 +2,6 @@ package store.view;
 
 import java.text.DecimalFormat;
 import java.util.Map;
-import store.domain.PromotionProductQuantity;
 import store.dto.ProductInfoDTO;
 import store.dto.ProductInventoryDTO;
 import store.dto.ProductQuantityDTO;
@@ -16,6 +15,7 @@ public class OutputView {
     private static final String PRODUCT_QUANTITY_FORMAT = "%d개 ";
     private static final String PRODUCT_QUANTITY_ZERO = "재고 없음 ";
     private static final DecimalFormat DECIMAL_FORMATTER = new DecimalFormat("###,###,###,###");
+    private static final String PURCHASE_PRODUCTS_INPUT_MESSAGE = "구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])";
     private static final String CONTINUE_CHECKOUT_MESSAGE = "감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)";
 
 
@@ -38,6 +38,10 @@ public class OutputView {
         printLineBreak();
     }
 
+    public void printPurchaseProductsInputMessage(){
+        System.out.println(PURCHASE_PRODUCTS_INPUT_MESSAGE);
+    }
+
 
     private void printStoreProducts(final ProductInventoryDTO productInventoryDTO) {
         Map<String, ProductInfoDTO> infos = productInventoryDTO.getInfos();
@@ -45,17 +49,28 @@ public class OutputView {
         Map<String, PromotionProductQuantityDTO> promotionQuantities = productInventoryDTO.getPromotionQuantities();
 
         quantities.keySet().forEach(productName -> {
-            if (promotionQuantities.containsKey(productName)) {
-                printProductInfo(infos.get(productName));
-                printPromotionQuantity(promotionQuantities.get(productName));
-                printLineBreak();
-            }
-            printProductInfo(infos.get(productName));
-            printProductQuantity(quantities.get(productName));
-            printLineBreak();
+            printPromotionProduct(infos, promotionQuantities, productName);
+            printProduct(infos, quantities, productName);
         });
-
     }
+
+    private void printProduct(final Map<String, ProductInfoDTO> infos, final Map<String, ProductQuantityDTO> quantities,
+                              final String productName) {
+        printProductInfo(infos.get(productName));
+        printProductQuantity(quantities.get(productName));
+        printLineBreak();
+    }
+
+    private void printPromotionProduct(final Map<String, ProductInfoDTO> infos,
+                                       final Map<String, PromotionProductQuantityDTO> promotionQuantities,
+                                       final String productName) {
+        if (promotionQuantities.containsKey(productName)) {
+            printProductInfo(infos.get(productName));
+            printPromotionQuantity(promotionQuantities.get(productName));
+            printLineBreak();
+        }
+    }
+
 
     private void printPromotionQuantity(final PromotionProductQuantityDTO promotionProductQuantityDTO) {
         printProductQuantity(promotionProductQuantityDTO.getQuantity());

@@ -19,11 +19,11 @@ public class DateRange {
         return isGreaterThanStartDate(today) && isLessThanEndDate(today);
     }
 
-    private boolean isGreaterThanStartDate(LocalDate date) {
-        return startDate.isAfter(date) || startDate.equals(date);
+    private boolean isGreaterThanStartDate(LocalDate today) {
+        return startDate.isBefore(today) || startDate.equals(today);
     }
 
-    private boolean isLessThanEndDate(LocalDate date) {
-        return endDate.isBefore(date) || endDate.equals(date);
+    private boolean isLessThanEndDate(LocalDate today) {
+        return endDate.isAfter(today) || endDate.equals(today);
     }
 }

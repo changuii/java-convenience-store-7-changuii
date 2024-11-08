@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import store.domain.BuyGet;
 import store.domain.DateRange;
 import store.domain.Promotion;
 import store.enums.ErrorMessage;
@@ -47,10 +48,10 @@ public class PromotionGenerator {
         try {
             String[] column = promotion.split(StoreConfig.TABLE_ROW_DELIMITER.getValue());
             String promotionName = column[0];
-            int purchaseCount = parseInt(column[1]);
+            BuyGet buyGet = BuyGet.of(parseInt(column[1]), parseInt(column[2]));
             DateRange dateRange = parseDateRange(column[3], column[4]);
 
-            return Promotion.of(promotionName, purchaseCount, dateRange);
+            return Promotion.of(promotionName, buyGet, dateRange);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
         }

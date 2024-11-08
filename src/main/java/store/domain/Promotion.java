@@ -5,17 +5,17 @@ import camp.nextstep.edu.missionutils.DateTimes;
 
 public class Promotion {
     private final String promotionName;
-    private final int purchaseCount;
+    private final BuyGet buyGet;
     private final DateRange dateRange;
 
-    private Promotion(final String promotionName, final int purchaseCount, final DateRange dateRange) {
+    private Promotion(final String promotionName, final BuyGet buyGet, final DateRange dateRange) {
         this.promotionName = promotionName;
-        this.purchaseCount = purchaseCount;
+        this.buyGet = buyGet;
         this.dateRange = dateRange;
     }
 
-    public static Promotion of(final String promotionName, final int purchaseCount, final DateRange dateRange) {
-        return new Promotion(promotionName, purchaseCount, dateRange);
+    public static Promotion of(final String promotionName, final BuyGet buyGet, final DateRange dateRange) {
+        return new Promotion(promotionName, buyGet, dateRange);
     }
 
     public boolean isValidNow() {

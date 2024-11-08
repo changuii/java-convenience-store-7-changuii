@@ -4,7 +4,7 @@ package store.component;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import store.domain.ConvenienceStore;
+import store.service.ConvenienceStoreService;
 import store.domain.ProductInventory;
 import store.domain.Promotion;
 import store.enums.StoreConfig;
@@ -22,8 +22,8 @@ public class ConvenienceStoreGnerator {
         this.productInventoryGenerator = productInventoryGenerator;
     }
 
-    public ConvenienceStore generate() {
-        return ConvenienceStore.from(generateProductInventory(generatePromotion()));
+    public ConvenienceStoreService generate() {
+        return ConvenienceStoreService.from(generateProductInventory(generatePromotion()));
     }
 
     private Map<String, Optional<Promotion>> generatePromotion() {

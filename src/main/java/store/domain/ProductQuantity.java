@@ -11,6 +11,10 @@ public class ProductQuantity {
         return new ProductQuantity(quantity);
     }
 
+    public boolean isLessThanQuantity(int quantity){
+        return this.quantity >= quantity;
+    }
+
     public int getQuantity() {
         return quantity;
     }

@@ -1,6 +1,7 @@
 package store.domain;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class ProductInventory {
@@ -20,6 +21,18 @@ public class ProductInventory {
                                         final Map<String, PromotionProductQuantity> promotionQuantities) {
         return new ProductInventory(infos, quantities, promotionQuantities);
     }
+
+    public boolean containsProductName(final String productName) {
+        return infos.containsKey(productName);
+    }
+
+    public boolean isLessThanQuantity(final String productName, final int quantity) {
+        if (promotionQuantities.containsKey(productName)) {
+            return promotionQuantities.get(productName).isLessThanQuantity(quantity, this.quantities.get(productName));
+        }
+        return this.quantities.get(productName).isLessThanQuantity(quantity);
+    }
+
 
     public Map<String, ProductInfo> getInfos() {
         return Collections.unmodifiableMap(infos);

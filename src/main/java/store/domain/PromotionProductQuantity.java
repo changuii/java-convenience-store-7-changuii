@@ -13,6 +13,13 @@ public class PromotionProductQuantity {
         return new PromotionProductQuantity(quantity, promotion);
     }
 
+    public boolean isLessThanQuantity(final int quantity, final ProductQuantity productQuantity){
+        if(promotion.isValidNow()){
+            return productQuantity.isLessThanQuantity(quantity - this.quantity);
+        }
+        return productQuantity.isLessThanQuantity(quantity);
+    }
+
     public int getQuantity() {
         return quantity;
     }

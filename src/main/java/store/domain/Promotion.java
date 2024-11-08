@@ -16,6 +16,10 @@ public class Promotion {
         return new Promotion(promotionName, purchaseCount, dateRange);
     }
 
+    public boolean isValidNow(){
+        return dateRange.isInRangeNow();
+    }
+
     public String getPromotionName() {
         return promotionName;
     }

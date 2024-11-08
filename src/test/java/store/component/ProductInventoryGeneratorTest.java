@@ -12,39 +12,61 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import store.domain.DateRange;
-import store.domain.Product;
+import store.domain.ProductInfo;
+import store.domain.ProductInventory;
+import store.domain.ProductQuantity;
 import store.domain.Promotion;
+import store.domain.PromotionProductQuantity;
 import store.enums.ErrorMessage;
 
-public class ProductGeneratorTest {
+public class ProductInventoryGeneratorTest {
 
-    private final ProductGenerator productGenerator;
-    private Map<String, Product> basicProducts;
-    private Map<String, Product> promotionProducts;
+    private final ProductInventoryGenerator productInventoryGenerator;
+    private final Map<String, ProductQuantity> quantities;
+    private final Map<String, PromotionProductQuantity> promotionQuantities;
+    private final Map<String, ProductInfo> infos;
 
-    public ProductGeneratorTest() {
-        productGenerator = new ProductGenerator();
+    public ProductInventoryGeneratorTest() {
+        productInventoryGenerator = new ProductInventoryGenerator();
+        quantities = new LinkedHashMap<>();
+        promotionQuantities = new LinkedHashMap<>();
+        infos = new LinkedHashMap<>();
+    }
+
+    private static Stream<Arguments> provideProductLineAndPromotionsAndProductData() {
+        Promotion promotion = makePromotion("탄산2+1");
+        Map<String, Optional<Promotion>> promotions =
+                Map.of("탄산2+1", Optional.of(promotion), "null", Optional.empty());
+        return Stream.of(
+                Arguments.of(List.of("콜라,1000,10,탄산2+1"), promotions, "콜라", 10, promotion),
+                Arguments.of(List.of("환타,2000,20,탄산2+1"), promotions, "환타", 20, promotion),
+                Arguments.of(List.of("사이다,3000,30,탄산2+1"), promotions, "사이다", 30, promotion),
+                Arguments.of(List.of("밀키스,4000,40,탄산2+1"), promotions, "밀키스", 40, promotion)
+        );
+    }
+
+    private static Promotion makePromotion(final String name) {
+        DateRange dateRange = DateRange.of(LocalDate.parse("2023-11-01"), LocalDate.parse("2023-12-01"));
+        return Promotion.of(name, 10, dateRange);
     }
 
     @BeforeEach
     void init() {
-        basicProducts = new LinkedHashMap<>();
-        promotionProducts = new LinkedHashMap<>();
+        quantities.clear();
+        promotionQuantities.clear();
+        infos.clear();
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"파격할인", "바겐세일", "초특가", "콜라1+1"})
-    void 존재하지_않는_Promotion을_가진_경우_예외가_발생한다(String promotionName){
+    void 존재하지_않는_Promotion을_가진_경우_예외가_발생한다(String promotionName) {
         String input = String.format("콜라,1000,10,%s", promotionName);
 
-        assertThatThrownBy(
-                () -> productGenerator.generate(Map.of("null", Optional.empty()), basicProducts, promotionProducts,
-                        List.of(input)))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
+        assertThatException(input);
     }
 
     @ParameterizedTest
@@ -52,11 +74,7 @@ public class ProductGeneratorTest {
     void 상품_가격이_int의_범위를_벗어난_경우_예외가_발생한다(String productPrice) {
         String input = String.format("콜라,%s,10,null", productPrice);
 
-        assertThatThrownBy(
-                () -> productGenerator.generate(Map.of("null", Optional.empty()), basicProducts, promotionProducts,
-                        List.of(input)))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
+        assertThatException(input);
     }
 
     @ParameterizedTest
@@ -64,59 +82,64 @@ public class ProductGeneratorTest {
     void 재고_수량이_int의_범위를_벗어난_경우_예외가_발생한다(String productQuantity) {
         String input = String.format("콜라,1000,%s,null", productQuantity);
 
+        assertThatException(input);
+    }
+
+    private void assertThatException(String input) {
         assertThatThrownBy(
-                () -> productGenerator.generate(Map.of("null", Optional.empty()), basicProducts, promotionProducts,
-                        List.of(input)))
+                () -> productInventoryGenerator.generate(Map.of("null", Optional.empty()), List.of(input)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
     }
 
+
     @ParameterizedTest
     @ValueSource(strings = {"탄산음료", "김치", "감자", "삼겹살", "젤리"})
-    void 상품_생성_테스트(String name) {
-        Optional<Promotion> promotion = Optional.empty();
-        Product product = Product.of(name, 1000, 10, promotion);
+    void 일반_상품을_생성하면_일반_상품_재고만_생성되고_프로모션_재고는_생성되지_않는다(String name) {
         String input = String.format("%s,1000,10,%s", name, "null");
+        quantities.put(name, ProductQuantity.from(10));
 
-        productGenerator.generate(Map.of("null", promotion), basicProducts, promotionProducts, List.of(input));
+        ProductInventory productInventory =
+                productInventoryGenerator.generate(Map.of("null", Optional.empty()), List.of(input));
 
-        assertThat(basicProducts.get(name))
-                .usingRecursiveComparison()
-                .isEqualTo(product);
-        assertThat(promotionProducts)
-                .isEmpty();
-
+        assertThatQuantities(productInventory);
     }
 
     @ParameterizedTest
     @MethodSource("provideProductLineAndPromotionsAndProductData")
     void 프로모션_상품만_입력하는_경우_일반_상품_재고0의_상품을_생성한다(final List<String> productLines,
-                                              final Map<String, Optional<Promotion>> promotions, String productName,
-                                              int productPrice, int productQuantity, Optional<Promotion> promotion) {
-        Product promotionProduct = Product.of(productName, productPrice, productQuantity, promotion);
-        Product basicProduct = Product.of(productName, productPrice, 0, Optional.empty());
+                                              final Map<String, Optional<Promotion>> promotions,
+                                              final String productName, final int productQuantity,
+                                              final Promotion promotion) {
+        quantities.put(productName, ProductQuantity.from(0));
+        promotionQuantities.put(productName, PromotionProductQuantity.of(productQuantity, promotion));
 
-        productGenerator.generate(promotions, basicProducts, promotionProducts, productLines);
+        ProductInventory productInventory = productInventoryGenerator.generate(promotions, productLines);
 
-        assertThat(basicProducts.get(productName)).usingRecursiveComparison().isEqualTo(basicProduct);
-        assertThat(promotionProducts.get(productName)).usingRecursiveComparison().isEqualTo(promotionProduct);
+        assertThatQuantities(productInventory);
     }
 
-    private static Stream<Arguments> provideProductLineAndPromotionsAndProductData() {
-        Optional<Promotion> promotion = makePromotion("탄산2+1");
-        Map<String, Optional<Promotion>> promotions = Map.of(
-                "탄산2+1", promotion, "null", Optional.empty());
-        return Stream.of(
-                Arguments.of(List.of("콜라,1000,10,탄산2+1"), promotions, "콜라", 1000, 10, promotion),
-                Arguments.of(List.of("환타,2000,20,탄산2+1"), promotions, "환타", 2000, 20, promotion),
-                Arguments.of(List.of("사이다,3000,30,탄산2+1"), promotions, "사이다", 3000, 30, promotion),
-                Arguments.of(List.of("밀키스,4000,40,탄산2+1"), promotions, "밀키스", 4000, 40, promotion)
-        );
+    @ParameterizedTest
+    @CsvSource(value = {"탄산음료:100000", "김치:1000", "감자:1000000000", "삼겹살:100"}, delimiter = ':')
+    void 상품인벤토리를_생성하면서_상품의_정보도_생성한다(String name, int price) {
+        String input = String.format("%s,%d,10,null", name, price);
+        infos.put(name, ProductInfo.of(name, price));
+
+        ProductInventory productInventory =
+                productInventoryGenerator.generate(Map.of("null", Optional.empty()), List.of(input));
+
+        assertThat(productInventory.getInfos())
+                .usingRecursiveComparison()
+                .isEqualTo(infos);
     }
 
-    private static Optional<Promotion> makePromotion(final String name) {
-        DateRange dateRange = DateRange.of(LocalDate.parse("2023-11-01"), LocalDate.parse("2023-12-01"));
-        return Optional.of(Promotion.of(name, 10, dateRange));
+    private void assertThatQuantities(ProductInventory actual) {
+        assertThat(actual.getQuantities())
+                .usingRecursiveComparison()
+                .isEqualTo(quantities);
+        assertThat(actual.getPromotionQuantities())
+                .usingRecursiveComparison()
+                .isEqualTo(promotionQuantities);
     }
 
 

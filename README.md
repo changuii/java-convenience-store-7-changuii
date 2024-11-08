@@ -168,6 +168,15 @@
 
 ### 예외 상황
 
+InputValidator
+
+- [x]  PurchaseProducts
+    - [x]  형식을 올바르게 지키고 않는 경우 (올바른 경우 : [상품명-수량],[상품명-수량] )
+- [x]  List<PurchaseProductsDTOs>
+    - [x]  같은 이름의 구매 물품이 있는지 여부
+- [x]  answer
+    - [x]  Y 혹은 N 이외의 경우에는 예외가 발생한다.
+
 PromotionGenerator
 
 - [x] 파일의 형식을 지키지 않은 경우

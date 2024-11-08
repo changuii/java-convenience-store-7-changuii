@@ -1,6 +1,9 @@
 package store.view;
 
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import store.dto.PurchaseProductDTO;
 import store.enums.ErrorMessage;
 
 public class InputValidator {
@@ -15,6 +18,16 @@ public class InputValidator {
 
     public void validatePurchaseProducts(String products) {
         if (!PURCHASE_PRODUCTS_FORMAT.matcher(products).matches()) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_FORMAT.getMessage());
+        }
+    }
+
+    public void validatePurchaseProductDTOs(List<PurchaseProductDTO> purchaseProductDTOs){
+        validateDuplicationPurchaseProductDTOs(purchaseProductDTOs);
+    }
+
+    private void validateDuplicationPurchaseProductDTOs(List<PurchaseProductDTO> purchaseProductDTOs){
+        if(purchaseProductDTOs.stream().map(PurchaseProductDTO::getName).count() != purchaseProductDTOs.size()){
             throw new IllegalArgumentException(ErrorMessage.INVALID_FORMAT.getMessage());
         }
     }

@@ -17,7 +17,9 @@ public class InputView {
     public List<PurchaseProductDTO> readPurchaseProducts() {
         String input = Console.readLine();
         inputValidator.validatePurchaseProducts(input);
-        return inputParser.parsePurchaseProducts(input);
+        List<PurchaseProductDTO> purchaseProductDTOs = inputParser.parsePurchaseProducts(input);
+        inputValidator.validatePurchaseProductDTOs(purchaseProductDTOs);
+        return purchaseProductDTOs;
     }
 
     public String readAnswer() {

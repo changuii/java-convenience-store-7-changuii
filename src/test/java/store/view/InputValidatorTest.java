@@ -44,6 +44,13 @@ public class InputValidatorTest {
     }
 
     @ParameterizedTest
+    @ValueSource(ints = {0, -1, -2, -3, -100, -500})
+    void 구매_상품의_수량이_최소_0개이하인_경우_예외가_발생한다(int purchaseQuantity){
+        List<PurchaseProductDTO> input = List.of(PurchaseProductDTO.of("밤티라미수", purchaseQuantity));
+        assertThatException(inputValidator::validatePurchaseProductDTOs, input);
+    }
+
+    @ParameterizedTest
     @ValueSource(strings = {"[김치-1]", "[김치-2],[참치-3]", "[김치-2],[참치-3],[꽁치-56213]"})
     void 올바른_형식의_상품들이_입력으로_들어오면_예외가_발생하지_않는다(String products) {
         inputValidator.validatePurchaseProducts(products);

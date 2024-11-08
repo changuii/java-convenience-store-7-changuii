@@ -2,22 +2,22 @@ package store.dto;
 
 public class PurchaseProductDTO {
     private final String name;
-    private final int count;
+    private final int quantity;
 
-    private PurchaseProductDTO(final String name, final int count) {
+    private PurchaseProductDTO(final String name, final int quantity) {
         this.name = name;
-        this.count = count;
+        this.quantity = quantity;
     }
 
-    public static PurchaseProductDTO of(final String name, final int count) {
-        return new PurchaseProductDTO(name, count);
+    public static PurchaseProductDTO of(final String name, final int quantity) {
+        return new PurchaseProductDTO(name, quantity);
     }
 
     public String getName() {
         return name;
     }
 
-    public int getCount() {
-        return count;
+    public int getQuantity() {
+        return quantity;
     }
 }

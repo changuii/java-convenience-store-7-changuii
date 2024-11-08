@@ -2,7 +2,7 @@ package store.factory;
 
 import store.component.ConvenienceStoreGnerator;
 import store.component.FileParser;
-import store.component.ProductGenerator;
+import store.component.ProductInventoryGenerator;
 import store.component.PromotionGenerator;
 import store.controller.StoreController;
 import store.handler.RetryHandler;
@@ -27,7 +27,7 @@ public abstract class StoreControllerFactory {
     }
 
     private static ConvenienceStoreGnerator createConvenienceStoreGenerator() {
-        return new ConvenienceStoreGnerator(new FileParser(), new PromotionGenerator(), new ProductGenerator());
+        return new ConvenienceStoreGnerator(new FileParser(), new PromotionGenerator(), new ProductInventoryGenerator());
     }
 
     private static RetryHandler createRetryHandle() {

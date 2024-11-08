@@ -1,12 +1,11 @@
 package store.component;
 
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import store.domain.ConvenienceStore;
-import store.domain.Product;
+import store.domain.ProductInventory;
 import store.domain.Promotion;
 import store.enums.StoreConfig;
 
@@ -14,21 +13,17 @@ public class ConvenienceStoreGnerator {
     private static final int TABLE_HEADER_ROW = 0;
     private final FileParser fileParser;
     private final PromotionGenerator promotionGenerator;
-    private final ProductGenerator productGenerator;
+    private final ProductInventoryGenerator productInventoryGenerator;
 
     public ConvenienceStoreGnerator(final FileParser fileParser, final PromotionGenerator promotionGenerator,
-                                    final ProductGenerator productGenerator) {
+                                    final ProductInventoryGenerator productInventoryGenerator) {
         this.fileParser = fileParser;
         this.promotionGenerator = promotionGenerator;
-        this.productGenerator = productGenerator;
+        this.productInventoryGenerator = productInventoryGenerator;
     }
 
     public ConvenienceStore generate() {
-        Map<String, Product> products = new LinkedHashMap<>();
-        Map<String, Product> promotionProducts = new LinkedHashMap<>();
-        generateProduct(products, promotionProducts, generatePromotion());
-
-        return ConvenienceStore.of(products, promotionProducts);
+        return ConvenienceStore.from(generateProductInventory(generatePromotion()));
     }
 
     private Map<String, Optional<Promotion>> generatePromotion() {
@@ -36,10 +31,9 @@ public class ConvenienceStoreGnerator {
         return promotionGenerator.generate(promotionLines);
     }
 
-    private void generateProduct(final Map<String, Product> products, final Map<String, Product> promotionProducts,
-                                 final Map<String, Optional<Promotion>> promotions) {
+    private ProductInventory generateProductInventory(final Map<String, Optional<Promotion>> promotions) {
         List<String> productLines = readFileLines(StoreConfig.PRODUCTS_VALUE_PATH.getValue());
-        productGenerator.generate(promotions, products, promotionProducts, productLines);
+        return productInventoryGenerator.generate(promotions, productLines);
     }
 
     private List<String> readFileLines(final String path) {

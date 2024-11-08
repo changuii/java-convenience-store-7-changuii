@@ -27,7 +27,7 @@ public class OutputView {
         System.out.println(CONTINUE_CHECKOUT_MESSAGE);
     }
 
-    public void printErrorMessage(IllegalArgumentException e) {
+    public void printErrorMessage(final IllegalArgumentException e) {
         System.out.println(e.getMessage());
     }
 
@@ -38,7 +38,7 @@ public class OutputView {
         printLineBreak();
     }
 
-    public void printPurchaseProductsInputMessage(){
+    public void printPurchaseProductsInputMessage() {
         System.out.println(PURCHASE_PRODUCTS_INPUT_MESSAGE);
     }
 

@@ -33,7 +33,7 @@ public abstract class StoreControllerFactory {
                 new ProductInventoryGenerator());
     }
 
-    private static ConvenienceStoreService createConvenienceService(){
+    private static ConvenienceStoreService createConvenienceService() {
         return createConvenienceStoreGenerator().generate();
     }
 

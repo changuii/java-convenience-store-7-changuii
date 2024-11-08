@@ -16,11 +16,11 @@ public class RetryHandler {
         }
     }
 
-    public <T> T retryUntilNotException(Supplier<T> logic, OutputView outputView){
-        while (true){
-            try{
+    public <T> T retryUntilNotException(Supplier<T> logic, OutputView outputView) {
+        while (true) {
+            try {
                 return logic.get();
-            }catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 outputView.printErrorMessage(e);
             }
         }

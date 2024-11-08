@@ -42,7 +42,7 @@ public class StoreController {
         return true;
     }
 
-    private void runConvenienceStoreCheckout(ConvenienceStoreService convenienceStoreService) {
+    private void runConvenienceStoreCheckout(final ConvenienceStoreService convenienceStoreService) {
         printConvenienceStore(convenienceStoreService);
         outputView.printPurchaseProductsInputMessage();
         List<PurchaseProductDTO> purchaseProductDTOs = retryHandler.retryUntilNotException(
@@ -51,7 +51,7 @@ public class StoreController {
     }
 
 
-    private void printConvenienceStore(ConvenienceStoreService convenienceStoreService) {
+    private void printConvenienceStore(final ConvenienceStoreService convenienceStoreService) {
         outputView.printWelcomeMessage();
         outputView.printStoreIntroduce(
                 dtoConverter.convertProductInventoryDTO(convenienceStoreService.getProductInventory()));

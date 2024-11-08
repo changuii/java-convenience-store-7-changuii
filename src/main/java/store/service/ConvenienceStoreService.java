@@ -10,13 +10,14 @@ public class ConvenienceStoreService {
     private final ProductInventory productInventory;
     private final LocalDateGenerator localDateGenerator;
 
-    private ConvenienceStoreService(final ProductInventory productInventory, final LocalDateGenerator localDateGenerator) {
+    private ConvenienceStoreService(final ProductInventory productInventory,
+                                    final LocalDateGenerator localDateGenerator) {
         this.productInventory = productInventory;
         this.localDateGenerator = localDateGenerator;
     }
 
     public static ConvenienceStoreService of(final ProductInventory productInventory,
-                                               final LocalDateGenerator localDateGenerator) {
+                                             final LocalDateGenerator localDateGenerator) {
         return new ConvenienceStoreService(productInventory, localDateGenerator);
     }
 

@@ -32,7 +32,8 @@ public class PromotionGenerator {
         }
     }
 
-    private void registerPromotions(Map<String, Optional<Promotion>> promotions, List<String> promotionLines) {
+    private void registerPromotions(final Map<String, Optional<Promotion>> promotions,
+                                    final List<String> promotionLines) {
         promotionLines.stream()
                 .map(this::parsePromotion)
                 .forEach(promotion -> promotions.put(promotion.getPromotionName(), Optional.of(promotion)));

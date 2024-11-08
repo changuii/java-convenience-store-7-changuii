@@ -13,7 +13,7 @@ import store.dto.PromotionProductQuantityDTO;
 
 public class DTOConverter {
 
-    public ProductInventoryDTO convertProductInventoryDTO(ProductInventory productInventory) {
+    public ProductInventoryDTO convertProductInventoryDTO(final ProductInventory productInventory) {
         return ProductInventoryDTO.from(
                 convertProductInfoDTOs(productInventory.getInfos()),
                 convertProductQuantityDTOs(productInventory.getQuantities()),
@@ -21,7 +21,7 @@ public class DTOConverter {
         );
     }
 
-    private Map<String, ProductInfoDTO> convertProductInfoDTOs(Map<String, ProductInfo> infos) {
+    private Map<String, ProductInfoDTO> convertProductInfoDTOs(final Map<String, ProductInfo> infos) {
         Map<String, ProductInfoDTO> productInfoDTOs = new LinkedHashMap<>();
 
         infos.keySet().stream()
@@ -31,7 +31,7 @@ public class DTOConverter {
         return productInfoDTOs;
     }
 
-    private Map<String, ProductQuantityDTO> convertProductQuantityDTOs(Map<String, ProductQuantity> quantities) {
+    private Map<String, ProductQuantityDTO> convertProductQuantityDTOs(final Map<String, ProductQuantity> quantities) {
         Map<String, ProductQuantityDTO> productQuantityDTOs = new LinkedHashMap<>();
 
         quantities.keySet().stream()
@@ -42,7 +42,7 @@ public class DTOConverter {
     }
 
     private Map<String, PromotionProductQuantityDTO> convertPromotionProductQuantityDTOs(
-            Map<String, PromotionProductQuantity> promotionQuantities) {
+            final Map<String, PromotionProductQuantity> promotionQuantities) {
         Map<String, PromotionProductQuantityDTO> promotionQuantityDTOs = new LinkedHashMap<>();
 
         promotionQuantities.keySet().stream()
@@ -53,15 +53,16 @@ public class DTOConverter {
         return promotionQuantityDTOs;
     }
 
-    private ProductInfoDTO convertProductInfoDTO(ProductInfo productInfo) {
+    private ProductInfoDTO convertProductInfoDTO(final ProductInfo productInfo) {
         return ProductInfoDTO.of(productInfo.getName(), productInfo.getPrice());
     }
 
-    private ProductQuantityDTO convertProductQuantityDTO(ProductQuantity productQuantity) {
+    private ProductQuantityDTO convertProductQuantityDTO(final ProductQuantity productQuantity) {
         return ProductQuantityDTO.from(productQuantity.getQuantity());
     }
 
-    private PromotionProductQuantityDTO convertPromotionProductQuantityDTO(PromotionProductQuantity promotionQuantity) {
+    private PromotionProductQuantityDTO convertPromotionProductQuantityDTO(
+            final PromotionProductQuantity promotionQuantity) {
         return PromotionProductQuantityDTO.of(promotionQuantity.getQuantity(), promotionQuantity.getPromotion());
     }
 }

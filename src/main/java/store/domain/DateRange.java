@@ -15,15 +15,15 @@ public class DateRange {
         return new DateRange(startDate, endDate);
     }
 
-    public boolean isInRangeNow(LocalDate today) {
+    public boolean isInRangeNow(final LocalDate today) {
         return isGreaterThanStartDate(today) && isLessThanEndDate(today);
     }
 
-    private boolean isGreaterThanStartDate(LocalDate today) {
+    private boolean isGreaterThanStartDate(final LocalDate today) {
         return startDate.isBefore(today) || startDate.equals(today);
     }
 
-    private boolean isLessThanEndDate(LocalDate today) {
+    private boolean isLessThanEndDate(final LocalDate today) {
         return endDate.isAfter(today) || endDate.equals(today);
     }
 }

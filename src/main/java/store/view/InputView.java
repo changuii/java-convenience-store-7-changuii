@@ -9,7 +9,7 @@ public class InputView {
     private final InputValidator inputValidator;
     private final InputParser inputParser;
 
-    public InputView(InputValidator inputValidator, InputParser inputParser) {
+    public InputView(final InputValidator inputValidator, final InputParser inputParser) {
         this.inputValidator = inputValidator;
         this.inputParser = inputParser;
     }

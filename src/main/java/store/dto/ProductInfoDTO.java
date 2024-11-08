@@ -1,6 +1,5 @@
 package store.dto;
 
-import store.domain.ProductInfo;
 
 public class ProductInfoDTO {
     private final String name;

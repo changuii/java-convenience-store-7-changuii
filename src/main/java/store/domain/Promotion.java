@@ -18,7 +18,7 @@ public class Promotion {
         return new Promotion(promotionName, buyGet, dateRange);
     }
 
-    public boolean isValidNow(LocalDate today) {
+    public boolean isValidNow(final LocalDate today) {
         return dateRange.isInRangeNow(today);
     }
 

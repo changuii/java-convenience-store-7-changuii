@@ -78,7 +78,7 @@ public class ProductInventoryGenerator {
         registerProductQuantities(product[0], parseInt(product[2]), productQuantities);
     }
 
-    private void registerProductInfo(final String productName, int productPrice,
+    private void registerProductInfo(final String productName, final int productPrice,
                                      final Map<String, ProductInfo> productInfos) {
         productInfos.put(productName, ProductInfo.of(productName, productPrice));
     }

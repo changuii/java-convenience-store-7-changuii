@@ -7,6 +7,7 @@ import store.component.ProductInventoryGenerator;
 import store.component.PromotionGenerator;
 import store.controller.StoreController;
 import store.handler.RetryHandler;
+import store.service.ConvenienceStoreService;
 import store.view.InputParser;
 import store.view.InputValidator;
 import store.view.InputView;
@@ -15,7 +16,7 @@ import store.view.OutputView;
 public abstract class StoreControllerFactory {
 
     public static StoreController create() {
-        return new StoreController(createInputView(), createOutputView(), createConvenienceStoreGenerator(),
+        return new StoreController(createInputView(), createOutputView(), createConvenienceService(),
                 createRetryHandle(), createDTOConverter());
     }
 
@@ -30,6 +31,10 @@ public abstract class StoreControllerFactory {
     private static ConvenienceStoreGnerator createConvenienceStoreGenerator() {
         return new ConvenienceStoreGnerator(new FileParser(), new PromotionGenerator(),
                 new ProductInventoryGenerator());
+    }
+
+    private static ConvenienceStoreService createConvenienceService(){
+        return createConvenienceStoreGenerator().generate();
     }
 
     private static RetryHandler createRetryHandle() {

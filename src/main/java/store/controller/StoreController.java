@@ -1,10 +1,9 @@
 package store.controller;
 
-import store.component.ConvenienceStoreGnerator;
+import java.util.List;
 import store.component.DTOConverter;
-import store.domain.ConvenienceStore;
-import store.domain.ProductInventory;
-import store.dto.ProductInventoryDTO;
+import store.service.ConvenienceStoreService;
+import store.dto.PurchaseProductDTO;
 import store.handler.RetryHandler;
 import store.view.InputView;
 import store.view.OutputView;
@@ -13,24 +12,24 @@ public class StoreController {
 
     private final InputView inputView;
     private final OutputView outputView;
-    private final ConvenienceStoreGnerator convenienceStoreGnerator;
+    private final ConvenienceStoreService convenienceStoreService;
     private final RetryHandler retryHandler;
     private final DTOConverter dtoConverter;
 
     public StoreController(final InputView inputView, final OutputView outputView,
-                           final ConvenienceStoreGnerator ConvenienceStoreGnerator, final RetryHandler retryHandler,
+                           final ConvenienceStoreService convenienceStoreService, final RetryHandler retryHandler,
                            final DTOConverter dtoConverter) {
         this.inputView = inputView;
         this.outputView = outputView;
-        this.convenienceStoreGnerator = ConvenienceStoreGnerator;
+        this.convenienceStoreService = convenienceStoreService;
         this.retryHandler = retryHandler;
         this.dtoConverter = dtoConverter;
 
     }
 
     public void run() {
-        ConvenienceStore convenienceStore = convenienceStoreGnerator.generate();
-        retryHandler.retryUntilFalse(this::runConvenienceStoreCheckout, this::isTerminationCheckout, convenienceStore);
+        retryHandler.retryUntilFalse(this::runConvenienceStoreCheckout, this::isTerminationCheckout,
+                convenienceStoreService);
     }
 
     private boolean isTerminationCheckout() {
@@ -43,14 +42,25 @@ public class StoreController {
         return true;
     }
 
-    private void runConvenienceStoreCheckout(ConvenienceStore convenienceStore) {
-        printConvenienceStore(convenienceStore);
+    private void runConvenienceStoreCheckout(ConvenienceStoreService convenienceStoreService) {
+        printConvenienceStore(convenienceStoreService);
+        outputView.printPurchaseProductsInputMessage();
+        List<PurchaseProductDTO> purchaseProductDTOs = retryHandler.retryUntilNotException(
+                this::requestPurchaseProductDTOs, outputView);
+
     }
 
 
-    private void printConvenienceStore(ConvenienceStore convenienceStore) {
+    private void printConvenienceStore(ConvenienceStoreService convenienceStoreService) {
         outputView.printWelcomeMessage();
-        outputView.printStoreIntroduce(dtoConverter.convertProductInventoryDTO(convenienceStore.getProductInventory()));
+        outputView.printStoreIntroduce(
+                dtoConverter.convertProductInventoryDTO(convenienceStoreService.getProductInventory()));
+    }
+
+    private List<PurchaseProductDTO> requestPurchaseProductDTOs() {
+        List<PurchaseProductDTO> purchaseProductDTOs = inputView.readPurchaseProducts();
+        convenienceStoreService.validatePurchaseProducts(purchaseProductDTOs);
+        return purchaseProductDTOs;
     }
 
 

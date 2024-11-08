@@ -14,10 +14,10 @@ public class InputView {
         this.inputParser = inputParser;
     }
 
-    public List<PurchaseProductDTO> readProducts() {
+    public List<PurchaseProductDTO> readPurchaseProducts() {
         String input = Console.readLine();
-        inputValidator.validateProducts(input);
-        return inputParser.parseProducts(input);
+        inputValidator.validatePurchaseProducts(input);
+        return inputParser.parsePurchaseProducts(input);
     }
 
     public String readAnswer() {

@@ -13,13 +13,13 @@ public class InputParser {
     private static final String EMPTY = "";
 
 
-    public List<PurchaseProductDTO> parseProducts(String products) {
+    public List<PurchaseProductDTO> parsePurchaseProducts(String products) {
         return Arrays.stream(products.split(PRODUCTS_DELIMITER))
-                .map(this::parseProduct)
+                .map(this::parsePurchaseProduct)
                 .collect(Collectors.toList());
     }
 
-    private PurchaseProductDTO parseProduct(String product) {
+    private PurchaseProductDTO parsePurchaseProduct(String product) {
         String[] values = product.replaceAll(PRODUCT_BRACKETS, EMPTY).split(PRODUCT_DELIMITER);
         String productName = values[0];
         int productCount = parseInt(values[1]);

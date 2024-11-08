@@ -36,7 +36,7 @@ public class InputParserTest {
     @ParameterizedTest
     @ValueSource(strings = {"[감자-10000000000]", "[김치-2147483648]"})
     void 상품의_수량이_int타입의_범위를_넘어가면_예외가_발생한다(String products) {
-        assertThatThrownBy(() -> inputParser.parseProducts(products))
+        assertThatThrownBy(() -> inputParser.parsePurchaseProducts(products))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(ErrorMessage.INVALID_FORMAT.getMessage());
     }
@@ -44,7 +44,7 @@ public class InputParserTest {
     @ParameterizedTest
     @MethodSource("provideProductsAndParsingProducts")
     void 상품들을_나타내는_문자열을_상품DTO_리스트로_파싱한다(String products, List<PurchaseProductDTO> expectedProducts) {
-        List<PurchaseProductDTO> actualProducts = inputParser.parseProducts(products);
+        List<PurchaseProductDTO> actualProducts = inputParser.parsePurchaseProducts(products);
 
         assertThat(actualProducts)
                 .usingRecursiveComparison()

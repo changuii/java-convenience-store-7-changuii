@@ -6,15 +6,15 @@ import store.enums.ErrorMessage;
 public class InputValidator {
 
 
-    private static final String PRODUCTS_FORMAT_REGEX
+    private static final String PURCHASE_PRODUCTS_FORMAT_REGEX
             = "^\\[[A-Za-z0-9가-힣]+-[0-9]+\\](,\\[[A-Za-z0-9가-힣]+-[0-9]+\\])*$";
-    private static final Pattern PRODUCTS_FORMAT = Pattern.compile(PRODUCTS_FORMAT_REGEX);
+    private static final Pattern PURCHASE_PRODUCTS_FORMAT = Pattern.compile(PURCHASE_PRODUCTS_FORMAT_REGEX);
     private static final String ANSWER_FORMAT_REGEX = "^[YN]$";
     private static final Pattern ANSWER_FORMAT = Pattern.compile(ANSWER_FORMAT_REGEX);
 
 
-    public void validateProducts(String products) {
-        if (!PRODUCTS_FORMAT.matcher(products).matches()) {
+    public void validatePurchaseProducts(String products) {
+        if (!PURCHASE_PRODUCTS_FORMAT.matcher(products).matches()) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FORMAT.getMessage());
         }
     }

@@ -25,8 +25,9 @@ public class ProductQuantityTest {
     void deductQuantity(final int currentQuantity, final int quantity, final int expected) {
         ProductQuantity productQuantity = ProductQuantity.of(Constants.PRODUCT_NAME, currentQuantity);
         ProductQuantity expectedQuantity = ProductQuantity.of(Constants.PRODUCT_NAME, expected);
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, quantity);
 
-        productQuantity.deductQuantity(quantity);
+        productQuantity.deductQuantity(purchaseProduct);
 
         assertThat(productQuantity).usingRecursiveComparison().isEqualTo(expectedQuantity);
     }

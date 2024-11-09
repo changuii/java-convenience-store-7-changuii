@@ -32,7 +32,7 @@ public class RetryHandlerTest {
     void False가_발생하지_않을때_까지_반복_실행한다(int N) {
         Counter counter = new Counter(N);
 
-        retryHandler.retryUntilFalse(counter::countFromUntilN, counter::isValid, N);
+        retryHandler.retryUntilTrue(counter::countFromUntilN, counter::isValid, N);
 
         assertThat(counter.getCount()).isEqualTo(N);
     }

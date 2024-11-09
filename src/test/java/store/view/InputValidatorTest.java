@@ -45,7 +45,7 @@ public class InputValidatorTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, -1, -2, -3, -100, -500})
-    void 구매_상품의_수량이_최소_0개이하인_경우_예외가_발생한다(int purchaseQuantity){
+    void 구매_상품의_수량이_최소_0개이하인_경우_예외가_발생한다(int purchaseQuantity) {
         List<PurchaseProductDTO> input = List.of(PurchaseProductDTO.of("밤티라미수", purchaseQuantity));
         assertThatException(inputValidator::validatePurchaseProductDTOs, input);
     }
@@ -64,14 +64,13 @@ public class InputValidatorTest {
     }
 
 
-
     @ParameterizedTest
     @ValueSource(strings = {"Y", "N"})
     void Y혹은N이_입력으로_들어오면_예외가_발생하지_않는다(String answer) {
         inputValidator.validateAnswer(answer);
     }
 
-    private <T> void assertThatException(Consumer<T> logic, T data){
+    private <T> void assertThatException(Consumer<T> logic, T data) {
         assertThatThrownBy(() -> logic.accept(data))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(ErrorMessage.INVALID_FORMAT.getMessage());

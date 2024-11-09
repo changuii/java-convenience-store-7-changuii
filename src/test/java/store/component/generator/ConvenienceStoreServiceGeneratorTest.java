@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Queue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import store.Constants;
 import store.component.FileParser;
 import store.domain.ProductInventory;
 import store.domain.product.Promotion;
@@ -47,7 +48,7 @@ public class ConvenienceStoreServiceGeneratorTest {
 
     @Test
     void generate를_호출하면_promotionGenerator의_generate를_호출한다() {
-        List<String> expected = new ArrayList<>(List.of("PROMOTION_GENERATE"));
+        List<String> expected = new ArrayList<>(List.of(TABLE_HEADER));
         mockFileParse.addFileLine(expected);
         mockFileParse.addFileLine(new ArrayList<>());
 
@@ -58,7 +59,7 @@ public class ConvenienceStoreServiceGeneratorTest {
 
     @Test
     void generate를_호출하면_productInventoryGenerator의_generate를_호출한다() {
-        List<String> expectedLines = new ArrayList<>(List.of("PRODUCT_INVENTORY_GENERATE"));
+        List<String> expectedLines = new ArrayList<>(List.of(TABLE_HEADER));
         mockFileParse.addFileLine(new ArrayList<>());
         mockFileParse.addFileLine(expectedLines);
 
@@ -66,7 +67,8 @@ public class ConvenienceStoreServiceGeneratorTest {
 
         assertThat(mockProductInventoryGenerator.getProductLines()).usingRecursiveComparison()
                 .isEqualTo(expectedLines);
-        assertThat(mockProductInventoryGenerator.getPromotions().get("MOCK")).usingRecursiveAssertion()
+        assertThat(
+                mockProductInventoryGenerator.getPromotions().get(Constants.PROMOTION_NAME)).usingRecursiveAssertion()
                 .isEqualTo(Optional.empty());
     }
 
@@ -116,7 +118,7 @@ public class ConvenienceStoreServiceGeneratorTest {
         @Override
         public Map<String, Optional<Promotion>> generate(List<String> promotionLines) {
             this.promotionLines = promotionLines;
-            return Map.of("MOCK", Optional.empty());
+            return Map.of(Constants.PROMOTION_NAME, Optional.empty());
         }
 
         public List<String> getPromotionLines() {

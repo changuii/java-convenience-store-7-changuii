@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import store.Constants;
 import store.domain.product.BuyGet;
 import store.domain.product.DateRange;
 import store.domain.product.ProductInfo;
@@ -20,8 +21,6 @@ import store.dto.ProductDTO;
 import store.dto.ProductInventoryDTO;
 
 public class DTOConverterTest {
-    private static final String EMPTY_PROMOTION_NAME = "프로모션";
-    private static final String EMPTY = "";
     private final DTOConverter dtoConverter;
     private List<ProductInfo> productInfos;
     private List<ProductQuantity> productQuantities;
@@ -66,13 +65,13 @@ public class DTOConverterTest {
 
     private ProductInventoryDTO createProductInventoryDTO(final String productName, final int productPrice,
                                                           final int quantity, final int promotionQuantity) {
-        ProductDTO promotion = ProductDTO.of(productName, productPrice, promotionQuantity, EMPTY_PROMOTION_NAME);
-        ProductDTO product = ProductDTO.of(productName, productPrice, quantity, EMPTY);
+        ProductDTO promotion = ProductDTO.of(productName, productPrice, promotionQuantity, Constants.PROMOTION_NAME);
+        ProductDTO product = ProductDTO.of(productName, productPrice, quantity, Constants.EMPTY);
         return ProductInventoryDTO.from(List.of(promotion, product));
     }
 
 
     private Promotion emptyPromotion() {
-        return Promotion.of(EMPTY_PROMOTION_NAME, BuyGet.of(1, 1), DateRange.of(LocalDate.MIN, LocalDate.MAX));
+        return Promotion.of(Constants.PROMOTION_NAME, BuyGet.of(1, 1), DateRange.of(LocalDate.MIN, LocalDate.MAX));
     }
 }

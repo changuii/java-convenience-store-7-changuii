@@ -29,7 +29,7 @@ public class RetryHandlerTest {
 
     @ParameterizedTest
     @ValueSource(ints = {1, 5, 10, 20, 30, 100})
-    void False가_발생하지_않을때_까지_반복_실행한다(int N){
+    void False가_발생하지_않을때_까지_반복_실행한다(int N) {
         Counter counter = new Counter(N);
 
         retryHandler.retryUntilFalse(counter::countFromUntilN, counter::isValid, N);
@@ -55,11 +55,11 @@ public class RetryHandlerTest {
             return count;
         }
 
-        public void countFromUntilN(int garbage){
+        public void countFromUntilN(int garbage) {
             count++;
         }
 
-        public boolean isValid(){
+        public boolean isValid() {
             return count == N;
         }
 

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import store.Constants;
 import store.domain.product.BuyGet;
 import store.domain.product.DateRange;
 import store.domain.product.ProductInfo;
@@ -17,8 +18,6 @@ import store.domain.product.Promotion;
 import store.domain.product.PromotionProductQuantity;
 
 public class ProductInventoryTest {
-
-    private static final String PRODUCT_NAME = "MOCK";
     private static final int GARBAGE_QUANTITY = 1;
     private ProductInventory productInventory;
 
@@ -27,17 +26,17 @@ public class ProductInventoryTest {
     void init() {
         LocalDate start = LocalDate.of(2023, 11, 01);
         LocalDate end = LocalDate.of(2023, 11, 30);
-        Promotion promotion = Promotion.of("MOCK_PROMOTION", BuyGet.of(1, 1), DateRange.of(start, end));
-        List<ProductInfo> infos = List.of(ProductInfo.of(PRODUCT_NAME, 1000));
-        List<ProductQuantity> quantities = List.of(ProductQuantity.of(PRODUCT_NAME, 5));
+        Promotion promotion = Promotion.of(Constants.PROMOTION_NAME, BuyGet.of(1, 1), DateRange.of(start, end));
+        List<ProductInfo> infos = List.of(ProductInfo.of(Constants.PRODUCT_NAME, 1000));
+        List<ProductQuantity> quantities = List.of(ProductQuantity.of(Constants.PRODUCT_NAME, 5));
         List<PromotionProductQuantity> promotionQuantity = List.of(
-                PromotionProductQuantity.of(PRODUCT_NAME, 10, promotion));
+                PromotionProductQuantity.of(Constants.PRODUCT_NAME, 10, promotion));
         productInventory = ProductInventory.of(infos, quantities, promotionQuantity);
     }
 
     @DisplayName("물건이 존재한다면 true, 존재하지 않는다면 false를 반환한다.")
     @ParameterizedTest
-    @CsvSource(value = {"MOCK:true", "김치:false", "오렌지주스:false"}, delimiter = ':')
+    @CsvSource(value = {"PRODUCT:true", "김치:false", "오렌지주스:false"}, delimiter = ':')
     void containsProductName(String productName, boolean expected) {
         PurchaseProduct purchaseProduct = PurchaseProduct.of(productName, GARBAGE_QUANTITY);
 
@@ -48,7 +47,7 @@ public class ProductInventoryTest {
     @ParameterizedTest
     @CsvSource(value = {"1:true", "10:true", "15:true", "16:false", "200:false"}, delimiter = ':')
     void isLessThanQuantity(int purchaseQuantity, boolean expected) {
-        PurchaseProduct purchaseProduct = PurchaseProduct.of(PRODUCT_NAME, purchaseQuantity);
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, purchaseQuantity);
         LocalDate inPromotionRangeDate = LocalDate.of(2023, 11, 01);
 
         assertThat(productInventory.isLessThanQuantity(purchaseProduct, inPromotionRangeDate)).isEqualTo(expected);
@@ -59,14 +58,14 @@ public class ProductInventoryTest {
     @CsvSource(value = {"2023-11-01:true", "2023-11-30:true", "2023-10-31:false", "2023-12-01:false"}, delimiter = ':')
     void 프로모션_날짜_테스트(LocalDate today, boolean expected) {
         int purchaseQuantity = 15;
-        PurchaseProduct purchaseProduct = PurchaseProduct.of(PRODUCT_NAME, purchaseQuantity);
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, purchaseQuantity);
 
         assertThat(productInventory.isLessThanQuantity(purchaseProduct, today)).isEqualTo(expected);
     }
 
     @DisplayName("현재날짜가 포로모션 날짜에 포함하면서, 프로모션 물품이 있다면 true 아니라면 false를 반환한다.")
     @ParameterizedTest
-    @CsvSource(value = {"2023-11-01:MOCK:true", "2023-10-31:MOCK:false", "2023-11-01:김치:false"}, delimiter = ':')
+    @CsvSource(value = {"2023-11-01:PRODUCT:true", "2023-10-31:PRODUCT:false", "2023-11-01:김치:false"}, delimiter = ':')
     void 프로모션_상품_존재_여부_테스트(final LocalDate today, final String productName, final boolean expected) {
         PurchaseProduct purchaseProduct = PurchaseProduct.of(productName, GARBAGE_QUANTITY);
 

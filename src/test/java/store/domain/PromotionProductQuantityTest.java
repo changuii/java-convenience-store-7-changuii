@@ -25,8 +25,8 @@ public class PromotionProductQuantityTest {
     void isLessThanQuantityTest(int promotionQuantity, int quantity, int purchaseQuantity, boolean expected) {
         ProductQuantity productQuantity = ProductQuantity.from(quantity);
         PromotionProductQuantity promotionProductQuantity = PromotionProductQuantity.of(promotionQuantity, promotion);
-        LocalDate today = LocalDate.of(2023, 11, 01);
-        boolean actual = promotionProductQuantity.isLessThanQuantity(purchaseQuantity, productQuantity, today);
+
+        boolean actual = promotionProductQuantity.isLessThanQuantity(purchaseQuantity, productQuantity);
 
         assertThat(actual).isEqualTo(expected);
     }

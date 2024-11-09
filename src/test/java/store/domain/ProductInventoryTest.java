@@ -8,11 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 public class ProductInventoryTest {
 
     private static final String PRODUCT_NAME = "MOCK";
+    private static final int GARBAGE_QUANTITY = 1;
     private ProductInventory productInventory;
 
 
@@ -32,17 +32,19 @@ public class ProductInventoryTest {
     @ParameterizedTest
     @CsvSource(value = {"MOCK:true", "김치:false", "오렌지주스:false"}, delimiter = ':')
     void containsProductName(String productName, boolean expected){
-        assertThat(productInventory.containsProductName(productName)).isEqualTo(expected);
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(productName, GARBAGE_QUANTITY);
+
+        assertThat(productInventory.containsProduct(purchaseProduct)).isEqualTo(expected);
     }
 
     @DisplayName("수량이 충분하면 true, 수량이 부족하면 false를 반환한다.")
     @ParameterizedTest
     @CsvSource(value = {"1:true", "10:true", "15:true", "16:false", "200:false"}, delimiter = ':')
     void isLessThanQuantity(int purchaseQuantity, boolean expected){
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(PRODUCT_NAME, purchaseQuantity);
         LocalDate inPromotionRangeDate = LocalDate.of(2023,11,01);
 
-        assertThat(productInventory.isLessThanQuantity(PRODUCT_NAME, purchaseQuantity, inPromotionRangeDate))
-                .isEqualTo(expected);
+        assertThat(productInventory.isLessThanQuantity(purchaseProduct, inPromotionRangeDate)).isEqualTo(expected);
     }
 
     @DisplayName("현재날짜가 프로모션 날짜에 포함되면 프로모션의 수량을 포함하고, 그렇지 않다면 포함하지 않는다.")
@@ -50,17 +52,19 @@ public class ProductInventoryTest {
     @CsvSource(value = {"2023-11-01:true", "2023-11-30:true", "2023-10-31:false", "2023-12-01:false"}, delimiter = ':')
     void 프로모션_날짜_테스트(LocalDate today, boolean expected){
         int purchaseQuantity = 15;
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(PRODUCT_NAME, purchaseQuantity);
 
-        assertThat(productInventory.isLessThanQuantity(PRODUCT_NAME, purchaseQuantity, today))
-                .isEqualTo(expected);
+
+        assertThat(productInventory.isLessThanQuantity(purchaseProduct, today)).isEqualTo(expected);
     }
 
     @DisplayName("현재날짜가 포로모션 날짜에 포함하면서, 프로모션 물품이 있다면 true 아니라면 false를 반환한다.")
     @ParameterizedTest
     @CsvSource(value = {"2023-11-01:MOCK:true", "2023-10-31:MOCK:false", "2023-11-01:김치:false"}, delimiter = ':')
     void 프로모션_상품_존재_여부_테스트(final LocalDate today, final String productName, final boolean expected){
-        assertThat(productInventory.isPromotionProduct(productName, today))
-                .isEqualTo(expected);
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(productName, GARBAGE_QUANTITY);
+
+        assertThat(productInventory.isPromotionProduct(purchaseProduct, today)).isEqualTo(expected);
     }
 
     @DisplayName("상품 이름에 해당하는 상품 수량을 감소시킨다.")

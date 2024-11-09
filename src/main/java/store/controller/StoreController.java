@@ -1,7 +1,9 @@
 package store.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import store.component.DTOConverter;
+import store.domain.PurchaseProduct;
 import store.service.ConvenienceStoreService;
 import store.dto.PurchaseProductDTO;
 import store.handler.RetryHandler;
@@ -61,6 +63,22 @@ public class StoreController {
         List<PurchaseProductDTO> purchaseProductDTOs = inputView.readPurchaseProducts();
         convenienceStoreService.validatePurchaseProducts(purchaseProductDTOs);
         return purchaseProductDTOs;
+    }
+
+    private void purchaseProducts(List<PurchaseProductDTO> purchaseProductDTOs) {
+        List<PurchaseProduct> purchaseHistory = new ArrayList<>();
+
+        purchaseProductDTOs.forEach(purchaseProductDTO -> {
+            if (convenienceStoreService.isPromotionProduct(purchaseProductDTO)) {
+
+            } else {
+                purchaseHistory.add(convenienceStoreService.purchaseProduct(purchaseProductDTO));
+            }
+        });
+    }
+
+    private void purchasePromotionProduct(PurchaseProductDTO purchaseProductDTO) {
+
     }
 
 

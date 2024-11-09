@@ -3,6 +3,7 @@ package store.service;
 import java.util.List;
 import store.component.LocalDateGenerator;
 import store.domain.ProductInventory;
+import store.domain.PurchaseProduct;
 import store.dto.PurchaseProductDTO;
 import store.enums.ErrorMessage;
 
@@ -23,6 +24,17 @@ public class ConvenienceStoreService {
 
     public void validatePurchaseProducts(final List<PurchaseProductDTO> purchaseProductDTOs) {
         purchaseProductDTOs.forEach(this::validatePurchaseProduct);
+    }
+
+    public boolean isPromotionProduct(final PurchaseProductDTO purchaseProductDTO) {
+        return productInventory.isPromotionProduct(purchaseProductDTO.getName(), localDateGenerator.generate());
+    }
+
+    public PurchaseProduct purchaseProduct(final PurchaseProductDTO purchaseProductDTO) {
+        int totalPrice = productInventory.purchaseProduct(purchaseProductDTO.getName(),
+                purchaseProductDTO.getQuantity());
+
+        return PurchaseProduct.of(purchaseProductDTO.getName(), totalPrice, purchaseProductDTO.getQuantity(), 0, 0);
     }
 
     private void validatePurchaseProduct(final PurchaseProductDTO purchaseProductDTO) {

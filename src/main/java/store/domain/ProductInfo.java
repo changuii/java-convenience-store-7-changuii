@@ -13,6 +13,9 @@ public class ProductInfo {
         return new ProductInfo(name, price);
     }
 
+    public int calculateTotalPrice(final int quantity){
+        return price * quantity;
+    }
 
     public String getName() {
         return name;

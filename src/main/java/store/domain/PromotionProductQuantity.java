@@ -23,6 +23,10 @@ public class PromotionProductQuantity {
         return productQuantity.isLessThanQuantity(quantity);
     }
 
+    public boolean isValidToday(final LocalDate today){
+        return promotion.isValidNow(today);
+    }
+
     public int getQuantity() {
         return quantity;
     }

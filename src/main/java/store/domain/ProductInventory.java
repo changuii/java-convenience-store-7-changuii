@@ -17,8 +17,8 @@ public class ProductInventory {
     }
 
     public static ProductInventory of(final Map<String, ProductInfo> infos,
-                                        final Map<String, ProductQuantity> quantities,
-                                        final Map<String, PromotionProductQuantity> promotionQuantities) {
+                                      final Map<String, ProductQuantity> quantities,
+                                      final Map<String, PromotionProductQuantity> promotionQuantities) {
         return new ProductInventory(infos, quantities, promotionQuantities);
     }
 
@@ -34,6 +34,17 @@ public class ProductInventory {
         return this.quantities.get(productName).isLessThanQuantity(quantity);
     }
 
+    public boolean isPromotionProduct(final String productName, final LocalDate today) {
+        if (promotionQuantities.containsKey(productName) && promotionQuantities.get(productName).isValidToday(today)) {
+            return true;
+        }
+        return false;
+    }
+
+    public int purchaseProduct(final String productName, final int purchaseQuantity){
+        quantities.get(productName).deductQuantity(purchaseQuantity);
+        return infos.get(productName).calculateTotalPrice(purchaseQuantity);
+    }
 
     public Map<String, ProductInfo> getInfos() {
         return Collections.unmodifiableMap(infos);

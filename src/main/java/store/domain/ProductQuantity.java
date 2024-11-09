@@ -15,6 +15,10 @@ public class ProductQuantity {
         return this.quantity >= quantity;
     }
 
+    public void deductQuantity(final int quantity){
+        this.quantity -= quantity;
+    }
+
     public int getQuantity() {
         return quantity;
     }

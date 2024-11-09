@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import store.Constants;
+import store.domain.PurchaseProduct;
 
 public class ProductInfoTest {
 
@@ -18,5 +20,13 @@ public class ProductInfoTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @ParameterizedTest
+    @CsvSource(value = {"PRODUCT:true", "사이다:false", "김치:false"}, delimiter = ':')
+    void 구매_상품과_이름과_일치하는지_검사하는_메서드(String purchaseProductName, boolean expected){
+        ProductInfo productInfo = ProductInfo.of(Constants.PRODUCT_NAME, Constants.PRODUCT_PRICE);
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(purchaseProductName, Constants.PRODUCT_QUANTITY_VALUE);
+
+        assertThat(productInfo.isMatchProduct(purchaseProduct)).isEqualTo(expected);
+    }
 
 }

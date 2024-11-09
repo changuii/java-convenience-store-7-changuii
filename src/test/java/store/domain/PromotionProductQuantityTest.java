@@ -30,4 +30,14 @@ public class PromotionProductQuantityTest {
 
         assertThat(actual).isEqualTo(expected);
     }
+
+    @DisplayName("현재 프로모션이 진행중인지 반환하는 메서드")
+    @ParameterizedTest
+    @CsvSource(value = {"2023-11-01:true", "2023-11-30:true", "2023-10-31:false", "2023-12-01:false"}, delimiter = ':')
+    void isValidToday(final LocalDate today, final boolean expected){
+        PromotionProductQuantity promotionQuantity = PromotionProductQuantity.of(100, promotion);
+
+        assertThat(promotionQuantity.isValidToday(today)).isEqualTo(expected);
+    }
+
 }

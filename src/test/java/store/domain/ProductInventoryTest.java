@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class ProductInventoryTest {
 
@@ -52,6 +53,37 @@ public class ProductInventoryTest {
 
         assertThat(productInventory.isLessThanQuantity(PRODUCT_NAME, purchaseQuantity, today))
                 .isEqualTo(expected);
+    }
+
+    @DisplayName("현재날짜가 포로모션 날짜에 포함하면서, 프로모션 물품이 있다면 true 아니라면 false를 반환한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"2023-11-01:MOCK:true", "2023-10-31:MOCK:false", "2023-11-01:김치:false"}, delimiter = ':')
+    void 프로모션_상품_존재_여부_테스트(final LocalDate today, final String productName, final boolean expected){
+        assertThat(productInventory.isPromotionProduct(productName, today))
+                .isEqualTo(expected);
+    }
+
+    @DisplayName("상품 이름에 해당하는 상품 수량을 감소시킨다.")
+    @ParameterizedTest
+    @CsvSource(value = {"1:4", "2:3", "3:2", "4:1", "5:0"}, delimiter = ':')
+    void 일반_상품_구매_테스트(final int purchaseQuantity, final int expected){
+        Map<String, ProductQuantity> expectedQuantities = Map.of(PRODUCT_NAME, ProductQuantity.from(expected));
+
+        productInventory.purchaseProduct(PRODUCT_NAME, purchaseQuantity);
+
+        assertThat(productInventory)
+                .extracting("quantities")
+                .usingRecursiveComparison()
+                .isEqualTo(expectedQuantities);
+    }
+
+    @DisplayName("상품 이름에 해당하는 상품 수량만큼의 가격을 반환한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"1:1000", "2:2000", "3:3000", "4:4000", "5:5000"}, delimiter = ':')
+    void 일반_상품_구매_금액총합_테스트(int purchaseQuantity, int expected){
+        int actual = productInventory.purchaseProduct(PRODUCT_NAME, purchaseQuantity);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
 

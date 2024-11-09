@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import store.domain.product.ProductInfo;
 import store.domain.ProductInventory;
 import store.domain.product.ProductQuantity;
@@ -47,7 +48,9 @@ public class ProductInventoryGenerator {
         productLines.forEach((productLine) -> {
             parseProduct(productLine, promotions, productInfos, productQuantities, promotionQuantities);
         });
-        return ProductInventory.of(productInfos, productQuantities, promotionQuantities);
+
+        return ProductInventory.of(productInfos.stream().distinct().collect(Collectors.toList()), productQuantities,
+                promotionQuantities);
     }
 
 
@@ -64,34 +67,52 @@ public class ProductInventoryGenerator {
         }
     }
 
-    private void registerProduct(final String[] product, final Map<String, Optional<Promotion>> promotions,
+    private void registerProduct(final String[] column, final Map<String, Optional<Promotion>> promotions,
                                  final List<ProductInfo> productInfos,
                                  final List<ProductQuantity> productQuantities,
                                  final List<PromotionProductQuantity> promotionQuantities) {
-        registerProductInfo(product[0], parseInt(product[1]), productInfos);
-        Optional<Promotion> promotion = promotions.get(product[3]);
+        registerProductInfo(column[0], parseInt(column[1]), productInfos);
+        Optional<Promotion> promotion = promotions.get(column[3]);
         if (promotion.isPresent()) {
-            registerProductQuantities(product[0], 0, productQuantities);
-            registerPromotionProductQuantities(product[0], parseInt(product[2]), promotion.get(), promotionQuantities);
+            registerProductQuantities(column[0], 0, productQuantities);
+            registerPromotionProductQuantities(column[0], parseInt(column[2]), promotion.get(), promotionQuantities);
             return;
         }
-        registerProductQuantities(product[0], parseInt(product[2]), productQuantities);
+        registerProductQuantities(column[0], parseInt(column[2]), productQuantities);
     }
 
     private void registerProductInfo(final String productName, final int productPrice,
                                      final List<ProductInfo> productInfos) {
+        removeIfExsistsInfo(productName, productInfos);
         productInfos.add(ProductInfo.of(productName, productPrice));
+    }
+
+    private void removeIfExsistsInfo(final String productName, final List<ProductInfo> productInfos) {
+        productInfos.stream()
+                .filter(productInfo -> productInfo.isMatchProductName(productName))
+                .findAny()
+                .ifPresent(productInfo -> productInfos.removeLast());
     }
 
     private void registerProductQuantities(final String productName, final int productQuantity,
                                            final List<ProductQuantity> productQuantities) {
+        removeIfExsistsProductQuantity(productName, productQuantities);
         productQuantities.add(ProductQuantity.of(productName, productQuantity));
     }
 
     private void registerPromotionProductQuantities(final String productName, final int productQuantity,
                                                     final Promotion promotion,
                                                     final List<PromotionProductQuantity> promotionQuantities) {
+
         promotionQuantities.add(PromotionProductQuantity.of(productName, productQuantity, promotion));
+    }
+
+    private void removeIfExsistsProductQuantity(final String productName,
+                                                final List<ProductQuantity> productQuantities) {
+        productQuantities.stream()
+                .filter(productQuantity -> productQuantity.isMatchProductName(productName))
+                .findAny()
+                .ifPresent(productQuantity -> productQuantities.removeLast());
     }
 
     private int parseInt(final String number) {

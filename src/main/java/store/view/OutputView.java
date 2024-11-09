@@ -42,11 +42,11 @@ public class OutputView {
 
     private void printStoreProducts(final ProductInventoryDTO productInventoryDTO) {
         productInventoryDTO.getProducts().stream().forEach(this::printProduct);
+        printLineBreak();
     }
 
     private void printProduct(final ProductDTO productDTO) {
-        formatProductDTO(productDTO);
-        printLineBreak();
+        System.out.println(formatProductDTO(productDTO));
     }
 
     private String formatProductDTO(final ProductDTO productDTO) {

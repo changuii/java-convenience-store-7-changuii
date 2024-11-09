@@ -1,10 +1,10 @@
 package store.factory;
 
-import store.component.ConvenienceStoreServiceGnerator;
+import store.component.generator.ConvenienceStoreServiceGnerator;
 import store.component.DTOConverter;
 import store.component.FileParser;
-import store.component.ProductInventoryGenerator;
-import store.component.PromotionGenerator;
+import store.component.generator.ProductInventoryGenerator;
+import store.component.generator.PromotionGenerator;
 import store.controller.StoreController;
 import store.handler.RetryHandler;
 import store.service.ConvenienceStoreService;

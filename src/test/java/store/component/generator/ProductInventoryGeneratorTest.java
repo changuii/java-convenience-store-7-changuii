@@ -1,4 +1,4 @@
-package store.component;
+package store.component.generator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -15,6 +15,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import store.component.generator.ProductInventoryGenerator;
 import store.domain.product.BuyGet;
 import store.domain.product.DateRange;
 import store.domain.product.ProductInfo;

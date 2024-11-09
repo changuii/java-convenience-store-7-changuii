@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.BeforeEach;
-import store.component.TodayGenerator;
+import store.component.generator.TodayGenerator;
 import store.domain.product.BuyGet;
 import store.domain.product.DateRange;
 import store.domain.product.ProductInfo;

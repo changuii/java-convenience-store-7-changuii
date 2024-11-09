@@ -1,4 +1,4 @@
-package store.component;
+package store.component.generator;
 
 import java.util.LinkedHashMap;
 import java.util.List;

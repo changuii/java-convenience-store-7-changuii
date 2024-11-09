@@ -1,4 +1,4 @@
-package store.component;
+package store.component.generator;
 
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDate;

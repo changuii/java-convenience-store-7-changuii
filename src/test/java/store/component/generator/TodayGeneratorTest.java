@@ -1,9 +1,10 @@
-package store.component;
+package store.component.generator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
+import store.component.generator.TodayGenerator;
 
 public class TodayGeneratorTest {
 

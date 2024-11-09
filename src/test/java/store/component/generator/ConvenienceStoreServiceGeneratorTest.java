@@ -1,4 +1,4 @@
-package store.component;
+package store.component.generator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,6 +10,11 @@ import java.util.Optional;
 import java.util.Queue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import store.component.FileParser;
+import store.component.generator.ConvenienceStoreServiceGnerator;
+import store.component.generator.ProductInventoryGenerator;
+import store.component.generator.PromotionGenerator;
+import store.component.generator.TodayGenerator;
 import store.domain.ProductInventory;
 import store.domain.product.Promotion;
 import store.enums.StoreConfig;

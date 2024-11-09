@@ -1,13 +1,11 @@
 package store.service;
 
 import java.util.List;
-import store.component.ConsumerGenerator;
-import store.component.LocalDateGenerator;
+import store.component.generator.ConsumerGenerator;
+import store.component.generator.LocalDateGenerator;
 import store.domain.Consumer;
 import store.domain.ProductInventory;
-import store.domain.PurchaseHistory;
 import store.domain.PurchaseProduct;
-import store.dto.PurchaseProductDTO;
 
 
 public class ConvenienceStoreService {

@@ -1,9 +1,10 @@
-package store.component;
+package store.component.generator;
 
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import store.component.FileParser;
 import store.service.ConvenienceStoreService;
 import store.domain.ProductInventory;
 import store.domain.product.Promotion;

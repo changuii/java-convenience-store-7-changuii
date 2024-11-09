@@ -47,7 +47,7 @@ public class ProductInventoryGenerator {
         productLines.forEach((productLine) -> {
             parseProduct(productLine, promotions, productInfos, productQuantities, promotionQuantities);
         });
-        return ProductInventory.from(productInfos, productQuantities, promotionQuantities);
+        return ProductInventory.of(productInfos, productQuantities, promotionQuantities);
     }
 
 

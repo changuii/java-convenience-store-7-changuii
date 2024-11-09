@@ -14,7 +14,7 @@ import store.dto.PromotionProductQuantityDTO;
 public class DTOConverter {
 
     public ProductInventoryDTO convertProductInventoryDTO(final ProductInventory productInventory) {
-        return ProductInventoryDTO.from(
+        return ProductInventoryDTO.of(
                 convertProductInfoDTOs(productInventory.getInfos()),
                 convertProductQuantityDTOs(productInventory.getQuantities()),
                 convertPromotionProductQuantityDTOs(productInventory.getPromotionQuantities())

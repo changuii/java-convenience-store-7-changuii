@@ -16,7 +16,7 @@ public class ProductInventory {
         this.promotionQuantities = promotionQuantities;
     }
 
-    public static ProductInventory from(final Map<String, ProductInfo> infos,
+    public static ProductInventory of(final Map<String, ProductInfo> infos,
                                         final Map<String, ProductQuantity> quantities,
                                         final Map<String, PromotionProductQuantity> promotionQuantities) {
         return new ProductInventory(infos, quantities, promotionQuantities);

@@ -15,7 +15,7 @@ public class ProductInventoryDTO {
         this.promotionQuantities = promotionQuantities;
     }
 
-    public static ProductInventoryDTO from(final Map<String, ProductInfoDTO> infos,
+    public static ProductInventoryDTO of(final Map<String, ProductInfoDTO> infos,
                                            final Map<String, ProductQuantityDTO> quantities,
                                            final Map<String, PromotionProductQuantityDTO> promotionQuantities) {
         return new ProductInventoryDTO(infos, quantities, promotionQuantities);

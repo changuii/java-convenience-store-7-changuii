@@ -1,19 +1,16 @@
 package store.view;
 
 import java.text.DecimalFormat;
-import java.util.Map;
-import store.dto.ProductInfoDTO;
+import store.dto.ProductDTO;
 import store.dto.ProductInventoryDTO;
-import store.dto.ProductQuantityDTO;
-import store.dto.PromotionProductQuantityDTO;
 
 public class OutputView {
 
     private static final String WELCOME_MESSAGE = "안녕하세요. W편의점입니다.";
     private static final String INTRODUCE_STORE_PRODUCTS_MESSAGE = "현재 보유하고 있는 상품입니다.";
-    private static final String PRODUCT_INFO_FORMAT = "- %s %s원 ";
-    private static final String PRODUCT_QUANTITY_FORMAT = "%d개 ";
-    private static final String PRODUCT_QUANTITY_ZERO = "재고 없음 ";
+    private static final String PRODUCT_INFO_FORMAT = "- %s %s원 %s %s";
+    private static final String PRODUCT_QUANTITY_FORMAT = "%d개";
+    private static final String PRODUCT_QUANTITY_ZERO = "재고 없음";
     private static final DecimalFormat DECIMAL_FORMATTER = new DecimalFormat("###,###,###,###");
     private static final String PURCHASE_PRODUCTS_INPUT_MESSAGE = "구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])";
     private static final String CONTINUE_CHECKOUT_MESSAGE = "감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)";
@@ -44,49 +41,26 @@ public class OutputView {
 
 
     private void printStoreProducts(final ProductInventoryDTO productInventoryDTO) {
-        Map<String, ProductInfoDTO> infos = productInventoryDTO.getInfos();
-        Map<String, ProductQuantityDTO> quantities = productInventoryDTO.getQuantities();
-        Map<String, PromotionProductQuantityDTO> promotionQuantities = productInventoryDTO.getPromotionQuantities();
-
-        quantities.keySet().forEach(productName -> {
-            printPromotionProduct(infos, promotionQuantities, productName);
-            printProduct(infos, quantities, productName);
-        });
+        productInventoryDTO.getProducts().stream().forEach(this::printProduct);
     }
 
-    private void printProduct(final Map<String, ProductInfoDTO> infos, final Map<String, ProductQuantityDTO> quantities,
-                              final String productName) {
-        printProductInfo(infos.get(productName));
-        printProductQuantity(quantities.get(productName));
+    private void printProduct(final ProductDTO productDTO) {
+        formatProductDTO(productDTO);
         printLineBreak();
     }
 
-    private void printPromotionProduct(final Map<String, ProductInfoDTO> infos,
-                                       final Map<String, PromotionProductQuantityDTO> promotionQuantities,
-                                       final String productName) {
-        if (promotionQuantities.containsKey(productName)) {
-            printProductInfo(infos.get(productName));
-            printPromotionQuantity(promotionQuantities.get(productName));
-            printLineBreak();
-        }
+    private String formatProductDTO(final ProductDTO productDTO) {
+        String price = formatProductPrice(productDTO.getPrice());
+        String quantity = formatProductQuantity(productDTO.getQuantity());
+        return String.format(PRODUCT_INFO_FORMAT, productDTO.getName(), price, quantity, productDTO.getPromotionName());
+    }
+
+    private String formatProductPrice(final int price) {
+        return DECIMAL_FORMATTER.format(price);
     }
 
 
-    private void printPromotionQuantity(final PromotionProductQuantityDTO promotionProductQuantityDTO) {
-        printProductQuantity(promotionProductQuantityDTO.getQuantity());
-        System.out.print(promotionProductQuantityDTO.getPromotion());
-    }
-
-    private void printProductQuantity(final ProductQuantityDTO productQuantityDTO) {
-        System.out.print(formatProductQuantity(productQuantityDTO.getQuantity()));
-    }
-
-    private void printProductInfo(final ProductInfoDTO productInfoDTO) {
-        String price = DECIMAL_FORMATTER.format(productInfoDTO.getPrice());
-        System.out.print(String.format(PRODUCT_INFO_FORMAT, productInfoDTO.getName(), price));
-    }
-
-    private String formatProductQuantity(int quantity) {
+    private String formatProductQuantity(final int quantity) {
         if (quantity == 0) {
             return PRODUCT_QUANTITY_ZERO;
         }
@@ -94,7 +68,7 @@ public class OutputView {
     }
 
     public void printLineBreak() {
-        System.out.println();
+        System.out.print(System.lineSeparator());
     }
 
 }

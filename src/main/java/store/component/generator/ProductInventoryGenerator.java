@@ -1,6 +1,6 @@
 package store.component.generator;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,9 +40,9 @@ public class ProductInventoryGenerator {
 
     private ProductInventory createProductInventory(final Map<String, Optional<Promotion>> promotions,
                                                     final List<String> productLines) {
-        final Map<String, ProductInfo> productInfos = new LinkedHashMap<>();
-        final Map<String, ProductQuantity> productQuantities = new LinkedHashMap<>();
-        final Map<String, PromotionProductQuantity> promotionQuantities = new LinkedHashMap<>();
+        final List<ProductInfo> productInfos = new ArrayList<>();
+        final List<ProductQuantity> productQuantities = new ArrayList<>();
+        final List<PromotionProductQuantity> promotionQuantities = new ArrayList<>();
 
         productLines.forEach((productLine) -> {
             parseProduct(productLine, promotions, productInfos, productQuantities, promotionQuantities);
@@ -52,22 +52,22 @@ public class ProductInventoryGenerator {
 
 
     private void parseProduct(final String productLine, final Map<String, Optional<Promotion>> promotions,
-                              final Map<String, ProductInfo> productInfos,
-                              final Map<String, ProductQuantity> productQuantities,
-                              final Map<String, PromotionProductQuantity> promotionQuantities) {
+                              final List<ProductInfo> productInfos,
+                              final List<ProductQuantity> productQuantities,
+                              final List<PromotionProductQuantity> promotionQuantities) {
         try {
-            String[] product = productLine.split(StoreConfig.TABLE_ROW_DELIMITER.getValue());
-            validateContainPromotions(promotions, product[3]);
-            registerProduct(product, promotions, productInfos, productQuantities, promotionQuantities);
+            String[] column = productLine.split(StoreConfig.TABLE_ROW_DELIMITER.getValue());
+            validateContainPromotions(promotions, column[3]);
+            registerProduct(column, promotions, productInfos, productQuantities, promotionQuantities);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
         }
     }
 
     private void registerProduct(final String[] product, final Map<String, Optional<Promotion>> promotions,
-                                 final Map<String, ProductInfo> productInfos,
-                                 final Map<String, ProductQuantity> productQuantities,
-                                 final Map<String, PromotionProductQuantity> promotionQuantities) {
+                                 final List<ProductInfo> productInfos,
+                                 final List<ProductQuantity> productQuantities,
+                                 final List<PromotionProductQuantity> promotionQuantities) {
         registerProductInfo(product[0], parseInt(product[1]), productInfos);
         Optional<Promotion> promotion = promotions.get(product[3]);
         if (promotion.isPresent()) {
@@ -79,19 +79,19 @@ public class ProductInventoryGenerator {
     }
 
     private void registerProductInfo(final String productName, final int productPrice,
-                                     final Map<String, ProductInfo> productInfos) {
-        productInfos.put(productName, ProductInfo.of(productName, productPrice));
+                                     final List<ProductInfo> productInfos) {
+        productInfos.add(ProductInfo.of(productName, productPrice));
     }
 
     private void registerProductQuantities(final String productName, final int productQuantity,
-                                           final Map<String, ProductQuantity> quantities) {
-        quantities.put(productName, ProductQuantity.from(productQuantity));
+                                           final List<ProductQuantity> productQuantities) {
+        productQuantities.add(ProductQuantity.of(productName, productQuantity));
     }
 
     private void registerPromotionProductQuantities(final String productName, final int productQuantity,
                                                     final Promotion promotion,
-                                                    final Map<String, PromotionProductQuantity> quantities) {
-        quantities.put(productName, PromotionProductQuantity.of(productQuantity, promotion));
+                                                    final List<PromotionProductQuantity> promotionQuantities) {
+        promotionQuantities.add(PromotionProductQuantity.of(productName, productQuantity, promotion));
     }
 
     private int parseInt(final String number) {

@@ -1,35 +1,20 @@
 package store.dto;
 
-import java.util.Map;
+import java.util.List;
 
 public class ProductInventoryDTO {
-    private final Map<String, ProductInfoDTO> infos;
-    private final Map<String, ProductQuantityDTO> quantities;
-    private final Map<String, PromotionProductQuantityDTO> promotionQuantities;
+    private final List<ProductDTO> products;
 
-    public ProductInventoryDTO(final Map<String, ProductInfoDTO> infos,
-                               final Map<String, ProductQuantityDTO> quantities,
-                               final Map<String, PromotionProductQuantityDTO> promotionQuantities) {
-        this.infos = infos;
-        this.quantities = quantities;
-        this.promotionQuantities = promotionQuantities;
+    public ProductInventoryDTO(final List<ProductDTO> products) {
+        this.products = products;
     }
 
-    public static ProductInventoryDTO of(final Map<String, ProductInfoDTO> infos,
-                                           final Map<String, ProductQuantityDTO> quantities,
-                                           final Map<String, PromotionProductQuantityDTO> promotionQuantities) {
-        return new ProductInventoryDTO(infos, quantities, promotionQuantities);
+    public static ProductInventoryDTO from(final List<ProductDTO> products) {
+        return new ProductInventoryDTO(products);
     }
 
-    public Map<String, ProductInfoDTO> getInfos() {
-        return infos;
+    public List<ProductDTO> getProducts() {
+        return products;
     }
 
-    public Map<String, ProductQuantityDTO> getQuantities() {
-        return quantities;
-    }
-
-    public Map<String, PromotionProductQuantityDTO> getPromotionQuantities() {
-        return promotionQuantities;
-    }
 }

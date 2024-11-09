@@ -1,5 +1,7 @@
 package store.domain.product;
 
+import store.domain.PurchaseProduct;
+
 public class ProductInfo {
     private final String name;
     private final int price;
@@ -13,8 +15,12 @@ public class ProductInfo {
         return new ProductInfo(name, price);
     }
 
-    public int calculateTotalPrice(final int quantity){
+    public int calculateTotalPrice(final int quantity) {
         return price * quantity;
+    }
+
+    public boolean isMatchProduct(final PurchaseProduct purchaseProduct) {
+        return purchaseProduct.isMatchProductName(name);
     }
 
     public String getName() {

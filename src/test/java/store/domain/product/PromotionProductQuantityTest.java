@@ -7,14 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import store.domain.product.BuyGet;
-import store.domain.product.DateRange;
-import store.domain.product.ProductQuantity;
-import store.domain.product.Promotion;
-import store.domain.product.PromotionProductQuantity;
 
 public class PromotionProductQuantityTest {
-
+    private static final String PRODUCT_NAME = "MOCK";
+    private static final int MOCK_QUANTITY = 100;
     private Promotion promotion;
 
     @BeforeEach
@@ -28,8 +24,9 @@ public class PromotionProductQuantityTest {
     @ParameterizedTest
     @CsvSource(value = {"1:1:2:true", "2:2:4:true", "1:0:2:false", "2:1:4:false"}, delimiter = ':')
     void isLessThanQuantityTest(int promotionQuantity, int quantity, int purchaseQuantity, boolean expected) {
-        ProductQuantity productQuantity = ProductQuantity.from(quantity);
-        PromotionProductQuantity promotionProductQuantity = PromotionProductQuantity.of(promotionQuantity, promotion);
+        ProductQuantity productQuantity = ProductQuantity.of(PRODUCT_NAME, quantity);
+        PromotionProductQuantity promotionProductQuantity = PromotionProductQuantity.of(PRODUCT_NAME, promotionQuantity,
+                promotion);
 
         boolean actual = promotionProductQuantity.isLessThanQuantity(purchaseQuantity, productQuantity);
 
@@ -39,8 +36,9 @@ public class PromotionProductQuantityTest {
     @DisplayName("현재 프로모션이 진행중인지 반환하는 메서드")
     @ParameterizedTest
     @CsvSource(value = {"2023-11-01:true", "2023-11-30:true", "2023-10-31:false", "2023-12-01:false"}, delimiter = ':')
-    void isValidToday(final LocalDate today, final boolean expected){
-        PromotionProductQuantity promotionQuantity = PromotionProductQuantity.of(100, promotion);
+    void isValidToday(final LocalDate today, final boolean expected) {
+        PromotionProductQuantity promotionQuantity =
+                PromotionProductQuantity.of(PRODUCT_NAME, MOCK_QUANTITY, promotion);
 
         assertThat(promotionQuantity.isValidToday(today)).isEqualTo(expected);
     }

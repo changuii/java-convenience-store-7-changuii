@@ -1,9 +1,9 @@
 package store.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,18 +22,18 @@ public class ConvenienceStoreServiceTest {
     private static final String PRODUCT_NAME = "MOCK";
     private static final int PRODUCT_PRICE = 1000;
     private ConvenienceStoreService convenienceStoreService;
-    private Map<String, ProductInfo> infos;
-    private Map<String, ProductQuantity> quantities;
-    private Map<String, PromotionProductQuantity> promotionQuantities;
+    private List<ProductInfo> infos;
+    private List<ProductQuantity> quantities;
+    private List<PromotionProductQuantity> promotionQuantities;
 
     @BeforeEach
     void init() {
         LocalDate start = LocalDate.of(2024, 11, 01);
         LocalDate end = LocalDate.of(2024, 11, 30);
         Promotion promotion = Promotion.of("MOCK_PROMOTION", BuyGet.of(1, 1), DateRange.of(start, end));
-        infos = Map.of(PRODUCT_NAME, ProductInfo.of(PRODUCT_NAME, PRODUCT_PRICE));
-        quantities = Map.of(PRODUCT_NAME, ProductQuantity.from(5));
-        promotionQuantities = Map.of(PRODUCT_NAME, PromotionProductQuantity.of(10, promotion));
+        infos = List.of(ProductInfo.of(PRODUCT_NAME, PRODUCT_PRICE));
+        quantities = List.of(ProductQuantity.of(PRODUCT_NAME, 5));
+        promotionQuantities = List.of(PromotionProductQuantity.of(PRODUCT_NAME, 10, promotion));
         ProductInventory inventory = ProductInventory.of(infos, quantities, promotionQuantities);
         convenienceStoreService = ConvenienceStoreService.of(inventory, new TodayGenerator());
     }

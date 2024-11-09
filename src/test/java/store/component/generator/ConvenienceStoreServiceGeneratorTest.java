@@ -11,10 +11,6 @@ import java.util.Queue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import store.component.FileParser;
-import store.component.generator.ConvenienceStoreServiceGnerator;
-import store.component.generator.ProductInventoryGenerator;
-import store.component.generator.PromotionGenerator;
-import store.component.generator.TodayGenerator;
 import store.domain.ProductInventory;
 import store.domain.product.Promotion;
 import store.enums.StoreConfig;
@@ -77,7 +73,7 @@ public class ConvenienceStoreServiceGeneratorTest {
     @Test
     void 생성되는_ConvenienceStoreService_테스트() {
         ConvenienceStoreService expected = ConvenienceStoreService.of(
-                ProductInventory.of(Map.of(), Map.of(), Map.of()), new TodayGenerator());
+                ProductInventory.of(List.of(), List.of(), List.of()), new TodayGenerator());
         mockFileParse.addFileLine(new ArrayList<>());
         mockFileParse.addFileLine(new ArrayList<>());
 
@@ -138,7 +134,7 @@ public class ConvenienceStoreServiceGeneratorTest {
                                          final List<String> productLines) {
             this.promotions = promotions;
             this.productLines = productLines;
-            return ProductInventory.of(Map.of(), Map.of(), Map.of());
+            return ProductInventory.of(List.of(), List.of(), List.of());
         }
 
         public Map<String, Optional<Promotion>> getPromotions() {

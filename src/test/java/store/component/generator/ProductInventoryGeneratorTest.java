@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import store.component.generator.ProductInventoryGenerator;
 import store.domain.product.BuyGet;
 import store.domain.product.DateRange;
 import store.domain.product.ProductInfo;
@@ -28,15 +27,15 @@ import store.enums.ErrorMessage;
 public class ProductInventoryGeneratorTest {
 
     private final ProductInventoryGenerator productInventoryGenerator;
-    private final Map<String, ProductQuantity> quantities;
-    private final Map<String, PromotionProductQuantity> promotionQuantities;
-    private final Map<String, ProductInfo> infos;
+    private final List<ProductQuantity> quantities;
+    private final List<PromotionProductQuantity> promotionQuantities;
+    private final List<ProductInfo> infos;
 
     public ProductInventoryGeneratorTest() {
         productInventoryGenerator = new ProductInventoryGenerator();
-        quantities = new LinkedHashMap<>();
-        promotionQuantities = new LinkedHashMap<>();
-        infos = new LinkedHashMap<>();
+        quantities = new ArrayList<>();
+        promotionQuantities = new ArrayList<>();
+        infos = new ArrayList<>();
     }
 
     private static Stream<Arguments> provideProductLineAndPromotionsAndProductData() {
@@ -99,7 +98,7 @@ public class ProductInventoryGeneratorTest {
     @ValueSource(strings = {"탄산음료", "김치", "감자", "삼겹살", "젤리"})
     void 일반_상품을_생성하면_일반_상품_재고만_생성되고_프로모션_재고는_생성되지_않는다(String name) {
         String input = String.format("%s,1000,10,%s", name, "null");
-        quantities.put(name, ProductQuantity.from(10));
+        quantities.add(ProductQuantity.of(name, 10));
 
         ProductInventory productInventory =
                 productInventoryGenerator.generate(Map.of("null", Optional.empty()), List.of(input));
@@ -113,8 +112,8 @@ public class ProductInventoryGeneratorTest {
                                               final Map<String, Optional<Promotion>> promotions,
                                               final String productName, final int productQuantity,
                                               final Promotion promotion) {
-        quantities.put(productName, ProductQuantity.from(0));
-        promotionQuantities.put(productName, PromotionProductQuantity.of(productQuantity, promotion));
+        quantities.add(ProductQuantity.of(productName, 0));
+        promotionQuantities.add(PromotionProductQuantity.of(productName, productQuantity, promotion));
 
         ProductInventory productInventory = productInventoryGenerator.generate(promotions, productLines);
 
@@ -125,7 +124,7 @@ public class ProductInventoryGeneratorTest {
     @CsvSource(value = {"탄산음료:100000", "김치:1000", "감자:1000000000", "삼겹살:100"}, delimiter = ':')
     void 상품인벤토리를_생성하면서_상품의_정보도_생성한다(String name, int price) {
         String input = String.format("%s,%d,10,null", name, price);
-        infos.put(name, ProductInfo.of(name, price));
+        infos.add(ProductInfo.of(name, price));
 
         ProductInventory productInventory =
                 productInventoryGenerator.generate(Map.of("null", Optional.empty()), List.of(input));

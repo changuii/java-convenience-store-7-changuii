@@ -3,8 +3,8 @@ package store.component;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,39 +16,29 @@ import store.domain.ProductInventory;
 import store.domain.product.ProductQuantity;
 import store.domain.product.Promotion;
 import store.domain.product.PromotionProductQuantity;
-import store.dto.ProductInfoDTO;
+import store.dto.ProductDTO;
 import store.dto.ProductInventoryDTO;
-import store.dto.ProductQuantityDTO;
-import store.dto.PromotionProductQuantityDTO;
 
 public class DTOConverterTest {
-
+    private static final String EMPTY_PROMOTION_NAME = "프로모션";
+    private static final String EMPTY = "";
     private final DTOConverter dtoConverter;
-    private final Map<String, ProductInfo> infos;
-    private final Map<String, ProductQuantity> quantities;
-    private final Map<String, PromotionProductQuantity> promotionQuantities;
-    private final Map<String, ProductInfoDTO> infoDTOs;
-    private final Map<String, ProductQuantityDTO> quantityDTOs;
-    private final Map<String, PromotionProductQuantityDTO> promotionQuantityDTOs;
+    private List<ProductInfo> productInfos;
+    private List<ProductQuantity> productQuantities;
+    private List<PromotionProductQuantity> promotionProductQuantities;
 
     public DTOConverterTest() {
         dtoConverter = new DTOConverter();
-        this.infos = new LinkedHashMap<>();
-        this.quantities = new LinkedHashMap<>();
-        this.promotionQuantities = new LinkedHashMap<>();
-        this.infoDTOs = new LinkedHashMap<>();
-        this.quantityDTOs = new LinkedHashMap<>();
-        this.promotionQuantityDTOs = new LinkedHashMap<>();
+        productInfos = new ArrayList<>();
+        productQuantities = new ArrayList<>();
+        promotionProductQuantities = new ArrayList<>();
     }
 
     @BeforeEach
     void init() {
-        infos.clear();
-        quantities.clear();
-        promotionQuantities.clear();
-        infoDTOs.clear();
-        quantityDTOs.clear();
-        promotionQuantityDTOs.clear();
+        productInfos.clear();
+        productQuantities.clear();
+        promotionProductQuantities.clear();
     }
 
 
@@ -68,23 +58,21 @@ public class DTOConverterTest {
 
     private ProductInventory createProductInventory(final String productName, final int productPrice,
                                                     final int quantity, final int promotionQuantity) {
-        infos.put(productName, ProductInfo.of(productName, productPrice));
-        quantities.put(productName, ProductQuantity.from(quantity));
-        promotionQuantities.put(productName, PromotionProductQuantity.of(promotionQuantity, emptyPromotion()));
-        return ProductInventory.of(infos, quantities, promotionQuantities);
+        productInfos.add(ProductInfo.of(productName, productPrice));
+        productQuantities.add(ProductQuantity.of(productName, quantity));
+        promotionProductQuantities.add(PromotionProductQuantity.of(productName, promotionQuantity, emptyPromotion()));
+        return ProductInventory.of(productInfos, productQuantities, promotionProductQuantities);
     }
 
     private ProductInventoryDTO createProductInventoryDTO(final String productName, final int productPrice,
                                                           final int quantity, final int promotionQuantity) {
-        infoDTOs.put(productName, ProductInfoDTO.of(productName, productPrice));
-        quantityDTOs.put(productName, ProductQuantityDTO.from(quantity));
-        promotionQuantityDTOs.put(productName, PromotionProductQuantityDTO.of(promotionQuantity,
-                emptyPromotion().getPromotionName()));
-        return ProductInventoryDTO.of(infoDTOs, quantityDTOs, promotionQuantityDTOs);
+        ProductDTO promotion = ProductDTO.of(productName, productPrice, promotionQuantity, EMPTY_PROMOTION_NAME);
+        ProductDTO product = ProductDTO.of(productName, productPrice, quantity, EMPTY);
+        return ProductInventoryDTO.from(List.of(promotion, product));
     }
 
 
     private Promotion emptyPromotion() {
-        return Promotion.of("프로모션", BuyGet.of(1, 1), DateRange.of(LocalDate.MIN, LocalDate.MAX));
+        return Promotion.of(EMPTY_PROMOTION_NAME, BuyGet.of(1, 1), DateRange.of(LocalDate.MIN, LocalDate.MAX));
     }
 }

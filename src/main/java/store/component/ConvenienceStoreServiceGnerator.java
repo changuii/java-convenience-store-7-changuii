@@ -9,14 +9,14 @@ import store.domain.ProductInventory;
 import store.domain.Promotion;
 import store.enums.StoreConfig;
 
-public class ConvenienceStoreGnerator {
+public class ConvenienceStoreServiceGnerator {
     private static final int TABLE_HEADER_ROW = 0;
     private final FileParser fileParser;
     private final PromotionGenerator promotionGenerator;
     private final ProductInventoryGenerator productInventoryGenerator;
 
-    public ConvenienceStoreGnerator(final FileParser fileParser, final PromotionGenerator promotionGenerator,
-                                    final ProductInventoryGenerator productInventoryGenerator) {
+    public ConvenienceStoreServiceGnerator(final FileParser fileParser, final PromotionGenerator promotionGenerator,
+                                           final ProductInventoryGenerator productInventoryGenerator) {
         this.fileParser = fileParser;
         this.promotionGenerator = promotionGenerator;
         this.productInventoryGenerator = productInventoryGenerator;

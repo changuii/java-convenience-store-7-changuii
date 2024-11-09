@@ -1,6 +1,6 @@
 package store.factory;
 
-import store.component.ConvenienceStoreGnerator;
+import store.component.ConvenienceStoreServiceGnerator;
 import store.component.DTOConverter;
 import store.component.FileParser;
 import store.component.ProductInventoryGenerator;
@@ -28,8 +28,8 @@ public abstract class StoreControllerFactory {
         return new OutputView();
     }
 
-    private static ConvenienceStoreGnerator createConvenienceStoreGenerator() {
-        return new ConvenienceStoreGnerator(new FileParser(), new PromotionGenerator(),
+    private static ConvenienceStoreServiceGnerator createConvenienceStoreGenerator() {
+        return new ConvenienceStoreServiceGnerator(new FileParser(), new PromotionGenerator(),
                 new ProductInventoryGenerator());
     }
 

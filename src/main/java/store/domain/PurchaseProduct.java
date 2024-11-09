@@ -25,6 +25,20 @@ public class PurchaseProduct {
         return promotionQuantity.isLessThanQuantity(currentQuantity, quantity);
     }
 
+    public int deductQuantity(final int quantity){
+        if(currentQuantity > quantity){
+            currentQuantity -= quantity;
+            return quantity;
+        }
+        int quantityDifference = quantity - currentQuantity;
+        currentQuantity = 0;
+        return quantityDifference;
+    }
+
+    public PurchaseHistory generatePurchaseHistory(final int purchaseQuantity, final int totalPurchasePrice){
+        return PurchaseHistory.of(name, totalPurchasePrice, purchaseQuantity, 0, 0);
+    }
+
     public boolean isLessThanQuantity(final ProductQuantity quantity){
         return quantity.isLessThanQuantity(this.currentQuantity);
     }

@@ -46,6 +46,16 @@ public class ProductInventory {
                 .anyMatch(promotionProductQuantity -> true);
     }
 
+    public PurchaseHistory purchaseProduct(final PurchaseProduct purchaseProduct){
+        ProductQuantity productQuantity = getProductQuantity(purchaseProduct);
+        ProductInfo productInfo = getProductInfo(purchaseProduct);
+        int purchaseQuantity = productQuantity.deductQuantity(purchaseProduct);
+        int totalPurchasePrice = productInfo.calculateTotalPrice(purchaseQuantity);
+
+        return purchaseProduct.generatePurchaseHistory(purchaseQuantity, totalPurchasePrice);
+    }
+
+
     private PromotionProductQuantity getPromotionQuantity(final PurchaseProduct purchaseProduct) {
         return promotionQuantities.stream()
                 .filter(promotionProductQuantity -> promotionProductQuantity.isMatchProduct(purchaseProduct))
@@ -56,6 +66,13 @@ public class ProductInventory {
     private ProductQuantity getProductQuantity(final PurchaseProduct purchaseProduct) {
         return quantities.stream()
                 .filter(productQuantity -> productQuantity.isMatchProduct(purchaseProduct))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException());
+    }
+
+    private ProductInfo getProductInfo(final PurchaseProduct purchaseProduct){
+        return infos.stream()
+                .filter(productInfo -> productInfo.isMatchProduct(purchaseProduct))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException());
     }

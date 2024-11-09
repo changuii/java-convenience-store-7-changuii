@@ -1,10 +1,8 @@
 package store.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import store.component.DTOConverter;
 import store.domain.Consumer;
-import store.domain.PurchaseHistory;
 import store.domain.PurchaseProduct;
 import store.service.ConvenienceStoreService;
 import store.dto.PurchaseProductDTO;
@@ -32,25 +30,22 @@ public class StoreController {
     }
 
     public void run() {
-        retryHandler.retryUntilFalse(this::runConvenienceStoreCheckout, this::isTerminationCheckout,
+        retryHandler.retryUntilTrue(this::runConvenienceStoreCheckout, this::isCheckoutCompleted,
                 convenienceStoreService);
-    }
-
-    private boolean isTerminationCheckout() {
-        outputView.printRequestContinueCheckoutMessage();
-        String answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
-        outputView.printLineBreak();
-        if (answer.equals("Y")) {
-            return false;
-        }
-        return true;
     }
 
     private void runConvenienceStoreCheckout(final ConvenienceStoreService convenienceStoreService) {
         printConvenienceStore(convenienceStoreService);
         outputView.printPurchaseProductsInputMessage();
         Consumer consumer = retryHandler.retryUntilNotException(this::requestConsumer, outputView);
+        retryHandler.retryUntilTrue(this::checkoutConsumer, consumer::isCheckoutCompleted, consumer);
+    }
 
+    private boolean isCheckoutCompleted() {
+        outputView.printRequestContinueCheckoutMessage();
+        String answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
+        outputView.printLineBreak();
+        return answer.equals("N");
     }
 
 
@@ -64,6 +59,14 @@ public class StoreController {
         List<PurchaseProductDTO> purchaseProductDTOs = inputView.readPurchaseProducts();
         List<PurchaseProduct> purchaseProducts = dtoConverter.convertPurchaseProducts(purchaseProductDTOs);
         return convenienceStoreService.generateConsumer(purchaseProducts);
+    }
+
+    private void checkoutConsumer(Consumer consumer) {
+        if (!convenienceStoreService.isPromotionInProgress(consumer)) {
+            convenienceStoreService.purchaseProduct(consumer);
+        }
+
+
     }
 
 

@@ -7,7 +7,7 @@ import store.view.OutputView;
 
 public class RetryHandler {
 
-    public <T> void retryUntilFalse(Consumer<T> logic, BooleanSupplier flag, T data) {
+    public <T> void retryUntilTrue(Consumer<T> logic, BooleanSupplier flag, T data) {
         while (true) {
             logic.accept(data);
             if (flag.getAsBoolean()) {

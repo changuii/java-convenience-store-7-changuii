@@ -25,6 +25,15 @@ public class ConvenienceStoreService {
         return new ConvenienceStoreService(productInventory, localDateGenerator);
     }
 
+    public boolean isPromotionInProgress(Consumer consumer){
+        return consumer.isPromotionProduct(productInventory, localDateGenerator.generate());
+    }
+
+    public void purchaseProduct(Consumer consumer){
+        consumer.purchaseProduct(productInventory);
+    }
+
+
     public Consumer generateConsumer(List<PurchaseProduct> purchaseProducts) {
         return consumerGenerator.generate(purchaseProducts);
     }

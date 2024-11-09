@@ -19,8 +19,9 @@ public class ProductQuantity {
         return this.quantity >= quantity;
     }
 
-    public void deductQuantity(final int quantity) {
-        this.quantity -= quantity;
+    public int deductQuantity(final PurchaseProduct purchaseProduct) {
+        quantity = purchaseProduct.deductQuantity(quantity);
+        return quantity;
     }
 
     public boolean isMatchProduct(final PurchaseProduct purchaseProduct) {

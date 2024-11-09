@@ -3,6 +3,8 @@ package store.controller;
 import java.util.ArrayList;
 import java.util.List;
 import store.component.DTOConverter;
+import store.domain.Consumer;
+import store.domain.PurchaseHistory;
 import store.domain.PurchaseProduct;
 import store.service.ConvenienceStoreService;
 import store.dto.PurchaseProductDTO;
@@ -47,8 +49,7 @@ public class StoreController {
     private void runConvenienceStoreCheckout(final ConvenienceStoreService convenienceStoreService) {
         printConvenienceStore(convenienceStoreService);
         outputView.printPurchaseProductsInputMessage();
-        List<PurchaseProductDTO> purchaseProductDTOs = retryHandler.retryUntilNotException(
-                this::requestPurchaseProductDTOs, outputView);
+        Consumer consumer = retryHandler.retryUntilNotException(this::requestConsumer, outputView);
 
     }
 
@@ -59,26 +60,10 @@ public class StoreController {
                 dtoConverter.convertProductInventoryDTO(convenienceStoreService.getProductInventory()));
     }
 
-    private List<PurchaseProductDTO> requestPurchaseProductDTOs() {
+    private Consumer requestConsumer() {
         List<PurchaseProductDTO> purchaseProductDTOs = inputView.readPurchaseProducts();
-        convenienceStoreService.validatePurchaseProducts(purchaseProductDTOs);
-        return purchaseProductDTOs;
-    }
-
-    private void purchaseProducts(List<PurchaseProductDTO> purchaseProductDTOs) {
-        List<PurchaseProduct> purchaseHistory = new ArrayList<>();
-
-        purchaseProductDTOs.forEach(purchaseProductDTO -> {
-            if (convenienceStoreService.isPromotionProduct(purchaseProductDTO)) {
-
-            } else {
-                purchaseHistory.add(convenienceStoreService.purchaseProduct(purchaseProductDTO));
-            }
-        });
-    }
-
-    private void purchasePromotionProduct(PurchaseProductDTO purchaseProductDTO) {
-
+        List<PurchaseProduct> purchaseProducts = dtoConverter.convertPurchaseProducts(purchaseProductDTOs);
+        return convenienceStoreService.generateConsumer(purchaseProducts);
     }
 
 

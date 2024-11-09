@@ -1,15 +1,19 @@
 package store.component;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import store.domain.ProductInfo;
 import store.domain.ProductInventory;
 import store.domain.ProductQuantity;
 import store.domain.PromotionProductQuantity;
+import store.domain.PurchaseProduct;
 import store.dto.ProductInfoDTO;
 import store.dto.ProductInventoryDTO;
 import store.dto.ProductQuantityDTO;
 import store.dto.PromotionProductQuantityDTO;
+import store.dto.PurchaseProductDTO;
 
 public class DTOConverter {
 
@@ -20,6 +24,17 @@ public class DTOConverter {
                 convertPromotionProductQuantityDTOs(productInventory.getPromotionQuantities())
         );
     }
+
+    public List<PurchaseProduct> convertPurchaseProducts(final List<PurchaseProductDTO> purchaseProductDTOs){
+        return purchaseProductDTOs.stream()
+                .map(this::convertPurchaseProduct)
+                .collect(Collectors.toList());
+    }
+
+    private PurchaseProduct convertPurchaseProduct(final PurchaseProductDTO purchaseProductDTO){
+        return PurchaseProduct.of(purchaseProductDTO.getName(), purchaseProductDTO.getQuantity());
+    }
+
 
     private Map<String, ProductInfoDTO> convertProductInfoDTOs(final Map<String, ProductInfo> infos) {
         Map<String, ProductInfoDTO> productInfoDTOs = new LinkedHashMap<>();

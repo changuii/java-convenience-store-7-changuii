@@ -1,20 +1,25 @@
 package store.service;
 
 import java.util.List;
+import store.component.ConsumerGenerator;
 import store.component.LocalDateGenerator;
+import store.domain.Consumer;
 import store.domain.ProductInventory;
+import store.domain.PurchaseHistory;
 import store.domain.PurchaseProduct;
 import store.dto.PurchaseProductDTO;
-import store.enums.ErrorMessage;
+
 
 public class ConvenienceStoreService {
     private final ProductInventory productInventory;
     private final LocalDateGenerator localDateGenerator;
+    private final ConsumerGenerator consumerGenerator;
 
     private ConvenienceStoreService(final ProductInventory productInventory,
                                     final LocalDateGenerator localDateGenerator) {
         this.productInventory = productInventory;
         this.localDateGenerator = localDateGenerator;
+        this.consumerGenerator = new ConsumerGenerator(productInventory, localDateGenerator);
     }
 
     public static ConvenienceStoreService of(final ProductInventory productInventory,
@@ -22,38 +27,9 @@ public class ConvenienceStoreService {
         return new ConvenienceStoreService(productInventory, localDateGenerator);
     }
 
-    public void validatePurchaseProducts(final List<PurchaseProductDTO> purchaseProductDTOs) {
-        purchaseProductDTOs.forEach(this::validatePurchaseProduct);
+    public Consumer generateConsumer(List<PurchaseProduct> purchaseProducts) {
+        return consumerGenerator.generate(purchaseProducts);
     }
-
-    public boolean isPromotionProduct(final PurchaseProductDTO purchaseProductDTO) {
-        return productInventory.isPromotionProduct(purchaseProductDTO.getName(), localDateGenerator.generate());
-    }
-
-    public PurchaseProduct purchaseProduct(final PurchaseProductDTO purchaseProductDTO) {
-        int totalPrice = productInventory.purchaseProduct(purchaseProductDTO.getName(),
-                purchaseProductDTO.getQuantity());
-
-        return PurchaseProduct.of(purchaseProductDTO.getName(), totalPrice, purchaseProductDTO.getQuantity(), 0, 0);
-    }
-
-    private void validatePurchaseProduct(final PurchaseProductDTO purchaseProductDTO) {
-        validateExistsProductName(purchaseProductDTO.getName());
-        validateLessThanQuantity(purchaseProductDTO.getName(), purchaseProductDTO.getQuantity());
-    }
-
-    private void validateExistsProductName(final String productName) {
-        if (!productInventory.containsProductName(productName)) {
-            throw new IllegalArgumentException(ErrorMessage.NOT_EXISTS_PRODUCT_NAME.getMessage());
-        }
-    }
-
-    private void validateLessThanQuantity(final String productName, final int quantity) {
-        if (!productInventory.isLessThanQuantity(productName, quantity, localDateGenerator.generate())) {
-            throw new IllegalArgumentException(ErrorMessage.MORE_THAN_PURCHASE_PRODUCT_QUANTITY.getMessage());
-        }
-    }
-
 
     public ProductInventory getProductInventory() {
         return productInventory;

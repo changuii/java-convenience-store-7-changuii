@@ -15,12 +15,8 @@ public class PromotionProductQuantity {
         return new PromotionProductQuantity(quantity, promotion);
     }
 
-    public boolean isLessThanQuantity(final int quantity, final ProductQuantity productQuantity,
-                                      final LocalDate today) {
-        if (promotion.isValidNow(today)) {
-            return productQuantity.isLessThanQuantity(quantity - this.quantity);
-        }
-        return productQuantity.isLessThanQuantity(quantity);
+    public boolean isLessThanQuantity(final int quantity, final ProductQuantity productQuantity) {
+        return productQuantity.isLessThanQuantity(quantity - this.quantity);
     }
 
     public boolean isValidToday(final LocalDate today){

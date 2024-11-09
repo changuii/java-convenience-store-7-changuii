@@ -11,11 +11,11 @@ public class ProductQuantity {
         return new ProductQuantity(quantity);
     }
 
-    public boolean isLessThanQuantity(int quantity) {
+    public boolean isLessThanQuantity(final int quantity) {
         return this.quantity >= quantity;
     }
 
-    public void deductQuantity(final int quantity){
+    public void deductQuantity(final int quantity) {
         this.quantity -= quantity;
     }
 

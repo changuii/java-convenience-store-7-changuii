@@ -22,26 +22,48 @@ public class ProductInventory {
         return new ProductInventory(infos, quantities, promotionQuantities);
     }
 
-    public boolean containsProductName(final String productName) {
-        return infos.containsKey(productName);
+    public boolean containsProduct(final PurchaseProduct purchaseProduct){
+        return infos.keySet().stream()
+                .filter(purchaseProduct::isMatchProductName)
+                .anyMatch(productName -> true);
     }
 
-    public boolean isLessThanQuantity(final String productName, final int quantity, final LocalDate today) {
-        if (promotionQuantities.containsKey(productName)) {
-            return promotionQuantities.get(productName)
-                    .isLessThanQuantity(quantity, this.quantities.get(productName), today);
+    public boolean isLessThanQuantity(final PurchaseProduct purchaseProduct, final LocalDate today) {
+        ProductQuantity productQuantity = getProductQuantity(purchaseProduct);
+        if (isPromotionProduct(purchaseProduct, today)) {
+            PromotionProductQuantity promotionQuantity = getPromotionQuantity(purchaseProduct);
+            return purchaseProduct.isLessThanQuantity(promotionQuantity, productQuantity);
         }
-        return this.quantities.get(productName).isLessThanQuantity(quantity);
+        return purchaseProduct.isLessThanQuantity(productQuantity);
     }
 
-    public boolean isPromotionProduct(final String productName, final LocalDate today) {
-        if (promotionQuantities.containsKey(productName) && promotionQuantities.get(productName).isValidToday(today)) {
-            return true;
-        }
-        return false;
+    public boolean isPromotionProduct(final PurchaseProduct purchaseProduct, final LocalDate today) {
+        return promotionQuantities.keySet().stream()
+                .filter(purchaseProduct::isMatchProductName)
+                .map(promotionQuantities::get)
+                .filter(promotionQuantity -> promotionQuantity.isValidToday(today))
+                .findAny()
+                .isPresent();
     }
 
-    public int purchaseProduct(final String productName, final int purchaseQuantity){
+    private PromotionProductQuantity getPromotionQuantity(final PurchaseProduct purchaseProduct){
+        return promotionQuantities.keySet().stream()
+                .filter(purchaseProduct::isMatchProductName)
+                .map(promotionQuantities::get)
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException());
+    }
+
+    private ProductQuantity getProductQuantity(final PurchaseProduct purchaseProduct){
+        return quantities.keySet().stream()
+                .filter(purchaseProduct::isMatchProductName)
+                .map(quantities::get)
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException());
+    }
+
+
+    public int purchaseProduct(final String productName, final int purchaseQuantity) {
         quantities.get(productName).deductQuantity(purchaseQuantity);
         return infos.get(productName).calculateTotalPrice(purchaseQuantity);
     }

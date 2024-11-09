@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import store.Constants;
+import store.domain.PurchaseProduct;
 
 public class ProductQuantityTest {
 
@@ -29,4 +30,15 @@ public class ProductQuantityTest {
 
         assertThat(productQuantity).usingRecursiveComparison().isEqualTo(expectedQuantity);
     }
+
+    @DisplayName("purchaseProduct와 이름이 일치한다면, true 아니라면 false를 반환한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"PRODUCT:true", "사이다:false", "감자:false"}, delimiter = ':')
+    void isMatchProduct(final String purchaseProductName, final boolean expected){
+        ProductQuantity productQuantity = ProductQuantity.of(Constants.PRODUCT_NAME, Constants.PRODUCT_QUANTITY_VALUE);
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(purchaseProductName, Constants.PRODUCT_QUANTITY_VALUE);
+
+        assertThat(productQuantity.isMatchProduct(purchaseProduct)).isEqualTo(expected);
+    }
+
 }

@@ -4,11 +4,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import store.domain.ProductInfo;
+import store.domain.product.ProductInfo;
 import store.domain.ProductInventory;
-import store.domain.ProductQuantity;
-import store.domain.Promotion;
-import store.domain.PromotionProductQuantity;
+import store.domain.product.ProductQuantity;
+import store.domain.product.Promotion;
+import store.domain.product.PromotionProductQuantity;
 import store.enums.ErrorMessage;
 import store.enums.StoreConfig;
 

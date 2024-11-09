@@ -1,4 +1,4 @@
-package store.domain;
+package store.domain.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -7,6 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import store.domain.product.BuyGet;
+import store.domain.product.DateRange;
+import store.domain.product.ProductQuantity;
+import store.domain.product.Promotion;
+import store.domain.product.PromotionProductQuantity;
 
 public class PromotionProductQuantityTest {
 

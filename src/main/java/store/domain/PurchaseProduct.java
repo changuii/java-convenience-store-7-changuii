@@ -1,5 +1,8 @@
 package store.domain;
 
+import store.domain.product.ProductQuantity;
+import store.domain.product.PromotionProductQuantity;
+
 public class PurchaseProduct {
     private final String name;
     private int currentQuantity;

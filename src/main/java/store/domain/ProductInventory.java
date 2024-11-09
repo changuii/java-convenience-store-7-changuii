@@ -3,6 +3,9 @@ package store.domain;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Map;
+import store.domain.product.ProductInfo;
+import store.domain.product.ProductQuantity;
+import store.domain.product.PromotionProductQuantity;
 
 public class ProductInventory {
     private final Map<String, ProductInfo> infos;

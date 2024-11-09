@@ -4,24 +4,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import store.component.TodayGenerator;
-import store.domain.BuyGet;
-import store.domain.DateRange;
-import store.domain.ProductInfo;
+import store.domain.product.BuyGet;
+import store.domain.product.DateRange;
+import store.domain.product.ProductInfo;
 import store.domain.ProductInventory;
-import store.domain.ProductQuantity;
-import store.domain.Promotion;
-import store.domain.PromotionProductQuantity;
-import store.domain.PurchaseHistory;
-import store.dto.PurchaseProductDTO;
+import store.domain.product.ProductQuantity;
+import store.domain.product.Promotion;
+import store.domain.product.PromotionProductQuantity;
 import store.enums.ErrorMessage;
 
 public class ConvenienceStoreServiceTest {

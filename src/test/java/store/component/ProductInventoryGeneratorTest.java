@@ -15,13 +15,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import store.domain.BuyGet;
-import store.domain.DateRange;
-import store.domain.ProductInfo;
+import store.domain.product.BuyGet;
+import store.domain.product.DateRange;
+import store.domain.product.ProductInfo;
 import store.domain.ProductInventory;
-import store.domain.ProductQuantity;
-import store.domain.Promotion;
-import store.domain.PromotionProductQuantity;
+import store.domain.product.ProductQuantity;
+import store.domain.product.Promotion;
+import store.domain.product.PromotionProductQuantity;
 import store.enums.ErrorMessage;
 
 public class ProductInventoryGeneratorTest {

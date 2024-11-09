@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import store.domain.BuyGet;
-import store.domain.DateRange;
-import store.domain.Promotion;
+import store.domain.product.BuyGet;
+import store.domain.product.DateRange;
+import store.domain.product.Promotion;
 import store.enums.ErrorMessage;
 import store.enums.StoreConfig;
 

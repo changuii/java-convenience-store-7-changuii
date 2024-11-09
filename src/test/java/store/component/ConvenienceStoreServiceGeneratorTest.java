@@ -11,7 +11,7 @@ import java.util.Queue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import store.domain.ProductInventory;
-import store.domain.Promotion;
+import store.domain.product.Promotion;
 import store.enums.StoreConfig;
 import store.service.ConvenienceStoreService;
 

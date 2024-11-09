@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import store.service.ConvenienceStoreService;
 import store.domain.ProductInventory;
-import store.domain.Promotion;
+import store.domain.product.Promotion;
 import store.enums.StoreConfig;
 
 public class ConvenienceStoreServiceGnerator {

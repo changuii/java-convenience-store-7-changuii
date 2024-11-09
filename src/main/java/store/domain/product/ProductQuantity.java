@@ -1,4 +1,4 @@
-package store.domain;
+package store.domain.product;
 
 public class ProductQuantity {
     private int quantity;

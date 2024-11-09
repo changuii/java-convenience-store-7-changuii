@@ -53,4 +53,28 @@ public class PurchaseProductTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @DisplayName("상품의 재고가 현재 남은 갯수 이하라면, 모두 사버리고 이상이라면 남은 갯수만큼 차감하고 차감한 만큼 반환한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"1:2:1", "5:10:5", "7:3:3", "150:87:87"}, delimiter = ':')
+    void deductQuantity(int currentQuantity, int productQuantity, int expected) {
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, currentQuantity);
+
+        int actual = purchaseProduct.deductQuantity(productQuantity);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @DisplayName("일반 구매 수량, 구매 금액 총액을 매개변수로 받아 purchaseHistory를 생성한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"10:10000", "20:500", "30:700000"}, delimiter = ':')
+    void generatePurchaseHistory(int purchaseQuantity, int totalPurchasePrice) {
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, Constants.PRODUCT_QUANTITY_VALUE);
+        PurchaseHistory expected = PurchaseHistory.of(Constants.PRODUCT_NAME, totalPurchasePrice, purchaseQuantity,
+                Constants.EMPTY_NUM, Constants.EMPTY_NUM);
+
+        PurchaseHistory actual = purchaseProduct.generatePurchaseHistory(purchaseQuantity, totalPurchasePrice);
+
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+    }
+
 }

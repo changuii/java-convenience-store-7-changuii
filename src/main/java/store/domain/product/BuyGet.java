@@ -22,6 +22,10 @@ public class BuyGet {
     }
 
     public int calculateApplicableQuantity(final int quantity){
-        return calculateFreeQuantity(quantity) * (buy + get);
+        return calculateApplicableFreeQuantity(quantity) * (buy + get);
+    }
+
+    public int calculateApplicableFreeQuantity(final int quantity){
+        return quantity / (buy + get);
     }
 }

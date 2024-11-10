@@ -30,7 +30,7 @@ public class Consumer {
     }
 
     public void addtionProductQuantity() {
-        currentPurchaseProduct().additionQuantity();
+        currentPurchaseProduct().additionQuantityForApplyPromotion();
     }
 
     public int calculateQuantityAtRegularPrice(final ProductInventory productInventory) {
@@ -43,7 +43,7 @@ public class Consumer {
     }
 
     public void deductCurrentProductQuantityAtRegularPrice(final int regularPriceQuantity) {
-        currentPurchaseProduct().deductQuantity(regularPriceQuantity);
+        currentPurchaseProduct().deductRegularPriceQuantity(regularPriceQuantity);
     }
 
     public void purchasePromotionProduct(final ProductInventory productInventory) {

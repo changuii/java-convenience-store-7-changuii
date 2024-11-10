@@ -20,7 +20,7 @@ public class ProductQuantity {
     }
 
     public int deductQuantity(final PurchaseProduct purchaseProduct) {
-        int deductQuantity = purchaseProduct.deductQuantity(quantity);
+        int deductQuantity = purchaseProduct.purchaseUntilAvailable(quantity);
         quantity -= deductQuantity;
         return deductQuantity;
     }

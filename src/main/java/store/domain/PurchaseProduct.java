@@ -28,7 +28,7 @@ public class PurchaseProduct {
         return promotionQuantity.isLessThanQuantity(currentQuantity, quantity);
     }
 
-    public int deductQuantity(final int quantity) {
+    public int purchaseUntilAvailable(final int quantity) {
         if (currentQuantity > quantity) {
             currentQuantity -= quantity;
             return quantity;
@@ -38,7 +38,11 @@ public class PurchaseProduct {
         return purchaseQuantity;
     }
 
-    public int calculateNeedQuantity(Promotion promotion) {
+    public void deductRegularPriceQuantity(final int quantity) {
+        this.currentQuantity -= quantity;
+    }
+
+    public int getRequiredQuantityForApplyPromotion(Promotion promotion) {
         return promotion.getRequiredQuantityForApplyPromotion(currentQuantity);
     }
 
@@ -46,11 +50,11 @@ public class PurchaseProduct {
         return currentQuantity - promotionProductQuantity.getApplicableQuantity();
     }
 
-    public boolean isQuantityPromotionSufficient(PromotionProductQuantity promotionProductQuantity) {
+    public boolean hasQuantitySufficientForApplyPromotion(PromotionProductQuantity promotionProductQuantity) {
         return promotionProductQuantity.getRequiredQuantityForApplyPromotion(currentQuantity) <= currentQuantity;
     }
 
-    public void additionQuantity() {
+    public void additionQuantityForApplyPromotion() {
         currentQuantity++;
     }
 
@@ -58,13 +62,13 @@ public class PurchaseProduct {
         return currentQuantity == 0;
     }
 
-    public void writePurchaseHistory(final int quantity, final int price) {
+    public void recordRegularPricePurchaseHistory(final int quantity, final int price) {
         purchaseHistory.addPurchasePrice(price);
         purchaseHistory.addQuantity(quantity);
     }
 
-    public void writePurchaseHistory(final int price, final int promotionQuantity,
-                                     final int freeQuantity) {
+    public void recordPromotionAppliedPurchaseHistory(final int price, final int promotionQuantity,
+                                                      final int freeQuantity) {
         purchaseHistory.addPurchasePrice(price);
         purchaseHistory.addPromotionQuantity(promotionQuantity);
         purchaseHistory.addFreeQuantity(freeQuantity);

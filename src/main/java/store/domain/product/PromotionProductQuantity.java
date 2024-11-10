@@ -38,7 +38,11 @@ public class PromotionProductQuantity {
         return promotion.calculateApplicablePromotionQuantity(quantity);
     }
 
-    public int deductQuantity(final PurchaseProduct purchaseProduct){
+    public int calculateSufficientPromotionQuantity(final int quantity) {
+        return promotion.calculatePromotionEnoughQuantity(quantity);
+    }
+
+    public int deductQuantity(final PurchaseProduct purchaseProduct) {
         int deductQuantity = purchaseProduct.deductQuantity(quantity);
         quantity -= deductQuantity;
         return deductQuantity;

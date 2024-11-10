@@ -25,28 +25,36 @@ public class ConvenienceStoreService {
         return new ConvenienceStoreService(productInventory, localDateGenerator);
     }
 
-    public boolean isPromotionInProgress(Consumer consumer) {
+    public boolean isPromotionInProgress(final Consumer consumer) {
         return consumer.isPromotionProduct(productInventory, localDateGenerator.generate());
     }
 
-    public boolean isPromotionProductEnogh(Consumer consumer) {
+    public boolean isPromotionProductEnogh(final Consumer consumer) {
         return consumer.isPromotionProductQuantityEnogh(productInventory);
     }
 
-    public int getQuantityAtRegularPrice(Consumer consumer) {
+    public void purchaseRegularPricePromotionProduct(final Consumer consumer) {
+        consumer.purchaseRegularPricePromotionProduct(productInventory);
+    }
+
+    public boolean isQuantityPromotionSufficient(final Consumer consumer) {
+        return consumer.isQuantityPromotionSufficient(productInventory);
+    }
+
+    public int getQuantityAtRegularPrice(final Consumer consumer) {
         return consumer.calculateQuantityAtRegularPrice(productInventory);
     }
 
-    public void purchasePromotionProduct(Consumer consumer) {
+    public void purchasePromotionProduct(final Consumer consumer) {
         consumer.purchasePromotionProduct(productInventory);
     }
 
-    public void purchaseProduct(Consumer consumer) {
+    public void purchaseProduct(final Consumer consumer) {
         consumer.purchaseProduct(productInventory);
     }
 
 
-    public Consumer generateConsumer(List<PurchaseProduct> purchaseProducts) {
+    public Consumer generateConsumer(final List<PurchaseProduct> purchaseProducts) {
         return consumerGenerator.generate(purchaseProducts);
     }
 

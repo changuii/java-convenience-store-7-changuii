@@ -16,6 +16,8 @@ public class OutputView {
     private static final String CONTINUE_CHECKOUT_MESSAGE = "감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)";
     private static final String PURCHASE_QUANTITY_REGULAR_PRICE_MESSAGE =
             "현재 %s %d개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까? (Y/N)";
+    private static final String ADDITION_PROMOTION_PRODUCT_QUANTITY_MESSAGE =
+            "현재 %s은(는) 1개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)";
 
 
     public void printWelcomeMessage() {
@@ -23,6 +25,7 @@ public class OutputView {
     }
 
     public void printRequestContinueCheckoutMessage() {
+        printLineBreak();
         System.out.println(CONTINUE_CHECKOUT_MESSAGE);
     }
 
@@ -45,6 +48,11 @@ public class OutputView {
     public void printPurchaseQuantityAtRegularPrice(final String productName, final int quantity) {
         printLineBreak();
         System.out.println(String.format(PURCHASE_QUANTITY_REGULAR_PRICE_MESSAGE, productName, quantity));
+    }
+
+    public void printAdditionPromotionProductQuantityMessage(final String productName) {
+        printLineBreak();
+        System.out.println(String.format(ADDITION_PROMOTION_PRODUCT_QUANTITY_MESSAGE, productName));
     }
 
     private void printStoreProducts(final ProductInventoryDTO productInventoryDTO) {

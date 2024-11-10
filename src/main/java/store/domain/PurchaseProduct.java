@@ -46,6 +46,14 @@ public class PurchaseProduct {
         return currentQuantity - promotionProductQuantity.calculateApplicablePromotionProduct();
     }
 
+    public boolean isQuantityPromotionSufficient(PromotionProductQuantity promotionProductQuantity) {
+        return promotionProductQuantity.calculateSufficientPromotionQuantity(currentQuantity) <= currentQuantity;
+    }
+
+    public void additionQuantity() {
+        currentQuantity++;
+    }
+
     public boolean isPurchaseCompleted() {
         return currentQuantity == 0;
     }

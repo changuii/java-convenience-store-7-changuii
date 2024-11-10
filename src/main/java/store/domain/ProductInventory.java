@@ -74,6 +74,11 @@ public class ProductInventory {
         purchaseProduct.writePurchaseHistory(totalPurchasePrice, purchaseQuantity, freeQuantity);
     }
 
+    public boolean isQuantityPromotionSufficient(final PurchaseProduct purchaseProduct) {
+        PromotionProductQuantity promotionProductQuantity = getPromotionQuantity(purchaseProduct);
+        return purchaseProduct.isQuantityPromotionSufficient(promotionProductQuantity);
+    }
+
     public boolean isPromotionQuantityEnough(final PurchaseProduct purchaseProduct) {
         PromotionProductQuantity promotionQuantity = getPromotionQuantity(purchaseProduct);
         return promotionQuantity.isQuantityEnough(purchaseProduct);

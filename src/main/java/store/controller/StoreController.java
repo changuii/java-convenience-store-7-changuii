@@ -63,7 +63,9 @@ public class StoreController {
 
     private void checkoutConsumer(Consumer consumer) {
         purchaseNonPromotionProduct(consumer);
-        purchaseNotEnoughPromotionProduct(consumer);
+        purchaseNotEnoughPromotionProductQuantity(consumer);
+        purchaseNotEnoughPurchaseProductQuantity(consumer);
+        purchaseEnoughPromotionProduct(consumer);
         consumer.nextPurchaseProduct();
     }
 
@@ -73,7 +75,7 @@ public class StoreController {
         }
     }
 
-    private void purchaseNotEnoughPromotionProduct(Consumer consumer) {
+    private void purchaseNotEnoughPromotionProductQuantity(Consumer consumer) {
         if (!consumer.isCurrentPurchaseProductDone() && !convenienceStoreService.isPromotionProductEnogh(consumer)) {
             String productName = consumer.currentProductName();
             int quantity = convenienceStoreService.getQuantityAtRegularPrice(consumer);
@@ -82,6 +84,26 @@ public class StoreController {
             if (answer.equals("N")) {
                 consumer.deductCurrentProductQuantityAtRegularPrice(quantity);
             }
+            convenienceStoreService.purchasePromotionProduct(consumer);
+        }
+    }
+
+    private void purchaseNotEnoughPurchaseProductQuantity(Consumer consumer) {
+        if (!consumer.isCurrentPurchaseProductDone() &&
+                !convenienceStoreService.isQuantityPromotionSufficient(consumer)) {
+            String productName = consumer.currentProductName();
+            outputView.printAdditionPromotionProductQuantityMessage(productName);
+            String answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
+            if (answer.equals("Y")) {
+                consumer.addtionProductQuantity();
+            } else{
+                convenienceStoreService.purchaseRegularPricePromotionProduct(consumer);
+            }
+        }
+    }
+
+    private void purchaseEnoughPromotionProduct(Consumer consumer){
+        if(!consumer.isCurrentPurchaseProductDone()){
             convenienceStoreService.purchasePromotionProduct(consumer);
         }
     }

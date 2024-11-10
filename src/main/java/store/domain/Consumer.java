@@ -25,6 +25,14 @@ public class Consumer {
         return productInventory.isPromotionQuantityEnough(currentPurchaseProduct());
     }
 
+    public boolean isQuantityPromotionSufficient(final ProductInventory productInventory) {
+        return productInventory.isQuantityPromotionSufficient(currentPurchaseProduct());
+    }
+
+    public void addtionProductQuantity() {
+        currentPurchaseProduct().additionQuantity();
+    }
+
     public int calculateQuantityAtRegularPrice(final ProductInventory productInventory) {
         return productInventory.calculateQuantityAtRegularPrice(currentPurchaseProduct());
     }
@@ -42,6 +50,11 @@ public class Consumer {
         productInventory.purchasePromotionProduct(currentPurchaseProduct());
         productInventory.purchaseRegularPricePromotionProduct(currentPurchaseProduct());
         productInventory.purchaseProduct(currentPurchaseProduct());
+        addIfCurrentPurchaseProductComplete();
+    }
+
+    public void purchaseRegularPricePromotionProduct(final ProductInventory productInventory) {
+        productInventory.purchaseRegularPricePromotionProduct(currentPurchaseProduct());
         addIfCurrentPurchaseProductComplete();
     }
 

@@ -14,7 +14,7 @@ public class BuyGet {
     }
 
     public int calculateFreeQuantity(final int currentQuantity){
-        return currentQuantity / (buy + get);
+        return (currentQuantity + 1) / (buy + get);
     }
     public int calculateQuantityCondition(final int currentQuantity){
         int freeQuantity = calculateFreeQuantity(currentQuantity);

@@ -46,7 +46,7 @@ public class ProductInventory {
                 .anyMatch(promotionProductQuantity -> true);
     }
 
-    public void purchaseProduct(final PurchaseProduct purchaseProduct){
+    public void purchaseProduct(final PurchaseProduct purchaseProduct) {
         ProductQuantity productQuantity = getProductQuantity(purchaseProduct);
         ProductInfo productInfo = getProductInfo(purchaseProduct);
         int purchaseQuantity = productQuantity.deductQuantity(purchaseProduct);
@@ -55,12 +55,31 @@ public class ProductInventory {
         purchaseProduct.writePurchaseHistory(purchaseQuantity, totalPurchasePrice);
     }
 
-    public boolean isPromotionQuantityEnough(final PurchaseProduct purchaseProduct){
+    public void purchaseRegularPricePromotionProduct(final PurchaseProduct purchaseProduct) {
+        PromotionProductQuantity promotionProductQuantity = getPromotionQuantity(purchaseProduct);
+        ProductInfo productInfo = getProductInfo(purchaseProduct);
+        int purchaseQuantity = promotionProductQuantity.deductQuantity(purchaseProduct);
+        int totalPurchasePrice = productInfo.calculateTotalPrice(purchaseQuantity);
+
+        purchaseProduct.writePurchaseHistory(purchaseQuantity, totalPurchasePrice);
+    }
+
+    public void purchasePromotionProduct(final PurchaseProduct purchaseProduct) {
+        PromotionProductQuantity promotionProductQuantity = getPromotionQuantity(purchaseProduct);
+        ProductInfo productInfo = getProductInfo(purchaseProduct);
+        int freeQuantity = promotionProductQuantity.calculateFreeQuantity();
+        int purchaseQuantity = promotionProductQuantity.deductQuantity(purchaseProduct, freeQuantity);
+        int totalPurchasePrice = productInfo.calculateTotalPrice(purchaseQuantity);
+
+        purchaseProduct.writePurchaseHistory(totalPurchasePrice, purchaseQuantity, freeQuantity);
+    }
+
+    public boolean isPromotionQuantityEnough(final PurchaseProduct purchaseProduct) {
         PromotionProductQuantity promotionQuantity = getPromotionQuantity(purchaseProduct);
         return promotionQuantity.isQuantityEnough(purchaseProduct);
     }
 
-    public int calculateQuantityAtRegularPrice(final PurchaseProduct purchaseProduct){
+    public int calculateQuantityAtRegularPrice(final PurchaseProduct purchaseProduct) {
         PromotionProductQuantity promotionQuantity = getPromotionQuantity(purchaseProduct);
         return purchaseProduct.calculateQuantityAtRegularPrice(promotionQuantity);
     }
@@ -80,7 +99,7 @@ public class ProductInventory {
                 .orElseThrow(() -> new IllegalArgumentException());
     }
 
-    private ProductInfo getProductInfo(final PurchaseProduct purchaseProduct){
+    private ProductInfo getProductInfo(final PurchaseProduct purchaseProduct) {
         return infos.stream()
                 .filter(productInfo -> productInfo.isMatchProduct(purchaseProduct))
                 .findAny()

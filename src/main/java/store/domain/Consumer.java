@@ -17,46 +17,57 @@ public class Consumer {
         return new Consumer(purchaseProducts);
     }
 
-    public boolean isPromotionProduct(final ProductInventory productInventory, final LocalDate today){
+    public boolean isPromotionProduct(final ProductInventory productInventory, final LocalDate today) {
         return productInventory.isPromotionProduct(currentPurchaseProduct(), today);
     }
 
-    public boolean isPromotionProductQuantityEnogh(final ProductInventory productInventory){
+    public boolean isPromotionProductQuantityEnogh(final ProductInventory productInventory) {
         return productInventory.isPromotionQuantityEnough(currentPurchaseProduct());
     }
 
-    public int calculateQuantityAtRegularPrice(final ProductInventory productInventory){
+    public int calculateQuantityAtRegularPrice(final ProductInventory productInventory) {
         return productInventory.calculateQuantityAtRegularPrice(currentPurchaseProduct());
     }
 
-    public void purchaseProduct(final ProductInventory productInventory){
+    public void purchaseProduct(final ProductInventory productInventory) {
         productInventory.purchaseProduct(currentPurchaseProduct());
         addIfCurrentPurchaseProductComplete();
     }
 
-    public void addIfCurrentPurchaseProductComplete(){
-        if(currentPurchaseProduct().isPurchaseCompleted()){
+    public void deductCurrentProductQuantityAtRegularPrice(final int regularPriceQuantity) {
+        currentPurchaseProduct().deductQuantity(regularPriceQuantity);
+    }
+
+    public void purchasePromotionProduct(final ProductInventory productInventory) {
+        productInventory.purchasePromotionProduct(currentPurchaseProduct());
+        productInventory.purchaseRegularPricePromotionProduct(currentPurchaseProduct());
+        productInventory.purchaseProduct(currentPurchaseProduct());
+        addIfCurrentPurchaseProductComplete();
+    }
+
+    public void addIfCurrentPurchaseProductComplete() {
+        if (currentPurchaseProduct().isPurchaseCompleted()) {
             purchaseHistories.add(currentPurchaseProduct().generateCompletedPurchaseHistory());
         }
     }
 
-    public boolean isCurrentPurchaseProductDone(){
+    public boolean isCurrentPurchaseProductDone() {
         return currentPurchaseProduct().isPurchaseCompleted();
     }
 
-    public void nextPurchaseProduct(){
+    public void nextPurchaseProduct() {
         removePurchaseCompletedProduct();
     }
 
-    public String currentProductName(){
+    public String currentProductName() {
         return currentPurchaseProduct().getName();
     }
 
-    private PurchaseProduct currentPurchaseProduct(){
+    private PurchaseProduct currentPurchaseProduct() {
         return purchaseProducts.getFirst();
     }
 
-    private void removePurchaseCompletedProduct(){
+    private void removePurchaseCompletedProduct() {
         purchaseProducts.removeFirst();
     }
 

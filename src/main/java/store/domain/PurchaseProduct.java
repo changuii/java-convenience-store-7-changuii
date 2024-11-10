@@ -55,6 +55,13 @@ public class PurchaseProduct {
         purchaseHistory.addQuantity(quantity);
     }
 
+    public void writePurchaseHistory(final int price, final int promotionQuantity,
+                                     final int freeQuantity) {
+        purchaseHistory.addPurchasePrice(price);
+        purchaseHistory.addPromotionQuantity(promotionQuantity);
+        purchaseHistory.addFreeQuantity(freeQuantity);
+    }
+
     public CompletedPurchaseHistory generateCompletedPurchaseHistory() {
         return purchaseHistory.purchaseComplete();
     }

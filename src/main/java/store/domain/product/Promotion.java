@@ -30,6 +30,10 @@ public class Promotion {
         return buyGet.calculateApplicableQuantity(quantity);
     }
 
+    public int calculateApplicableFreeQuantity(final int quantity){
+        return buyGet.calculateApplicableFreeQuantity(quantity);
+    }
+
     public String getPromotionName() {
         return promotionName;
     }

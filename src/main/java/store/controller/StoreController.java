@@ -67,18 +67,22 @@ public class StoreController {
         consumer.nextPurchaseProduct();
     }
 
-    private void purchaseNonPromotionProduct(Consumer consumer){
+    private void purchaseNonPromotionProduct(Consumer consumer) {
         if (!convenienceStoreService.isPromotionInProgress(consumer)) {
             convenienceStoreService.purchaseProduct(consumer);
         }
     }
 
-    private void purchaseNotEnoughPromotionProduct(Consumer consumer){
-        if(!consumer.isCurrentPurchaseProductDone() && !convenienceStoreService.isPromotionProductEnogh(consumer)){
+    private void purchaseNotEnoughPromotionProduct(Consumer consumer) {
+        if (!consumer.isCurrentPurchaseProductDone() && !convenienceStoreService.isPromotionProductEnogh(consumer)) {
             String productName = consumer.currentProductName();
             int quantity = convenienceStoreService.getQuantityAtRegularPrice(consumer);
             outputView.printPurchaseQuantityAtRegularPrice(productName, quantity);
             String answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
+            if (answer.equals("N")) {
+                consumer.deductCurrentProductQuantityAtRegularPrice(quantity);
+            }
+            convenienceStoreService.purchasePromotionProduct(consumer);
         }
     }
 

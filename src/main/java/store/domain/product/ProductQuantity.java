@@ -20,8 +20,9 @@ public class ProductQuantity {
     }
 
     public int deductQuantity(final PurchaseProduct purchaseProduct) {
-        quantity = purchaseProduct.deductQuantity(quantity);
-        return quantity;
+        int deductQuantity = purchaseProduct.deductQuantity(quantity);
+        quantity -= deductQuantity;
+        return deductQuantity;
     }
 
     public boolean isMatchProduct(final PurchaseProduct purchaseProduct) {

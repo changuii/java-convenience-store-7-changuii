@@ -30,14 +30,29 @@ public class PromotionProductQuantity {
         return purchaseProduct.isMatchProductName(productName);
     }
 
-    public boolean isQuantityEnough(final PurchaseProduct purchaseProduct){
+    public boolean isQuantityEnough(final PurchaseProduct purchaseProduct) {
         return purchaseProduct.calculateNeedQuantity(promotion) <= quantity;
     }
 
-    public int calculateApplicablePromotionProduct(){
+    public int calculateApplicablePromotionProduct() {
         return promotion.calculateApplicablePromotionQuantity(quantity);
     }
 
+    public int deductQuantity(final PurchaseProduct purchaseProduct){
+        int deductQuantity = purchaseProduct.deductQuantity(quantity);
+        quantity -= deductQuantity;
+        return deductQuantity;
+    }
+
+    public int deductQuantity(final PurchaseProduct purchaseProduct, final int freeQuantity) {
+        int deductQuantity = purchaseProduct.deductQuantity(calculateApplicablePromotionProduct());
+        quantity -= deductQuantity;
+        return deductQuantity - freeQuantity;
+    }
+
+    public int calculateFreeQuantity() {
+        return promotion.calculateApplicableFreeQuantity(quantity);
+    }
 
 
     public boolean isMatchProductName(final String name) {

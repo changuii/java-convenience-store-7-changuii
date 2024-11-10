@@ -33,9 +33,9 @@ public class PurchaseProduct {
             currentQuantity -= quantity;
             return quantity;
         }
-        int quantityDifference = quantity - currentQuantity;
+        int purchaseQuantity = currentQuantity;
         currentQuantity = 0;
-        return quantityDifference;
+        return purchaseQuantity;
     }
 
     public int calculateNeedQuantity(Promotion promotion) {

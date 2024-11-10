@@ -35,11 +35,11 @@ public class PromotionProductQuantity {
     }
 
     public int calculateApplicablePromotionProduct() {
-        return promotion.calculateApplicablePromotionQuantity(quantity);
+        return promotion.getApplicableQuantity(quantity);
     }
 
     public int calculateSufficientPromotionQuantity(final int quantity) {
-        return promotion.calculatePromotionEnoughQuantity(quantity);
+        return promotion.getRequiredQuantityForApplyPromotion(quantity);
     }
 
     public int deductQuantity(final PurchaseProduct purchaseProduct) {
@@ -55,7 +55,7 @@ public class PromotionProductQuantity {
     }
 
     public int calculateFreeQuantity() {
-        return promotion.calculateApplicableFreeQuantity(quantity);
+        return promotion.getApplicableFreeQuantity(quantity);
     }
 
 

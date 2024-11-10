@@ -39,7 +39,7 @@ public class PurchaseProduct {
     }
 
     public int calculateNeedQuantity(Promotion promotion) {
-        return promotion.calculatePromotionEnoughQuantity(currentQuantity);
+        return promotion.getRequiredQuantityForApplyPromotion(currentQuantity);
     }
 
     public int calculateQuantityAtRegularPrice(PromotionProductQuantity promotionProductQuantity) {

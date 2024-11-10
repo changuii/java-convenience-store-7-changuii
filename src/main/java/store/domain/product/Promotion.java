@@ -22,15 +22,15 @@ public class Promotion {
         return dateRange.isInRangeNow(today);
     }
 
-    public int calculatePromotionEnoughQuantity(final int currentQuantity){
+    public int getRequiredQuantityForApplyPromotion(final int currentQuantity) {
         return buyGet.calculateRequiredQuantityForApplyPromotion(currentQuantity);
     }
 
-    public int calculateApplicablePromotionQuantity(final int quantity){
+    public int getApplicableQuantity(final int quantity) {
         return buyGet.calculateApplicableQuantity(quantity);
     }
 
-    public int calculateApplicableFreeQuantity(final int quantity){
+    public int getApplicableFreeQuantity(final int quantity) {
         return buyGet.calculateApplicableFreeQuantity(quantity);
     }
 

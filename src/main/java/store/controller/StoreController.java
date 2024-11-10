@@ -62,11 +62,23 @@ public class StoreController {
     }
 
     private void checkoutConsumer(Consumer consumer) {
+        purchaseNonPromotionProduct(consumer);
+        purchaseNotEnoughPromotionProduct(consumer);
+    }
+
+    private void purchaseNonPromotionProduct(Consumer consumer){
         if (!convenienceStoreService.isPromotionInProgress(consumer)) {
             convenienceStoreService.purchaseProduct(consumer);
         }
+    }
 
-
+    private void purchaseNotEnoughPromotionProduct(Consumer consumer){
+        if(!convenienceStoreService.isPromotionProductEnogh(consumer)){
+            String productName = consumer.currentProductName();
+            int quantity = convenienceStoreService.getQuantityAtRegularPrice(consumer);
+            outputView.printPurchaseQuantityAtRegularPrice(productName, quantity);
+            String answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
+        }
     }
 
 

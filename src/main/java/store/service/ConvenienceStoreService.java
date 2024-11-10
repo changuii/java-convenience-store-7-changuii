@@ -29,6 +29,14 @@ public class ConvenienceStoreService {
         return consumer.isPromotionProduct(productInventory, localDateGenerator.generate());
     }
 
+    public boolean isPromotionProductEnogh(Consumer consumer){
+        return consumer.isPromotionProductQuantityEnogh(productInventory);
+    }
+
+    public int getQuantityAtRegularPrice(Consumer consumer){
+        return consumer.calculateQuantityAtRegularPrice(productInventory);
+    }
+
     public void purchaseProduct(Consumer consumer){
         consumer.purchaseProduct(productInventory);
     }

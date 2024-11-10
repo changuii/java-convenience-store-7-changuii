@@ -14,6 +14,8 @@ public class OutputView {
     private static final DecimalFormat DECIMAL_FORMATTER = new DecimalFormat("###,###,###,###");
     private static final String PURCHASE_PRODUCTS_INPUT_MESSAGE = "구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])";
     private static final String CONTINUE_CHECKOUT_MESSAGE = "감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)";
+    private static final String PURCHASE_QUANTITY_REGULAR_PRICE_MESSAGE =
+            "현재 %s %d개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까? (Y/N)";
 
 
     public void printWelcomeMessage() {
@@ -25,6 +27,7 @@ public class OutputView {
     }
 
     public void printErrorMessage(final IllegalArgumentException e) {
+        printLineBreak();
         System.out.println(e.getMessage());
     }
 
@@ -39,6 +42,10 @@ public class OutputView {
         System.out.println(PURCHASE_PRODUCTS_INPUT_MESSAGE);
     }
 
+    public void printPurchaseQuantityAtRegularPrice(final String productName, final int quantity) {
+        printLineBreak();
+        System.out.println(String.format(PURCHASE_QUANTITY_REGULAR_PRICE_MESSAGE, productName, quantity));
+    }
 
     private void printStoreProducts(final ProductInventoryDTO productInventoryDTO) {
         productInventoryDTO.getProducts().stream().forEach(this::printProduct);

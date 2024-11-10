@@ -1,6 +1,7 @@
 package store.domain;
 
 import store.domain.product.ProductQuantity;
+import store.domain.product.Promotion;
 import store.domain.product.PromotionProductQuantity;
 
 public class PurchaseProduct {
@@ -35,11 +36,23 @@ public class PurchaseProduct {
         return quantityDifference;
     }
 
+    public int calculateNeedQuantity(Promotion promotion){
+        return promotion.calculatePromotionEnoughQuantity(currentQuantity);
+    }
+
+    public int calculateQuantityAtRegularPrice(PromotionProductQuantity promotionProductQuantity){
+        return currentQuantity - promotionProductQuantity.calculateApplicablePromotionProduct();
+    }
+
     public PurchaseHistory generatePurchaseHistory(final int purchaseQuantity, final int totalPurchasePrice){
         return PurchaseHistory.of(name, totalPurchasePrice, purchaseQuantity, 0, 0);
     }
 
     public boolean isLessThanQuantity(final ProductQuantity quantity){
         return quantity.isLessThanQuantity(this.currentQuantity);
+    }
+
+    public String getName(){
+        return name;
     }
 }

@@ -55,6 +55,16 @@ public class ProductInventory {
         return purchaseProduct.generatePurchaseHistory(purchaseQuantity, totalPurchasePrice);
     }
 
+    public boolean isPromotionQuantityEnough(final PurchaseProduct purchaseProduct){
+        PromotionProductQuantity promotionQuantity = getPromotionQuantity(purchaseProduct);
+        return promotionQuantity.isQuantityEnough(purchaseProduct);
+    }
+
+    public int calculateQuantityAtRegularPrice(final PurchaseProduct purchaseProduct){
+        PromotionProductQuantity promotionQuantity = getPromotionQuantity(purchaseProduct);
+        return purchaseProduct.calculateQuantityAtRegularPrice(promotionQuantity);
+    }
+
 
     private PromotionProductQuantity getPromotionQuantity(final PurchaseProduct purchaseProduct) {
         return promotionQuantities.stream()

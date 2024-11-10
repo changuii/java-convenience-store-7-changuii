@@ -21,10 +21,22 @@ public class Consumer {
         return productInventory.isPromotionProduct(currentPurchaseProduct(), today);
     }
 
+    public boolean isPromotionProductQuantityEnogh(final ProductInventory productInventory){
+        return productInventory.isPromotionQuantityEnough(currentPurchaseProduct());
+    }
+
+    public int calculateQuantityAtRegularPrice(final ProductInventory productInventory){
+        return productInventory.calculateQuantityAtRegularPrice(currentPurchaseProduct());
+    }
+
     public void purchaseProduct(final ProductInventory productInventory){
         PurchaseHistory purchaseHistory = productInventory.purchaseProduct(currentPurchaseProduct());
         purchaseHistories.add(purchaseHistory);
         removePurchaseCompletedProduct();
+    }
+
+    public String currentProductName(){
+        return currentPurchaseProduct().getName();
     }
 
 

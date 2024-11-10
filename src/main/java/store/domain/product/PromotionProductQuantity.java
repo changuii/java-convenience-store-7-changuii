@@ -30,6 +30,16 @@ public class PromotionProductQuantity {
         return purchaseProduct.isMatchProductName(productName);
     }
 
+    public boolean isQuantityEnough(final PurchaseProduct purchaseProduct){
+        return purchaseProduct.calculateNeedQuantity(promotion) <= quantity;
+    }
+
+    public int calculateApplicablePromotionProduct(){
+        return promotion.calculateApplicablePromotionQuantity(quantity);
+    }
+
+
+
     public boolean isMatchProductName(final String name) {
         return this.productName.equals(name);
     }

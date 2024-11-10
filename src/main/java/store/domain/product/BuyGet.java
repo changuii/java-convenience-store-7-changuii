@@ -12,4 +12,16 @@ public class BuyGet {
     public static BuyGet of(final int buy, final int get) {
         return new BuyGet(buy, get);
     }
+
+    public int calculateFreeQuantity(final int currentQuantity){
+        return currentQuantity / (buy + get);
+    }
+    public int calculateQuantityCondition(final int currentQuantity){
+        int freeQuantity = calculateFreeQuantity(currentQuantity);
+        return freeQuantity + (freeQuantity * buy);
+    }
+
+    public int calculateApplicableQuantity(final int quantity){
+        return calculateFreeQuantity(quantity) * (buy + get);
+    }
 }

@@ -22,6 +22,14 @@ public class Promotion {
         return dateRange.isInRangeNow(today);
     }
 
+    public int calculatePromotionEnoughQuantity(final int currentQuantity){
+        return buyGet.calculateQuantityCondition(currentQuantity);
+    }
+
+    public int calculateApplicablePromotionQuantity(final int quantity){
+        return buyGet.calculateApplicableQuantity(quantity);
+    }
+
     public String getPromotionName() {
         return promotionName;
     }

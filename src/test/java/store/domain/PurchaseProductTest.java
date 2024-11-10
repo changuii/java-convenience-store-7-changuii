@@ -89,4 +89,34 @@ public class PurchaseProductTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @DisplayName("구매하려는 수량에 대해 프로모션에 필요한 수량을 반환한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"7:6", "10:9", "12:12", "5:6"}, delimiter = ':')
+    void calculateNeedQuantity(final int purchaseQuantity, final int expected) {
+        BuyGet buyGet = BuyGet.of(2, 1);
+        DateRange dateRange = DateRange.of(LocalDate.of(2023, 11, 01), LocalDate.of(2023, 11, 30));
+        Promotion promotion = Promotion.of(Constants.PROMOTION_NAME, buyGet, dateRange);
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, purchaseQuantity);
+
+        int actual = purchaseProduct.calculateNeedQuantity(promotion);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @DisplayName("구매하려는 수량에 대해 정가로 구매해야하는 수량을 반환한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"7:6:1", "10:7:4", "5:4:2", "5:2:5", "7:3:4", "3:1:3"}, delimiter = ':')
+    void calculateQuantityAtRegularPrice(final int purchaseQuantity, final int promotionQuantity, final int expected) {
+        BuyGet buyGet = BuyGet.of(2, 1);
+        DateRange dateRange = DateRange.of(LocalDate.of(2023, 11, 01), LocalDate.of(2023, 11, 30));
+        Promotion promotion = Promotion.of(Constants.PROMOTION_NAME, buyGet, dateRange);
+        PromotionProductQuantity promotionProductQuantity = PromotionProductQuantity.of(Constants.PRODUCT_NAME,
+                promotionQuantity, promotion);
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, purchaseQuantity);
+
+        int actual = purchaseProduct.calculateQuantityAtRegularPrice(promotionProductQuantity);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
 }

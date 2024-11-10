@@ -13,19 +13,26 @@ public class BuyGet {
         return new BuyGet(buy, get);
     }
 
-    public int calculateFreeQuantity(final int currentQuantity){
+    // currentQuantity가 받아야할 무료 수량을 계산
+    private int calculateRequiredFreeQuantityForApplyPromotion(final int currentQuantity) {
         return (currentQuantity + 1) / (buy + get);
     }
-    public int calculateQuantityCondition(final int currentQuantity){
-        int freeQuantity = calculateFreeQuantity(currentQuantity);
+
+    // currentQuantity가 프로모션 혜택을 받으면서 구매할 수 있는 수량
+    public int calculateRequiredQuantityForApplyPromotion(final int currentQuantity) {
+        int freeQuantity = calculateRequiredFreeQuantityForApplyPromotion(currentQuantity);
         return freeQuantity + (freeQuantity * buy);
     }
 
-    public int calculateApplicableQuantity(final int quantity){
+    // 재고 수량의 적용가능한 무료 수량을 계산한다.
+    public int calculateApplicableFreeQuantity(final int quantity) {
+        return quantity / (buy + get);
+    }
+
+    // 재고 수량이 처리할 수 있는 최대 프로모션 수량을 계산한다.
+    public int calculateApplicableQuantity(final int quantity) {
         return calculateApplicableFreeQuantity(quantity) * (buy + get);
     }
 
-    public int calculateApplicableFreeQuantity(final int quantity){
-        return quantity / (buy + get);
-    }
+
 }

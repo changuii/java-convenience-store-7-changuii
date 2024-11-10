@@ -23,7 +23,7 @@ public class Promotion {
     }
 
     public int calculatePromotionEnoughQuantity(final int currentQuantity){
-        return buyGet.calculateQuantityCondition(currentQuantity);
+        return buyGet.calculateRequiredQuantityForApplyPromotion(currentQuantity);
     }
 
     public int calculateApplicablePromotionQuantity(final int quantity){

@@ -39,6 +39,7 @@ public class StoreController {
         outputView.printPurchaseProductsInputMessage();
         Consumer consumer = retryHandler.retryUntilNotException(this::requestGenerateConsumer, outputView);
         retryHandler.retryUntilTrue(this::purchaseAllProductForConsumer, consumer::isPurchaseCompleted, consumer);
+        discountMembership(consumer);
     }
 
     private boolean isCheckoutCompleted() {
@@ -113,6 +114,11 @@ public class StoreController {
         if (!consumer.isCurrentPurchaseProductDone()) {
             convenienceStoreService.purchasePromotionProduct(consumer);
         }
+    }
+
+    private void discountMembership(final Consumer consumer){
+        outputView.printMembershipDiscountRequestMessage();
+        boolean answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
     }
 
 

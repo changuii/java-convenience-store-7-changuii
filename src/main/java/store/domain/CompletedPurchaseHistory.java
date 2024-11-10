@@ -22,12 +22,12 @@ public class CompletedPurchaseHistory {
         return new CompletedPurchaseHistory(productName, totalPurchasePrice, quantity, promotionQuantity, freeQuantity);
     }
 
-    public int getSumOfTotalPurchasePrice(int totalPurchasePrice) {
-        return this.totalPurchasePrice + totalPurchasePrice;
+    public int getSumOfTotalPurchasePrice(final int totalPurchasePrice) {
+        return calculateProductPrice() * (quantity + promotionQuantity + freeQuantity) + totalPurchasePrice;
     }
 
     public int getSumOfAllPurchaseQuantity(final int totalPurchaseQuantity) {
-        return quantity + promotionQuantity + totalPurchaseQuantity;
+        return quantity + promotionQuantity + freeQuantity + totalPurchaseQuantity;
     }
 
     public int getSumOfTotalPromotionDiscount(final int totalPromotionDiscount) {
@@ -43,6 +43,6 @@ public class CompletedPurchaseHistory {
     }
 
     private int calculatePromotionDiscount() {
-        return calculateProductPrice() * promotionQuantity;
+        return calculateProductPrice() * freeQuantity;
     }
 }

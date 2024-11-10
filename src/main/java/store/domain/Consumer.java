@@ -84,7 +84,7 @@ public class Consumer {
         purchaseProducts.removeFirst();
     }
 
-    public boolean isCheckoutCompleted() {
+    public boolean isPurchaseCompleted() {
         return purchaseProducts.isEmpty();
     }
 

@@ -37,8 +37,8 @@ public class StoreController {
     private void runConvenienceStoreCheckout(final ConvenienceStoreService convenienceStoreService) {
         printConvenienceStore(convenienceStoreService);
         outputView.printPurchaseProductsInputMessage();
-        Consumer consumer = retryHandler.retryUntilNotException(this::requestConsumer, outputView);
-        retryHandler.retryUntilTrue(this::checkoutConsumer, consumer::isCheckoutCompleted, consumer);
+        Consumer consumer = retryHandler.retryUntilNotException(this::requestGenerateConsumer, outputView);
+        retryHandler.retryUntilTrue(this::purchaseAllProductForConsumer, consumer::isPurchaseCompleted, consumer);
     }
 
     private boolean isCheckoutCompleted() {
@@ -55,27 +55,27 @@ public class StoreController {
                 dtoConverter.convertProductInventoryDTO(convenienceStoreService.getProductInventory()));
     }
 
-    private Consumer requestConsumer() {
+    private Consumer requestGenerateConsumer() {
         List<PurchaseProductDTO> purchaseProductDTOs = inputView.readPurchaseProducts();
         List<PurchaseProduct> purchaseProducts = dtoConverter.convertPurchaseProducts(purchaseProductDTOs);
         return convenienceStoreService.generateConsumer(purchaseProducts);
     }
 
-    private void checkoutConsumer(Consumer consumer) {
-        purchaseNonPromotionProduct(consumer);
-        purchaseNotEnoughPromotionProductQuantity(consumer);
-        purchaseNotEnoughPurchaseProductQuantity(consumer);
-        purchaseEnoughPromotionProduct(consumer);
+    private void purchaseAllProductForConsumer(Consumer consumer) {
+        purchaseProductWithoutInprogressPromotion(consumer);
+        purchaseIfStoreQuantityRequirementNotMetForApplyPromotion(consumer);
+        purchaseIfInsufficientConsumerQuantityForApplyPromotion(consumer);
+        purchaseSufficientQuantityForApplyPromotion(consumer);
         consumer.nextPurchaseProduct();
     }
 
-    private void purchaseNonPromotionProduct(Consumer consumer) {
+    private void purchaseProductWithoutInprogressPromotion(Consumer consumer) {
         if (!convenienceStoreService.isPromotionInProgress(consumer)) {
             convenienceStoreService.purchaseProduct(consumer);
         }
     }
 
-    private void purchaseNotEnoughPromotionProductQuantity(Consumer consumer) {
+    private void purchaseIfStoreQuantityRequirementNotMetForApplyPromotion(Consumer consumer) {
         if (!consumer.isCurrentPurchaseProductDone()
                 && !convenienceStoreService.isInventoryQuantityRequirementMetForApplyPromotion(consumer)) {
             String productName = consumer.currentProductName();
@@ -89,7 +89,7 @@ public class StoreController {
         }
     }
 
-    private void purchaseNotEnoughPurchaseProductQuantity(Consumer consumer) {
+    private void purchaseIfInsufficientConsumerQuantityForApplyPromotion(Consumer consumer) {
         if (!consumer.isCurrentPurchaseProductDone() &&
                 !convenienceStoreService.isQuantitySufficientForApplyPromotion(consumer)) {
             String productName = consumer.currentProductName();
@@ -103,7 +103,7 @@ public class StoreController {
         }
     }
 
-    private void purchaseEnoughPromotionProduct(Consumer consumer) {
+    private void purchaseSufficientQuantityForApplyPromotion(Consumer consumer) {
         if (!consumer.isCurrentPurchaseProductDone()) {
             convenienceStoreService.purchasePromotionProduct(consumer);
         }

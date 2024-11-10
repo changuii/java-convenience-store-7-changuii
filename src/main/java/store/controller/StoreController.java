@@ -64,6 +64,7 @@ public class StoreController {
     private void checkoutConsumer(Consumer consumer) {
         purchaseNonPromotionProduct(consumer);
         purchaseNotEnoughPromotionProduct(consumer);
+        consumer.nextPurchaseProduct();
     }
 
     private void purchaseNonPromotionProduct(Consumer consumer){
@@ -73,7 +74,7 @@ public class StoreController {
     }
 
     private void purchaseNotEnoughPromotionProduct(Consumer consumer){
-        if(!convenienceStoreService.isPromotionProductEnogh(consumer)){
+        if(!consumer.isCurrentPurchaseProductDone() && !convenienceStoreService.isPromotionProductEnogh(consumer)){
             String productName = consumer.currentProductName();
             int quantity = convenienceStoreService.getQuantityAtRegularPrice(consumer);
             outputView.printPurchaseQuantityAtRegularPrice(productName, quantity);

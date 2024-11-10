@@ -46,13 +46,13 @@ public class ProductInventory {
                 .anyMatch(promotionProductQuantity -> true);
     }
 
-    public PurchaseHistory purchaseProduct(final PurchaseProduct purchaseProduct){
+    public void purchaseProduct(final PurchaseProduct purchaseProduct){
         ProductQuantity productQuantity = getProductQuantity(purchaseProduct);
         ProductInfo productInfo = getProductInfo(purchaseProduct);
         int purchaseQuantity = productQuantity.deductQuantity(purchaseProduct);
         int totalPurchasePrice = productInfo.calculateTotalPrice(purchaseQuantity);
 
-        return purchaseProduct.generatePurchaseHistory(purchaseQuantity, totalPurchasePrice);
+        purchaseProduct.writePurchaseHistory(purchaseQuantity, totalPurchasePrice);
     }
 
     public boolean isPromotionQuantityEnough(final PurchaseProduct purchaseProduct){

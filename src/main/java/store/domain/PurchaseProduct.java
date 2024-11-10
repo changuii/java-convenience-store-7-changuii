@@ -5,10 +5,12 @@ import store.domain.product.Promotion;
 import store.domain.product.PromotionProductQuantity;
 
 public class PurchaseProduct {
+    private final PurchaseHistory purchaseHistory;
     private final String name;
     private int currentQuantity;
 
     private PurchaseProduct(final String name, final int currentQuantity) {
+        this.purchaseHistory = PurchaseHistory.from(name);
         this.name = name;
         this.currentQuantity = currentQuantity;
     }
@@ -26,8 +28,8 @@ public class PurchaseProduct {
         return promotionQuantity.isLessThanQuantity(currentQuantity, quantity);
     }
 
-    public int deductQuantity(final int quantity){
-        if(currentQuantity > quantity){
+    public int deductQuantity(final int quantity) {
+        if (currentQuantity > quantity) {
             currentQuantity -= quantity;
             return quantity;
         }
@@ -36,23 +38,32 @@ public class PurchaseProduct {
         return quantityDifference;
     }
 
-    public int calculateNeedQuantity(Promotion promotion){
+    public int calculateNeedQuantity(Promotion promotion) {
         return promotion.calculatePromotionEnoughQuantity(currentQuantity);
     }
 
-    public int calculateQuantityAtRegularPrice(PromotionProductQuantity promotionProductQuantity){
+    public int calculateQuantityAtRegularPrice(PromotionProductQuantity promotionProductQuantity) {
         return currentQuantity - promotionProductQuantity.calculateApplicablePromotionProduct();
     }
 
-    public PurchaseHistory generatePurchaseHistory(final int purchaseQuantity, final int totalPurchasePrice){
-        return PurchaseHistory.of(name, totalPurchasePrice, purchaseQuantity, 0, 0);
+    public boolean isPurchaseCompleted() {
+        return currentQuantity == 0;
     }
 
-    public boolean isLessThanQuantity(final ProductQuantity quantity){
+    public void writePurchaseHistory(final int quantity, final int price) {
+        purchaseHistory.addPurchasePrice(price);
+        purchaseHistory.addQuantity(quantity);
+    }
+
+    public CompletedPurchaseHistory generateCompletedPurchaseHistory() {
+        return purchaseHistory.purchaseComplete();
+    }
+
+    public boolean isLessThanQuantity(final ProductQuantity quantity) {
         return quantity.isLessThanQuantity(this.currentQuantity);
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 }

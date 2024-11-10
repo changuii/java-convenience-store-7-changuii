@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Consumer {
     private final List<PurchaseProduct> purchaseProducts;
-    private final List<PurchaseHistory> purchaseHistories;
+    private final List<CompletedPurchaseHistory> purchaseHistories;
 
     private Consumer(final List<PurchaseProduct> purchaseProducts) {
         this.purchaseProducts = purchaseProducts;
@@ -30,15 +30,27 @@ public class Consumer {
     }
 
     public void purchaseProduct(final ProductInventory productInventory){
-        PurchaseHistory purchaseHistory = productInventory.purchaseProduct(currentPurchaseProduct());
-        purchaseHistories.add(purchaseHistory);
+        productInventory.purchaseProduct(currentPurchaseProduct());
+        addIfCurrentPurchaseProductComplete();
+    }
+
+    public void addIfCurrentPurchaseProductComplete(){
+        if(currentPurchaseProduct().isPurchaseCompleted()){
+            purchaseHistories.add(currentPurchaseProduct().generateCompletedPurchaseHistory());
+        }
+    }
+
+    public boolean isCurrentPurchaseProductDone(){
+        return currentPurchaseProduct().isPurchaseCompleted();
+    }
+
+    public void nextPurchaseProduct(){
         removePurchaseCompletedProduct();
     }
 
     public String currentProductName(){
         return currentPurchaseProduct().getName();
     }
-
 
     private PurchaseProduct currentPurchaseProduct(){
         return purchaseProducts.getFirst();

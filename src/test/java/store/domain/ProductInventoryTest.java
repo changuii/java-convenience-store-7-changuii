@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import store.Constants;
@@ -70,6 +71,18 @@ public class ProductInventoryTest {
         PurchaseProduct purchaseProduct = PurchaseProduct.of(productName, GARBAGE_QUANTITY);
 
         assertThat(productInventory.isPromotionProduct(purchaseProduct, today)).isEqualTo(expected);
+    }
+
+    @DisplayName("구매 상품에 대해서 재고를 차감하고, 구매 내역을 기록한다.")
+    @Test
+    void purchaseProduct(){
+        PurchaseProduct actual = PurchaseProduct.of(Constants.PRODUCT_NAME, GARBAGE_QUANTITY);
+        PurchaseProduct expected = PurchaseProduct.of(Constants.PRODUCT_NAME, 0);
+        expected.writePurchaseHistory(1, 1000);
+
+        productInventory.purchaseProduct(actual);
+
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
 

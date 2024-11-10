@@ -32,7 +32,7 @@ public class PurchaseHistory {
     }
 
     public void addFreeQuantity(final int freeQuantity){
-        this.freeQuantity = freeQuantity;
+        this.freeQuantity += freeQuantity;
     }
 
     public CompletedPurchaseHistory purchaseComplete(){

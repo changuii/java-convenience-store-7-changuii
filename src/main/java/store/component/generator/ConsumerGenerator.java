@@ -38,7 +38,7 @@ public class ConsumerGenerator {
     }
 
     private void validateLessThanQuantity(final PurchaseProduct purchaseProduct) {
-        if (!productInventory.isLessThanQuantity(purchaseProduct, localDateGenerator.generate())) {
+        if (!productInventory.isLessThanQuantityForPurchase(purchaseProduct, localDateGenerator.generate())) {
             throw new IllegalArgumentException(ErrorMessage.MORE_THAN_PURCHASE_PRODUCT_QUANTITY.getMessage());
         }
     }

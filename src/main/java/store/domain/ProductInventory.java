@@ -30,23 +30,23 @@ public class ProductInventory {
                 .anyMatch(productInfo -> true);
     }
 
-    public boolean isLessThanQuantity(final PurchaseProduct purchaseProduct, final LocalDate today) {
+    public boolean isLessThanQuantityForPurchase(final PurchaseProduct purchaseProduct, final LocalDate today) {
         ProductQuantity productQuantity = getProductQuantity(purchaseProduct);
-        if (isPromotionProduct(purchaseProduct, today)) {
+        if (isPromotionInProgress(purchaseProduct, today)) {
             PromotionProductQuantity promotionQuantity = getPromotionQuantity(purchaseProduct);
             return purchaseProduct.isLessThanQuantity(promotionQuantity, productQuantity);
         }
         return purchaseProduct.isLessThanQuantity(productQuantity);
     }
 
-    public boolean isPromotionProduct(final PurchaseProduct purchaseProduct, final LocalDate today) {
+    public boolean isPromotionInProgress(final PurchaseProduct purchaseProduct, final LocalDate today) {
         return promotionQuantities.stream()
                 .filter(promotionProductQuantity -> promotionProductQuantity.isMatchProduct(purchaseProduct))
                 .filter(promotionProductQuantity -> promotionProductQuantity.isValidToday(today))
                 .anyMatch(promotionProductQuantity -> true);
     }
 
-    public void purchaseProduct(final PurchaseProduct purchaseProduct) {
+    public void purchaseRegularPriceProduct(final PurchaseProduct purchaseProduct) {
         ProductQuantity productQuantity = getProductQuantity(purchaseProduct);
         ProductInfo productInfo = getProductInfo(purchaseProduct);
         int purchaseQuantity = productQuantity.deductQuantity(purchaseProduct);
@@ -74,12 +74,12 @@ public class ProductInventory {
         purchaseProduct.recordPromotionAppliedPurchaseHistory(totalPurchasePrice, purchaseQuantity, freeQuantity);
     }
 
-    public boolean isQuantityPromotionSufficient(final PurchaseProduct purchaseProduct) {
+    public boolean isQuantitySufficientForApplyPromotion(final PurchaseProduct purchaseProduct) {
         PromotionProductQuantity promotionProductQuantity = getPromotionQuantity(purchaseProduct);
         return purchaseProduct.hasQuantitySufficientForApplyPromotion(promotionProductQuantity);
     }
 
-    public boolean isPromotionQuantityEnough(final PurchaseProduct purchaseProduct) {
+    public boolean isRequirementMetForApplyPromotion(final PurchaseProduct purchaseProduct) {
         PromotionProductQuantity promotionQuantity = getPromotionQuantity(purchaseProduct);
         return promotionQuantity.isRequirementMetForApplyPromotion(purchaseProduct);
     }

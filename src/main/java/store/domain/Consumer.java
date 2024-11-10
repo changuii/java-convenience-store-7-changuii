@@ -18,15 +18,15 @@ public class Consumer {
     }
 
     public boolean isPromotionProduct(final ProductInventory productInventory, final LocalDate today) {
-        return productInventory.isPromotionProduct(currentPurchaseProduct(), today);
+        return productInventory.isPromotionInProgress(currentPurchaseProduct(), today);
     }
 
     public boolean isPromotionProductQuantityEnogh(final ProductInventory productInventory) {
-        return productInventory.isPromotionQuantityEnough(currentPurchaseProduct());
+        return productInventory.isRequirementMetForApplyPromotion(currentPurchaseProduct());
     }
 
     public boolean isQuantityPromotionSufficient(final ProductInventory productInventory) {
-        return productInventory.isQuantityPromotionSufficient(currentPurchaseProduct());
+        return productInventory.isQuantitySufficientForApplyPromotion(currentPurchaseProduct());
     }
 
     public void addtionProductQuantity() {
@@ -37,19 +37,19 @@ public class Consumer {
         return productInventory.calculateQuantityAtRegularPrice(currentPurchaseProduct());
     }
 
-    public void purchaseProduct(final ProductInventory productInventory) {
-        productInventory.purchaseProduct(currentPurchaseProduct());
-        addIfCurrentPurchaseProductComplete();
-    }
-
     public void deductCurrentProductQuantityAtRegularPrice(final int regularPriceQuantity) {
         currentPurchaseProduct().deductRegularPriceQuantity(regularPriceQuantity);
+    }
+
+    public void purchaseProduct(final ProductInventory productInventory) {
+        productInventory.purchaseRegularPriceProduct(currentPurchaseProduct());
+        addIfCurrentPurchaseProductComplete();
     }
 
     public void purchasePromotionProduct(final ProductInventory productInventory) {
         productInventory.purchasePromotionProduct(currentPurchaseProduct());
         productInventory.purchaseRegularPricePromotionProduct(currentPurchaseProduct());
-        productInventory.purchaseProduct(currentPurchaseProduct());
+        productInventory.purchaseRegularPriceProduct(currentPurchaseProduct());
         addIfCurrentPurchaseProductComplete();
     }
 

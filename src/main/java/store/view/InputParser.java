@@ -19,6 +19,10 @@ public class InputParser {
                 .collect(Collectors.toList());
     }
 
+    public boolean parseAnswer(final String answer) {
+        return answer.equals("Y");
+    }
+
     private PurchaseProductDTO parsePurchaseProduct(final String product) {
         String[] values = product.replaceAll(PRODUCT_BRACKETS, EMPTY).split(PRODUCT_DELIMITER);
         String productName = values[0];

@@ -43,9 +43,9 @@ public class StoreController {
 
     private boolean isCheckoutCompleted() {
         outputView.printRequestContinueCheckoutMessage();
-        String answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
+        boolean answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
         outputView.printLineBreak();
-        return answer.equals("N");
+        return !answer;
     }
 
 
@@ -81,8 +81,8 @@ public class StoreController {
             String productName = consumer.currentProductName();
             int quantity = convenienceStoreService.getQuantityAtRegularPrice(consumer);
             outputView.printPurchaseQuantityAtRegularPrice(productName, quantity);
-            String answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
-            if (answer.equals("N")) {
+            boolean answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
+            if (!answer) {
                 consumer.deductCurrentProductQuantityAtRegularPrice(quantity);
             }
             convenienceStoreService.purchasePromotionProduct(consumer);
@@ -94,8 +94,8 @@ public class StoreController {
                 !convenienceStoreService.isQuantitySufficientForApplyPromotion(consumer)) {
             String productName = consumer.currentProductName();
             outputView.printAdditionPromotionProductQuantityMessage(productName);
-            String answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
-            if (answer.equals("Y")) {
+            boolean answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
+            if (answer) {
                 consumer.additionCurrentProductQuantityForApplyPromotion();
             } else {
                 convenienceStoreService.purchaseRegularPricePromotionProduct(consumer);

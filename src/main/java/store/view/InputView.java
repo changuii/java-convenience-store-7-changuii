@@ -22,10 +22,10 @@ public class InputView {
         return purchaseProductDTOs;
     }
 
-    public String readAnswer() {
+    public boolean readAnswer() {
         String input = Console.readLine();
         inputValidator.validateAnswer(input);
-        return input;
+        return inputParser.parseAnswer(input);
     }
 
 }

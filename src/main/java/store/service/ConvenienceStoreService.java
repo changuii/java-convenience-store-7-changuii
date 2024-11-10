@@ -10,7 +10,7 @@ import store.domain.PurchaseProduct;
 
 
 public class ConvenienceStoreService {
-    private static final double MEMBERSHIP_DISCOUNT_PERCENTAGE = 30.0;
+    private static final double MEMBERSHIP_DISCOUNT_PERCENTAGE = 0.3;
     private static final int MAX_MEMBERSHIP_DISCOUNT_PRICE = 8_000;
     private final ProductInventory productInventory;
     private final LocalDateGenerator localDateGenerator;

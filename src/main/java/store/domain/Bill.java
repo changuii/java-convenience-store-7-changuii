@@ -50,4 +50,28 @@ public class Bill {
     public void calculateCheckoutPrice() {
         checkoutPrice = totalPurchasePrice - promotionDiscount - membershipDiscount;
     }
+
+    public List<CompletedPurchaseHistory> getCompletedPurchaseHistories() {
+        return completedPurchaseHistories;
+    }
+
+    public int getTotalPurchasePrice() {
+        return totalPurchasePrice;
+    }
+
+    public int getTotalAllQuantity() {
+        return totalAllQuantity;
+    }
+
+    public int getPromotionDiscount() {
+        return promotionDiscount;
+    }
+
+    public int getMembershipDiscount() {
+        return membershipDiscount;
+    }
+
+    public int getCheckoutPrice() {
+        return checkoutPrice;
+    }
 }

@@ -42,6 +42,8 @@ public class StoreController {
         retryHandler.retryUntilTrue(this::purchaseAllProductForConsumer, consumer::isPurchaseCompleted, consumer);
         Bill bill = consumer.generateBill();
         discountMembership(bill);
+        bill.calculateCheckoutPrice();
+        outputView.printBill(dtoConverter.convertBillDTO(bill));
     }
 
     private boolean isCheckoutCompleted() {

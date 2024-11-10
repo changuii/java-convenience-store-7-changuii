@@ -39,10 +39,23 @@ public class CompletedPurchaseHistory {
     }
 
     public int calculateProductPrice() {
-        return (quantity + promotionQuantity) / totalPurchasePrice;
+        return totalPurchasePrice / (quantity + promotionQuantity);
     }
 
     private int calculatePromotionDiscount() {
         return calculateProductPrice() * freeQuantity;
     }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public int getAllQuantity() {
+        return quantity + promotionQuantity + freeQuantity;
+    }
+
+    public int getFreeQuantity() {
+        return freeQuantity;
+    }
+
 }

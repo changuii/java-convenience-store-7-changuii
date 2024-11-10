@@ -76,7 +76,8 @@ public class StoreController {
     }
 
     private void purchaseNotEnoughPromotionProductQuantity(Consumer consumer) {
-        if (!consumer.isCurrentPurchaseProductDone() && !convenienceStoreService.isPromotionProductEnogh(consumer)) {
+        if (!consumer.isCurrentPurchaseProductDone()
+                && !convenienceStoreService.isInventoryQuantityRequirementMetForApplyPromotion(consumer)) {
             String productName = consumer.currentProductName();
             int quantity = convenienceStoreService.getQuantityAtRegularPrice(consumer);
             outputView.printPurchaseQuantityAtRegularPrice(productName, quantity);
@@ -90,7 +91,7 @@ public class StoreController {
 
     private void purchaseNotEnoughPurchaseProductQuantity(Consumer consumer) {
         if (!consumer.isCurrentPurchaseProductDone() &&
-                !convenienceStoreService.isQuantityPromotionSufficient(consumer)) {
+                !convenienceStoreService.isQuantitySufficientForApplyPromotion(consumer)) {
             String productName = consumer.currentProductName();
             outputView.printAdditionPromotionProductQuantityMessage(productName);
             String answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);

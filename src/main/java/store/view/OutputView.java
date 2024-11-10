@@ -23,7 +23,7 @@ public class OutputView {
             "현재 %s은(는) 1개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)";
     private static final String MEMBERSHIP_DISCOUNT_REQUEST_MESSAGE = "멤버십 할인을 받으시겠습니까? (Y/N)";
     private static final String BILL_TITLE_MESSAGE = "==============W 편의점================";
-    private static final String BILL_ROW_FORMAT = "%-14s%-12s%-8s";
+    private static final String BILL_ROW_FORMAT = "%s%s\t\t\t%s";
     private static final String BILL_FREE_TITLE_MESSAGE = "=============증\t\t정===============";
     private static final String BILL_RESULT_TITLE_MESSAGE = "====================================";
 
@@ -80,7 +80,7 @@ public class OutputView {
     }
 
     private void printPurchaseProduct(ProductDTO purchaseProduct) {
-        System.out.println(String.format(BILL_ROW_FORMAT, purchaseProduct.getName(), purchaseProduct.getQuantity(),
+        System.out.println(String.format(BILL_ROW_FORMAT, formatTab(purchaseProduct.getName()), purchaseProduct.getQuantity(),
                 formatPrice(purchaseProduct.getPrice() * purchaseProduct.getQuantity())));
     }
 
@@ -92,7 +92,7 @@ public class OutputView {
     }
 
     private void printFreeProduct(ProductDTO freeProduct) {
-        System.out.println(String.format(BILL_ROW_FORMAT, freeProduct.getName(), freeProduct.getQuantity(), EMPTY));
+        System.out.println(String.format(BILL_ROW_FORMAT, formatTab(freeProduct.getName()), freeProduct.getQuantity(), EMPTY));
     }
 
     private void printBillResult(BillDTO billDTO) {
@@ -105,26 +105,26 @@ public class OutputView {
 
     private void printAllPurchasePrice(final int totalPurchaseQuantity, final int totalPurchasePrice) {
         System.out.println(
-                String.format(BILL_ROW_FORMAT, "총구매액", totalPurchaseQuantity, formatPrice(totalPurchasePrice)));
+                String.format(BILL_ROW_FORMAT, formatTab("총구매액"), totalPurchaseQuantity, formatPrice(totalPurchasePrice)));
     }
 
     private void printPromotionDiscount(final int promotionDiscount) {
         System.out.println(
-                String.format(BILL_ROW_FORMAT, "행사할인", EMPTY, formatPrice(formatNegative(promotionDiscount))));
+                String.format(BILL_ROW_FORMAT, formatTab("행사할인"), EMPTY, formatPrice(formatNegative(promotionDiscount))));
     }
 
     private void printMembershipDiscount(final int membershipDiscount) {
         System.out.println(
-                String.format(BILL_ROW_FORMAT, "멤버십할인", EMPTY, formatPrice(formatNegative(membershipDiscount))));
+                String.format(BILL_ROW_FORMAT, formatTab("멤버십할인"), EMPTY, formatPrice(formatNegative(membershipDiscount))));
     }
 
     private void printCheckoutPrice(final int checkoutPrice) {
-        System.out.println(String.format(BILL_ROW_FORMAT, "내실돈", EMPTY, formatPrice(checkoutPrice)));
+        System.out.println(String.format(BILL_ROW_FORMAT, formatTab("내실돈"), EMPTY, formatPrice(checkoutPrice)));
     }
 
     private void printBillTitleMessage() {
         System.out.println(BILL_TITLE_MESSAGE);
-        System.out.println(String.format(BILL_ROW_FORMAT, "상품명", "수량", "금액"));
+        System.out.println(String.format(BILL_ROW_FORMAT, formatTab("상품명"), "수량", "금액"));
     }
 
     private void printBillFreeTitleMessage() {
@@ -156,6 +156,10 @@ public class OutputView {
 
     private int formatNegative(final int number) {
         return number * NEGATIVE;
+    }
+
+    private String formatTab(final String value){
+        return value + "\t".repeat(Math.abs(value.length() / 3 - 4));
     }
 
     private String formatProductQuantity(final int quantity) {

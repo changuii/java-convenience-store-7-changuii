@@ -43,11 +43,11 @@ public class PurchaseProduct {
     }
 
     public int calculateQuantityAtRegularPrice(PromotionProductQuantity promotionProductQuantity) {
-        return currentQuantity - promotionProductQuantity.calculateApplicablePromotionProduct();
+        return currentQuantity - promotionProductQuantity.getApplicableQuantity();
     }
 
     public boolean isQuantityPromotionSufficient(PromotionProductQuantity promotionProductQuantity) {
-        return promotionProductQuantity.calculateSufficientPromotionQuantity(currentQuantity) <= currentQuantity;
+        return promotionProductQuantity.getRequiredQuantityForApplyPromotion(currentQuantity) <= currentQuantity;
     }
 
     public void additionQuantity() {

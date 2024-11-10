@@ -58,7 +58,7 @@ public class ProductInventory {
     public void purchaseRegularPricePromotionProduct(final PurchaseProduct purchaseProduct) {
         PromotionProductQuantity promotionProductQuantity = getPromotionQuantity(purchaseProduct);
         ProductInfo productInfo = getProductInfo(purchaseProduct);
-        int purchaseQuantity = promotionProductQuantity.deductQuantity(purchaseProduct);
+        int purchaseQuantity = promotionProductQuantity.deductQuantityWithoutPromotion(purchaseProduct);
         int totalPurchasePrice = productInfo.calculateTotalPrice(purchaseQuantity);
 
         purchaseProduct.writePurchaseHistory(purchaseQuantity, totalPurchasePrice);
@@ -67,8 +67,8 @@ public class ProductInventory {
     public void purchasePromotionProduct(final PurchaseProduct purchaseProduct) {
         PromotionProductQuantity promotionProductQuantity = getPromotionQuantity(purchaseProduct);
         ProductInfo productInfo = getProductInfo(purchaseProduct);
-        int freeQuantity = promotionProductQuantity.calculateFreeQuantity();
-        int purchaseQuantity = promotionProductQuantity.deductQuantity(purchaseProduct, freeQuantity);
+        int freeQuantity = promotionProductQuantity.getApplicableFreeQuantity();
+        int purchaseQuantity = promotionProductQuantity.deductQuantityApplyPromotion(purchaseProduct, freeQuantity);
         int totalPurchasePrice = productInfo.calculateTotalPrice(purchaseQuantity);
 
         purchaseProduct.writePurchaseHistory(totalPurchasePrice, purchaseQuantity, freeQuantity);
@@ -81,7 +81,7 @@ public class ProductInventory {
 
     public boolean isPromotionQuantityEnough(final PurchaseProduct purchaseProduct) {
         PromotionProductQuantity promotionQuantity = getPromotionQuantity(purchaseProduct);
-        return promotionQuantity.isQuantityEnough(purchaseProduct);
+        return promotionQuantity.isRequirementMetForApplyPromotion(purchaseProduct);
     }
 
     public int calculateQuantityAtRegularPrice(final PurchaseProduct purchaseProduct) {

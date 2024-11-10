@@ -57,6 +57,7 @@ public class OutputView {
     }
 
     public void printMembershipDiscountRequestMessage() {
+        printLineBreak();
         System.out.println(MEMBERSHIP_DISCOUNT_REQUEST_MESSAGE);
     }
 

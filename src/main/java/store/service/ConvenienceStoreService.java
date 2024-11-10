@@ -3,12 +3,15 @@ package store.service;
 import java.util.List;
 import store.component.generator.ConsumerGenerator;
 import store.component.generator.LocalDateGenerator;
+import store.domain.Bill;
 import store.domain.Consumer;
 import store.domain.ProductInventory;
 import store.domain.PurchaseProduct;
 
 
 public class ConvenienceStoreService {
+    private static final double MEMBERSHIP_DISCOUNT_PERCENTAGE = 30.0;
+    private static final int MAX_MEMBERSHIP_DISCOUNT_PRICE = 8_000;
     private final ProductInventory productInventory;
     private final LocalDateGenerator localDateGenerator;
     private final ConsumerGenerator consumerGenerator;
@@ -53,6 +56,9 @@ public class ConvenienceStoreService {
         consumer.purchaseProduct(productInventory);
     }
 
+    public void discountMembership(final Bill bill){
+        bill.discountMembership(MEMBERSHIP_DISCOUNT_PERCENTAGE, MAX_MEMBERSHIP_DISCOUNT_PRICE);
+    }
 
     public Consumer generateConsumer(final List<PurchaseProduct> purchaseProducts) {
         return consumerGenerator.generate(purchaseProducts);

@@ -6,11 +6,11 @@ import java.util.List;
 
 public class Consumer {
     private final List<PurchaseProduct> purchaseProducts;
-    private final List<CompletedPurchaseHistory> purchaseHistories;
+    private final List<CompletedPurchaseHistory> completedPurchaseHistories;
 
     private Consumer(final List<PurchaseProduct> purchaseProducts) {
         this.purchaseProducts = purchaseProducts;
-        this.purchaseHistories = new ArrayList<>();
+        this.completedPurchaseHistories = new ArrayList<>();
     }
 
     public static Consumer from(final List<PurchaseProduct> purchaseProducts) {
@@ -60,7 +60,7 @@ public class Consumer {
 
     public void addIfCurrentPurchaseProductComplete() {
         if (currentPurchaseProduct().isPurchaseCompleted()) {
-            purchaseHistories.add(currentPurchaseProduct().generateCompletedPurchaseHistory());
+            completedPurchaseHistories.add(currentPurchaseProduct().generateCompletedPurchaseHistory());
         }
     }
 
@@ -70,6 +70,10 @@ public class Consumer {
 
     public void nextPurchaseProduct() {
         removePurchaseCompletedProduct();
+    }
+
+    public Bill generateBill() {
+        return Bill.from(completedPurchaseHistories);
     }
 
     public String currentProductName() {

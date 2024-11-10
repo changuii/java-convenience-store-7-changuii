@@ -2,6 +2,7 @@ package store.controller;
 
 import java.util.List;
 import store.component.DTOConverter;
+import store.domain.Bill;
 import store.domain.Consumer;
 import store.domain.PurchaseProduct;
 import store.service.ConvenienceStoreService;
@@ -39,7 +40,8 @@ public class StoreController {
         outputView.printPurchaseProductsInputMessage();
         Consumer consumer = retryHandler.retryUntilNotException(this::requestGenerateConsumer, outputView);
         retryHandler.retryUntilTrue(this::purchaseAllProductForConsumer, consumer::isPurchaseCompleted, consumer);
-        discountMembership(consumer);
+        Bill bill = consumer.generateBill();
+        discountMembership(bill);
     }
 
     private boolean isCheckoutCompleted() {
@@ -116,9 +118,12 @@ public class StoreController {
         }
     }
 
-    private void discountMembership(final Consumer consumer){
+    private void discountMembership(final Bill bill) {
         outputView.printMembershipDiscountRequestMessage();
         boolean answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
+        if (answer) {
+            convenienceStoreService.discountMembership(bill);
+        }
     }
 
 

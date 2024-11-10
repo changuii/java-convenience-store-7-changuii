@@ -61,7 +61,7 @@ public class StoreController {
         return convenienceStoreService.generateConsumer(purchaseProducts);
     }
 
-    private void purchaseAllProductForConsumer(Consumer consumer) {
+    private void purchaseAllProductForConsumer(final Consumer consumer) {
         purchaseProductWithoutInprogressPromotion(consumer);
         purchaseIfStoreQuantityRequirementNotMetForApplyPromotion(consumer);
         purchaseIfInsufficientConsumerQuantityForApplyPromotion(consumer);
@@ -69,41 +69,47 @@ public class StoreController {
         consumer.nextPurchaseProduct();
     }
 
-    private void purchaseProductWithoutInprogressPromotion(Consumer consumer) {
+    private void purchaseProductWithoutInprogressPromotion(final Consumer consumer) {
         if (!convenienceStoreService.isPromotionInProgress(consumer)) {
             convenienceStoreService.purchaseProduct(consumer);
         }
     }
 
-    private void purchaseIfStoreQuantityRequirementNotMetForApplyPromotion(Consumer consumer) {
+    private void purchaseIfStoreQuantityRequirementNotMetForApplyPromotion(final Consumer consumer) {
         if (!consumer.isCurrentPurchaseProductDone()
                 && !convenienceStoreService.isInventoryQuantityRequirementMetForApplyPromotion(consumer)) {
-            String productName = consumer.currentProductName();
-            int quantity = convenienceStoreService.getQuantityAtRegularPrice(consumer);
-            outputView.printPurchaseQuantityAtRegularPrice(productName, quantity);
-            boolean answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
-            if (!answer) {
-                consumer.deductCurrentProductQuantityAtRegularPrice(quantity);
-            }
+            int quantityAtRegularPrice = convenienceStoreService.getQuantityAtRegularPrice(consumer);
+            outputView.printPurchaseQuantityAtRegularPrice(consumer.currentProductName(), quantityAtRegularPrice);
+            deductQuantityAtRegularPriceIfAnswerNo(consumer, quantityAtRegularPrice);
             convenienceStoreService.purchasePromotionProduct(consumer);
         }
     }
 
-    private void purchaseIfInsufficientConsumerQuantityForApplyPromotion(Consumer consumer) {
-        if (!consumer.isCurrentPurchaseProductDone() &&
-                !convenienceStoreService.isQuantitySufficientForApplyPromotion(consumer)) {
-            String productName = consumer.currentProductName();
-            outputView.printAdditionPromotionProductQuantityMessage(productName);
-            boolean answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
-            if (answer) {
-                consumer.additionCurrentProductQuantityForApplyPromotion();
-            } else {
-                convenienceStoreService.purchaseRegularPricePromotionProduct(consumer);
-            }
+    private void deductQuantityAtRegularPriceIfAnswerNo(final Consumer consumer, final int quantityAtRegularPrice) {
+        boolean answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
+        if (!answer) {
+            consumer.deductCurrentProductQuantityAtRegularPrice(quantityAtRegularPrice);
         }
     }
 
-    private void purchaseSufficientQuantityForApplyPromotion(Consumer consumer) {
+    private void purchaseIfInsufficientConsumerQuantityForApplyPromotion(final Consumer consumer) {
+        if (!consumer.isCurrentPurchaseProductDone() &&
+                !convenienceStoreService.isQuantitySufficientForApplyPromotion(consumer)) {
+            outputView.printAdditionPromotionProductQuantityMessage(consumer.currentProductName());
+            additionQuantityForApplyPromotionIfAnswerYes(consumer);
+        }
+    }
+
+    private void additionQuantityForApplyPromotionIfAnswerYes(final Consumer consumer) {
+        boolean answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
+        if (answer) {
+            consumer.additionCurrentProductQuantityForApplyPromotion();
+            return;
+        }
+        convenienceStoreService.purchaseRegularPricePromotionProduct(consumer);
+    }
+
+    private void purchaseSufficientQuantityForApplyPromotion(final Consumer consumer) {
         if (!consumer.isCurrentPurchaseProductDone()) {
             convenienceStoreService.purchasePromotionProduct(consumer);
         }

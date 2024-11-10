@@ -64,15 +64,16 @@ public class PurchaseProductTest {
         assertThat(actual).isEqualTo(expected);
     }
 
-    @DisplayName("일반 구매 수량, 구매 금액 총액을 매개변수로 받아 purchaseHistory를 생성한다.")
+    @DisplayName("PurchaseProduct는 결제가 완료되면, 기록된 내용을 바탕으로 CompleletedPurchaseHistory를 생성한다.")
     @ParameterizedTest
     @CsvSource(value = {"10:10000", "20:500", "30:700000"}, delimiter = ':')
     void generatePurchaseHistory(int purchaseQuantity, int totalPurchasePrice) {
-        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, Constants.PRODUCT_QUANTITY_VALUE);
-        PurchaseHistory expected = PurchaseHistory.of(Constants.PRODUCT_NAME, totalPurchasePrice, purchaseQuantity,
-                Constants.EMPTY_NUM, Constants.EMPTY_NUM);
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, purchaseQuantity);
+        CompletedPurchaseHistory expected = CompletedPurchaseHistory.of(Constants.PRODUCT_NAME,
+                totalPurchasePrice, purchaseQuantity, Constants.EMPTY_NUM, Constants.EMPTY_NUM);
 
-        PurchaseHistory actual = purchaseProduct.generatePurchaseHistory(purchaseQuantity, totalPurchasePrice);
+        purchaseProduct.writePurchaseHistory(purchaseQuantity, totalPurchasePrice);
+        CompletedPurchaseHistory actual = purchaseProduct.generateCompletedPurchaseHistory();
 
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }

@@ -17,7 +17,7 @@ public class PromotionProductQuantityTest {
 
     public PromotionProductQuantityTest() {
         dateRange = DateRange.of(LocalDate.of(2023, 11, 01), LocalDate.of(2023, 11, 30));
-        buyGet = BuyGet.of(1, 1);
+        buyGet = BuyGet.of(2, 1);
     }
 
     @BeforeEach
@@ -60,5 +60,18 @@ public class PromotionProductQuantityTest {
         PurchaseProduct purchaseProduct = PurchaseProduct.of(purchaseProductName, Constants.PRODUCT_QUANTITY_VALUE);
 
         assertThat(promotionProductQuantity.isMatchProduct(purchaseProduct)).isEqualTo(expected);
+    }
+
+    @DisplayName("구매하려는 상품의 수량이 필요한 총 프로모션 수량 이하라면 true 초과라면 false를 반환한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"7:6:true", "7:5:false", "8:9:true", "8:8:false"}, delimiter = ':')
+    void isQuantityEnough(final int purchaseQutntity, final int promotionQuantity, final boolean expected) {
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, purchaseQutntity);
+        PromotionProductQuantity promotionProductQuantity = PromotionProductQuantity.of(Constants.PRODUCT_NAME,
+                promotionQuantity, promotion);
+
+        boolean actual = promotionProductQuantity.isQuantityEnough(purchaseProduct);
+
+        assertThat(actual).isEqualTo(expected);
     }
 }

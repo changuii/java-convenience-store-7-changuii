@@ -95,15 +95,15 @@ public class StoreController {
             outputView.printAdditionPromotionProductQuantityMessage(productName);
             String answer = retryHandler.retryUntilNotException(inputView::readAnswer, outputView);
             if (answer.equals("Y")) {
-                consumer.addtionProductQuantity();
-            } else{
+                consumer.additionCurrentProductQuantityForApplyPromotion();
+            } else {
                 convenienceStoreService.purchaseRegularPricePromotionProduct(consumer);
             }
         }
     }
 
-    private void purchaseEnoughPromotionProduct(Consumer consumer){
-        if(!consumer.isCurrentPurchaseProductDone()){
+    private void purchaseEnoughPromotionProduct(Consumer consumer) {
+        if (!consumer.isCurrentPurchaseProductDone()) {
             convenienceStoreService.purchasePromotionProduct(consumer);
         }
     }

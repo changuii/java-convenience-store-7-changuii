@@ -26,11 +26,11 @@ public class ConvenienceStoreService {
     }
 
     public boolean isPromotionInProgress(final Consumer consumer) {
-        return consumer.isPromotionProduct(productInventory, localDateGenerator.generate());
+        return consumer.isCurrentProductPromotionInProgress(productInventory, localDateGenerator.generate());
     }
 
     public boolean isPromotionProductEnogh(final Consumer consumer) {
-        return consumer.isPromotionProductQuantityEnogh(productInventory);
+        return consumer.isInventoryQuantityRequirementMetForApplyPromotion(productInventory);
     }
 
     public void purchaseRegularPricePromotionProduct(final Consumer consumer) {
@@ -38,11 +38,11 @@ public class ConvenienceStoreService {
     }
 
     public boolean isQuantityPromotionSufficient(final Consumer consumer) {
-        return consumer.isQuantityPromotionSufficient(productInventory);
+        return consumer.isCurrentProductQuantitySufficientForApplyPromotion(productInventory);
     }
 
     public int getQuantityAtRegularPrice(final Consumer consumer) {
-        return consumer.calculateQuantityAtRegularPrice(productInventory);
+        return consumer.calculateCurrentProductQuantityAtRegularPrice(productInventory);
     }
 
     public void purchasePromotionProduct(final Consumer consumer) {

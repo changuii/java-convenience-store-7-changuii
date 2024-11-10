@@ -17,23 +17,23 @@ public class Consumer {
         return new Consumer(purchaseProducts);
     }
 
-    public boolean isPromotionProduct(final ProductInventory productInventory, final LocalDate today) {
+    public boolean isCurrentProductPromotionInProgress(final ProductInventory productInventory, final LocalDate today) {
         return productInventory.isPromotionInProgress(currentPurchaseProduct(), today);
     }
 
-    public boolean isPromotionProductQuantityEnogh(final ProductInventory productInventory) {
+    public boolean isInventoryQuantityRequirementMetForApplyPromotion(final ProductInventory productInventory) {
         return productInventory.isRequirementMetForApplyPromotion(currentPurchaseProduct());
     }
 
-    public boolean isQuantityPromotionSufficient(final ProductInventory productInventory) {
+    public boolean isCurrentProductQuantitySufficientForApplyPromotion(final ProductInventory productInventory) {
         return productInventory.isQuantitySufficientForApplyPromotion(currentPurchaseProduct());
     }
 
-    public void addtionProductQuantity() {
+    public void additionCurrentProductQuantityForApplyPromotion() {
         currentPurchaseProduct().additionQuantityForApplyPromotion();
     }
 
-    public int calculateQuantityAtRegularPrice(final ProductInventory productInventory) {
+    public int calculateCurrentProductQuantityAtRegularPrice(final ProductInventory productInventory) {
         return productInventory.calculateQuantityAtRegularPrice(currentPurchaseProduct());
     }
 

@@ -78,4 +78,15 @@ public class PurchaseProductTest {
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
+    @DisplayName("isPurchaseCompleted 메서드는 현재 재고가 0이라면 true, 아직 재고가 남아있다면 false를 반환한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"0:true", "1:false", "2:false", "3:false"}, delimiter = ':')
+    void isPurchaseCompleted(final int currentQuantity, final boolean expected) {
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, currentQuantity);
+
+        boolean actual = purchaseProduct.isPurchaseCompleted();
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
 }

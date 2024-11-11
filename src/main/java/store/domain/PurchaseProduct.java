@@ -39,7 +39,7 @@ public class PurchaseProduct {
     }
 
     public void deductRegularPriceQuantity(final int quantity) {
-        this.currentQuantity -= quantity;
+        purchaseUntilAvailable(quantity);
     }
 
     public int getRequiredQuantityForApplyPromotion(final Promotion promotion) {

@@ -22,7 +22,7 @@ public class ConsumerGenerator {
     }
 
 
-    public void validatePurchaseProducts(final List<PurchaseProduct> purchaseProducts) {
+    private void validatePurchaseProducts(final List<PurchaseProduct> purchaseProducts) {
         purchaseProducts.forEach(this::validatePurchaseProduct);
     }
 

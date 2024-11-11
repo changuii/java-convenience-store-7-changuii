@@ -17,7 +17,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import store.domain.product.BuyGet;
 import store.domain.product.DateRange;
-import store.domain.product.ProductInfo;
+import store.domain.product.Product;
 import store.domain.ProductInventory;
 import store.domain.product.ProductQuantity;
 import store.domain.product.Promotion;
@@ -29,7 +29,7 @@ public class ProductInventoryGeneratorTest {
     private final ProductInventoryGenerator productInventoryGenerator;
     private final List<ProductQuantity> quantities;
     private final List<PromotionProductQuantity> promotionQuantities;
-    private final List<ProductInfo> infos;
+    private final List<Product> infos;
 
     public ProductInventoryGeneratorTest() {
         productInventoryGenerator = new ProductInventoryGenerator();
@@ -124,7 +124,7 @@ public class ProductInventoryGeneratorTest {
     @CsvSource(value = {"탄산음료:100000", "김치:1000", "감자:1000000000", "삼겹살:100"}, delimiter = ':')
     void 상품인벤토리를_생성하면서_상품의_정보도_생성한다(String name, int price) {
         String input = String.format("%s,%d,10,null", name, price);
-        infos.add(ProductInfo.of(name, price));
+        infos.add(Product.of(name, price));
 
         ProductInventory productInventory =
                 productInventoryGenerator.generate(Map.of("null", Optional.empty()), List.of(input));

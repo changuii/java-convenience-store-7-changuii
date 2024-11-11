@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import store.domain.product.ProductInfo;
+import store.domain.product.Product;
 import store.domain.ProductInventory;
 import store.domain.product.ProductQuantity;
 import store.domain.product.Promotion;
@@ -41,46 +41,46 @@ public class ProductInventoryGenerator {
 
     private ProductInventory createProductInventory(final Map<String, Optional<Promotion>> promotions,
                                                     final List<String> productLines) {
-        final List<ProductInfo> productInfos = new ArrayList<>();
+        final List<Product> products = new ArrayList<>();
         final List<ProductQuantity> productQuantities = new ArrayList<>();
         final List<PromotionProductQuantity> promotionQuantities = new ArrayList<>();
-        parseProducts(productLines, promotions, productInfos, productQuantities, promotionQuantities);
+        parseProducts(productLines, promotions, products, productQuantities, promotionQuantities);
 
         return ProductInventory.of(
-                productInfos.stream().distinct().collect(Collectors.toList()),
+                products.stream().distinct().collect(Collectors.toList()),
                 productQuantities,
                 promotionQuantities
         );
     }
 
     private void parseProducts(final List<String> productLines, final Map<String, Optional<Promotion>> promotions,
-                               final List<ProductInfo> productInfos,
+                               final List<Product> products,
                                final List<ProductQuantity> productQuantities,
                                final List<PromotionProductQuantity> promotionQuantities) {
         productLines.forEach((productLine) -> {
-            parseProduct(productLine, promotions, productInfos, productQuantities, promotionQuantities);
+            parseProduct(productLine, promotions, products, productQuantities, promotionQuantities);
         });
     }
 
 
     private void parseProduct(final String productLine, final Map<String, Optional<Promotion>> promotions,
-                              final List<ProductInfo> productInfos,
+                              final List<Product> products,
                               final List<ProductQuantity> productQuantities,
                               final List<PromotionProductQuantity> promotionQuantities) {
         try {
             final String[] column = productLine.split(GeneratorConstants.TABLE_ROW_DELIMITER.getValue());
             validateContainPromotions(promotions, column[3]);
-            addProduct(column, promotions, productInfos, productQuantities, promotionQuantities);
+            addProduct(column, promotions, products, productQuantities, promotionQuantities);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
         }
     }
 
     private void addProduct(final String[] column, final Map<String, Optional<Promotion>> promotions,
-                            final List<ProductInfo> productInfos,
+                            final List<Product> products,
                             final List<ProductQuantity> productQuantities,
                             final List<PromotionProductQuantity> promotionQuantities) {
-        addProductInfo(column[0], parseInt(column[1]), productInfos);
+        addProductInfo(column[0], parseInt(column[1]), products);
         Optional<Promotion> promotion = promotions.get(column[3]);
         if (promotion.isPresent()) {
             addProductQuantities(column[0], 0, productQuantities);
@@ -91,16 +91,16 @@ public class ProductInventoryGenerator {
     }
 
     private void addProductInfo(final String productName, final int productPrice,
-                                final List<ProductInfo> productInfos) {
-        removeIfExsistsInfo(productName, productInfos);
-        productInfos.add(ProductInfo.of(productName, productPrice));
+                                final List<Product> products) {
+        removeIfExsistsInfo(productName, products);
+        products.add(Product.of(productName, productPrice));
     }
 
-    private void removeIfExsistsInfo(final String productName, final List<ProductInfo> productInfos) {
-        productInfos.stream()
+    private void removeIfExsistsInfo(final String productName, final List<Product> products) {
+        products.stream()
                 .filter(productInfo -> productInfo.isMatchProductName(productName))
                 .findAny()
-                .ifPresent(productInfo -> productInfos.removeLast());
+                .ifPresent(productInfo -> products.removeLast());
     }
 
     private void addProductQuantities(final String productName, final int productQuantity,

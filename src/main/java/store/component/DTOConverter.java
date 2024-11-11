@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import store.domain.Bill;
 import store.domain.CompletedPurchaseHistory;
-import store.domain.product.ProductInfo;
+import store.domain.product.Product;
 import store.domain.ProductInventory;
 import store.domain.product.ProductQuantity;
 import store.domain.product.PromotionProductQuantity;
@@ -89,31 +89,31 @@ public class DTOConverter {
         return productDTOs;
     }
 
-    private void addProductQuantity(final List<ProductQuantity> productQuantities, final ProductInfo productInfo,
+    private void addProductQuantity(final List<ProductQuantity> productQuantities, final Product product,
                                     final List<ProductDTO> productDTOs) {
         productQuantities.stream()
-                .filter(productQuantity -> productQuantity.isMatchProductName(productInfo.getName()))
-                .map(productQuantity -> convertProductDTO(productQuantity, productInfo))
+                .filter(productQuantity -> productQuantity.isMatchProductName(product.getName()))
+                .map(productQuantity -> convertProductDTO(productQuantity, product))
                 .findAny()
                 .ifPresent(productDTOs::add);
     }
 
     private void addPromotionProductQuantity(final List<PromotionProductQuantity> promotionProductQuantities,
-                                             final ProductInfo productInfo, final List<ProductDTO> productDTOs) {
+                                             final Product product, final List<ProductDTO> productDTOs) {
         promotionProductQuantities.stream()
-                .filter(productQuantity -> productQuantity.isMatchProductName(productInfo.getName()))
-                .map(productQuantity -> convertProductDTO(productQuantity, productInfo))
+                .filter(productQuantity -> productQuantity.isMatchProductName(product.getName()))
+                .map(productQuantity -> convertProductDTO(productQuantity, product))
                 .findAny()
                 .ifPresent(productDTOs::add);
     }
 
-    private ProductDTO convertProductDTO(final ProductQuantity productQuantity, final ProductInfo productInfo) {
-        return ProductDTO.of(productInfo.getName(), productInfo.getPrice(), productQuantity.getQuantity(), EMPTY);
+    private ProductDTO convertProductDTO(final ProductQuantity productQuantity, final Product product) {
+        return ProductDTO.of(product.getName(), product.getPrice(), productQuantity.getQuantity(), EMPTY);
     }
 
     private ProductDTO convertProductDTO(final PromotionProductQuantity promotionProductQuantity,
-                                         final ProductInfo productInfo) {
-        return ProductDTO.of(productInfo.getName(), productInfo.getPrice(), promotionProductQuantity.getQuantity(),
+                                         final Product product) {
+        return ProductDTO.of(product.getName(), product.getPrice(), promotionProductQuantity.getQuantity(),
                 promotionProductQuantity.getPromotion());
     }
 

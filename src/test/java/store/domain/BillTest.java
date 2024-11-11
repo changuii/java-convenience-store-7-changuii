@@ -13,7 +13,7 @@ public class BillTest {
 
     @DisplayName("멤버십 할인을 적용한다.")
     @Test
-    void discountMembership(){
+    void discountMembership() {
         CompletedPurchaseHistory purchaseHistory = CompletedPurchaseHistory.of(Constants.PRODUCT_NAME, 6000, 2, 4, 2);
         Bill bill = Bill.from(List.of(purchaseHistory));
         int expected = 600;

@@ -56,7 +56,7 @@ public class ConvenienceStoreService {
         consumer.purchaseProduct(productInventory);
     }
 
-    public void discountMembership(final Bill bill){
+    public void discountMembership(final Bill bill) {
         bill.discountMembership(MEMBERSHIP_DISCOUNT_PERCENTAGE, MAX_MEMBERSHIP_DISCOUNT_PRICE);
     }
 

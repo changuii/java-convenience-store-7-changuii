@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import store.Constants;
 import store.domain.product.BuyGet;
 import store.domain.product.DateRange;
-import store.domain.product.ProductInfo;
+import store.domain.product.Product;
 import store.domain.product.ProductQuantity;
 import store.domain.product.Promotion;
 import store.domain.product.PromotionProductQuantity;
@@ -26,7 +26,7 @@ public class ConsumerTest {
         LocalDate start = LocalDate.of(2023, 11, 01);
         LocalDate end = LocalDate.of(2023, 11, 30);
         Promotion promotion = Promotion.of(Constants.PROMOTION_NAME, BuyGet.of(2, 1), DateRange.of(start, end));
-        List<ProductInfo> infos = List.of(ProductInfo.of(Constants.PRODUCT_NAME, 1000), ProductInfo.of("김밥", 1000));
+        List<Product> infos = List.of(Product.of(Constants.PRODUCT_NAME, 1000), Product.of("김밥", 1000));
         List<ProductQuantity> quantities = List.of(ProductQuantity.of(Constants.PRODUCT_NAME, 5),
                 ProductQuantity.of("김밥", 5));
         List<PromotionProductQuantity> promotionQuantity = List.of(

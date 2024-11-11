@@ -62,7 +62,7 @@ public class PurchaseProduct {
         return currentQuantity == 0;
     }
 
-    public boolean isEmptyPurchaseHistory(){
+    public boolean isEmptyPurchaseHistory() {
         return purchaseHistory.isEmpty();
     }
 

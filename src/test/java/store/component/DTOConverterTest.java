@@ -16,7 +16,7 @@ import store.domain.CompletedPurchaseHistory;
 import store.domain.PurchaseProduct;
 import store.domain.product.BuyGet;
 import store.domain.product.DateRange;
-import store.domain.product.ProductInfo;
+import store.domain.product.Product;
 import store.domain.ProductInventory;
 import store.domain.product.ProductQuantity;
 import store.domain.product.Promotion;
@@ -28,20 +28,20 @@ import store.dto.PurchaseProductDTO;
 
 public class DTOConverterTest {
     private final DTOConverter dtoConverter;
-    private List<ProductInfo> productInfos;
+    private List<Product> products;
     private List<ProductQuantity> productQuantities;
     private List<PromotionProductQuantity> promotionProductQuantities;
 
     public DTOConverterTest() {
         dtoConverter = new DTOConverter();
-        productInfos = new ArrayList<>();
+        products = new ArrayList<>();
         productQuantities = new ArrayList<>();
         promotionProductQuantities = new ArrayList<>();
     }
 
     @BeforeEach
     void init() {
-        productInfos.clear();
+        products.clear();
         productQuantities.clear();
         promotionProductQuantities.clear();
     }
@@ -90,10 +90,10 @@ public class DTOConverterTest {
 
     private ProductInventory createProductInventory(final String productName, final int productPrice,
                                                     final int quantity, final int promotionQuantity) {
-        productInfos.add(ProductInfo.of(productName, productPrice));
+        products.add(Product.of(productName, productPrice));
         productQuantities.add(ProductQuantity.of(productName, quantity));
         promotionProductQuantities.add(PromotionProductQuantity.of(productName, promotionQuantity, emptyPromotion()));
-        return ProductInventory.of(productInfos, productQuantities, promotionProductQuantities);
+        return ProductInventory.of(products, productQuantities, promotionProductQuantities);
     }
 
     private ProductInventoryDTO createProductInventoryDTO(final String productName, final int productPrice,

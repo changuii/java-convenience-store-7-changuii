@@ -19,30 +19,29 @@ public class PurchaseHistory {
         return new PurchaseHistory(productName);
     }
 
-    public void addPurchasePrice(final int price){
+    public void addPurchasePrice(final int price) {
         this.totalPurchasePrice += price;
     }
 
-    public void addQuantity(final int quantity){
+    public void addQuantity(final int quantity) {
         this.quantity += quantity;
     }
 
-    public void addPromotionQuantity(final int promotionQuantity){
+    public void addPromotionQuantity(final int promotionQuantity) {
         this.promotionQuantity += promotionQuantity;
     }
 
-    public void addFreeQuantity(final int freeQuantity){
+    public void addFreeQuantity(final int freeQuantity) {
         this.freeQuantity += freeQuantity;
     }
 
-    public CompletedPurchaseHistory purchaseComplete(){
+    public CompletedPurchaseHistory purchaseComplete() {
         return CompletedPurchaseHistory.of(productName, totalPurchasePrice, quantity, promotionQuantity, freeQuantity);
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return (quantity + promotionQuantity) == 0;
     }
-
 
 
 }

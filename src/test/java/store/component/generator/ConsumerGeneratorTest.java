@@ -45,7 +45,7 @@ public class ConsumerGeneratorTest {
     }
 
     @Test
-    void 생성_테스트(){
+    void 생성_테스트() {
         List<PurchaseProduct> purchaseProducts = List.of(PurchaseProduct.of("콜라", 20));
         Consumer expected = Consumer.from(purchaseProducts);
 

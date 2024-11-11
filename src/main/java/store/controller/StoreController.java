@@ -67,14 +67,14 @@ public class StoreController {
     }
 
     private void purchaseAllProductForConsumer(final Consumer consumer) {
-        purchaseProductWithoutInprogressPromotion(consumer);
+        purchaseProductWithoutInProgressPromotion(consumer);
         purchaseIfStoreQuantityRequirementNotMetForApplyPromotion(consumer);
         purchaseIfInsufficientConsumerQuantityForApplyPromotion(consumer);
         purchaseSufficientQuantityForApplyPromotion(consumer);
         consumer.nextPurchaseProduct();
     }
 
-    private void purchaseProductWithoutInprogressPromotion(final Consumer consumer) {
+    private void purchaseProductWithoutInProgressPromotion(final Consumer consumer) {
         if (!convenienceStoreService.isPromotionInProgress(consumer)) {
             convenienceStoreService.purchaseProduct(consumer);
         }

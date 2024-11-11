@@ -5,8 +5,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import store.dto.PurchaseProductDTO;
@@ -35,7 +37,7 @@ public class InputParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"[감자-10000000000]", "[김치-2147483648]"})
-    void 상품의_수량이_int타입의_범위를_넘어가면_예외가_발생한다(String products) {
+    void 상품의_수량이_int타입의_범위를_넘어가면_예외가_발생한다(final String products) {
         assertThatThrownBy(() -> inputParser.parsePurchaseProducts(products))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(ErrorMessage.INVALID_FORMAT.getMessage());
@@ -43,12 +45,21 @@ public class InputParserTest {
 
     @ParameterizedTest
     @MethodSource("provideProductsAndParsingProducts")
-    void 상품들을_나타내는_문자열을_상품DTO_리스트로_파싱한다(String products, List<PurchaseProductDTO> expectedProducts) {
+    void 상품들을_나타내는_문자열을_상품DTO_리스트로_파싱한다(final String products, List<PurchaseProductDTO> expectedProducts) {
         List<PurchaseProductDTO> actualProducts = inputParser.parsePurchaseProducts(products);
 
         assertThat(actualProducts)
                 .usingRecursiveComparison()
                 .isEqualTo(expectedProducts);
+    }
+
+    @DisplayName("주어진, Y 혹은 N 문자열을 ture, false로 파싱한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"Y:true", "N:false"}, delimiter = ':')
+    void parseAnswer(final String answer, final boolean expected) {
+        boolean actual = inputParser.parseAnswer(answer);
+
+        assertThat(actual).isEqualTo(expected);
     }
 
 

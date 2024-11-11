@@ -14,8 +14,6 @@ import store.domain.product.Promotion;
 import store.domain.product.PromotionProductQuantity;
 
 public class PurchaseProductTest {
-
-
     @DisplayName("매개변수로 들어온 productName과 이름이 일치한다면 true 아니라면 false를 반환한다.")
     @ParameterizedTest
     @CsvSource(value = {"PRODUCT:true", "감자:false", "라면:false"}, delimiter = ':')
@@ -120,4 +118,72 @@ public class PurchaseProductTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @DisplayName("현재 구매할 남은 수량에 대해 주어진 프로모션에 적용 가능한 무료 수량을 반환한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"1:0", "2:0", "3:1", "4:1", "5:1", "6:2", "8:2", "9:3"}, delimiter = ':')
+    void getApplicableFreeQuantity(final int quantity, final int expected) {
+        Promotion promotion = Promotion.of(Constants.PROMOTION_NAME, BuyGet.of(2, 1),
+                DateRange.of(LocalDate.MIN, LocalDate.MAX));
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, quantity);
+
+        int actual = purchaseProduct.getApplicableFreeQuantity(promotion);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @DisplayName("현재 수량이 프로모션(수량도 고려)을 적용하기 위한 수량 조건을 만족한다면 true, 아니라면 false를 반환한다. (2+1 -> 3, 6, 9, 12)")
+    @ParameterizedTest
+    @CsvSource(value = {"1:true", "2:false", "3:true", "5:false", "6:true", "7:true"}, delimiter = ':')
+    void hasQuantitySufficientForApplyPromotion(final int quantity, final boolean expected) {
+        Promotion promotion = Promotion.of(Constants.PROMOTION_NAME, BuyGet.of(2, 1),
+                DateRange.of(LocalDate.MIN, LocalDate.MAX));
+        PromotionProductQuantity promotionProductQuantity = PromotionProductQuantity.of(Constants.PRODUCT_NAME,
+                100, promotion);
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, quantity);
+
+        boolean actual = purchaseProduct.hasQuantitySufficientForApplyPromotion(promotionProductQuantity);
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @DisplayName("현재 구매 수량을 1만큼 추가한다. (프로모션 적용이 가능하지만 부족하게 가져온 경우 사용)")
+    @ParameterizedTest
+    @CsvSource(value = {"1:2", "2:3", "3:4", "10:11", "15:16", "200:201"}, delimiter = ':')
+    void additionQuantityForApplyPromotion(final int quantity, final int expected) {
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, quantity);
+        PurchaseProduct expectedProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, expected);
+
+        purchaseProduct.additionQuantityForApplyPromotion();
+
+        assertThat(purchaseProduct).usingRecursiveComparison().isEqualTo(expectedProduct);
+    }
+
+    @DisplayName("정가로 구매한 상품에 대해서 구매 기록에 기록한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"3:3000", "100:50000", "50:3000", "5:500", "700:10000000"}, delimiter = ':')
+    void recordRegularPricePurchaseHistory(final int quantity, final int price) {
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, 1000);
+        PurchaseHistory expected = PurchaseHistory.from(Constants.PRODUCT_NAME);
+        expected.addQuantity(quantity);
+        expected.addPurchasePrice(price);
+
+        purchaseProduct.recordRegularPricePurchaseHistory(quantity, price);
+
+        assertThat(purchaseProduct).extracting("purchaseHistory").usingRecursiveComparison().isEqualTo(expected);
+    }
+
+    @DisplayName("프로모션 혜택을 받아 구매한 상품에 대해서 구매 기록에 기록한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"3:3000:1", "100:50000:60", "50:3000:10", "5:500:2", "700:10000000:300"}, delimiter = ':')
+    void recordPromotionAppliedPurchaseHistory(final int promotionQuantity, final int price, final int freeQuantity) {
+        PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, 1000);
+        PurchaseHistory expected = PurchaseHistory.from(Constants.PRODUCT_NAME);
+        expected.addPromotionQuantity(promotionQuantity);
+        expected.addPurchasePrice(price);
+        expected.addFreeQuantity(freeQuantity);
+
+        purchaseProduct.recordPromotionAppliedPurchaseHistory(price, promotionQuantity, freeQuantity);
+
+        assertThat(purchaseProduct).extracting("purchaseHistory").usingRecursiveComparison().isEqualTo(expected);
+    }
 }

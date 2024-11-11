@@ -70,7 +70,7 @@ public class PromotionProductQuantityTest {
         PromotionProductQuantity promotionProductQuantity = PromotionProductQuantity.of(Constants.PRODUCT_NAME,
                 promotionQuantity, promotion);
 
-        boolean actual = promotionProductQuantity.isQuantityEnough(purchaseProduct);
+        boolean actual = promotionProductQuantity.isRequirementMetForApplyPromotion(purchaseProduct);
 
         assertThat(actual).isEqualTo(expected);
     }

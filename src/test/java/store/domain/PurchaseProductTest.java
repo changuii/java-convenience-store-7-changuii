@@ -53,15 +53,16 @@ public class PurchaseProductTest {
         assertThat(actual).isEqualTo(expected);
     }
 
-    @DisplayName("상품의 재고가 현재 남은 갯수 이하라면, 모두 사버리고 이상이라면 남은 갯수만큼 차감하고 차감한 만큼 반환한다.")
+    @DisplayName("상품의 재고가 현재 남은 갯수 이하라면, 모두 사버리고 이상이라면 남은 갯수만큼 차감하고 반환한다.")
     @ParameterizedTest
-    @CsvSource(value = {"1:2:1", "5:10:5", "7:3:3", "150:87:87"}, delimiter = ':')
-    void deductQuantity(int currentQuantity, int productQuantity, int expected) {
+    @CsvSource(value = {"1:2:0", "5:10:0", "7:3:4", "150:87:63"}, delimiter = ':')
+    void purchaseUntilAvailable(int currentQuantity, int productQuantity, int expected) {
         PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, currentQuantity);
+        PurchaseProduct expectedProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, expected);
 
-        int actual = purchaseProduct.deductQuantity(productQuantity);
+        purchaseProduct.purchaseUntilAvailable(productQuantity);
 
-        assertThat(actual).isEqualTo(expected);
+        assertThat(purchaseProduct).usingRecursiveComparison().isEqualTo(expectedProduct);
     }
 
     @DisplayName("PurchaseProduct는 결제가 완료되면, 기록된 내용을 바탕으로 CompleletedPurchaseHistory를 생성한다.")
@@ -72,7 +73,7 @@ public class PurchaseProductTest {
         CompletedPurchaseHistory expected = CompletedPurchaseHistory.of(Constants.PRODUCT_NAME,
                 totalPurchasePrice, purchaseQuantity, Constants.EMPTY_NUM, Constants.EMPTY_NUM);
 
-        purchaseProduct.writePurchaseHistory(purchaseQuantity, totalPurchasePrice);
+        purchaseProduct.recordRegularPricePurchaseHistory(purchaseQuantity, totalPurchasePrice);
         CompletedPurchaseHistory actual = purchaseProduct.generateCompletedPurchaseHistory();
 
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
@@ -92,13 +93,13 @@ public class PurchaseProductTest {
     @DisplayName("구매하려는 수량에 대해 프로모션에 필요한 수량을 반환한다.")
     @ParameterizedTest
     @CsvSource(value = {"7:6", "10:9", "12:12", "5:6"}, delimiter = ':')
-    void calculateNeedQuantity(final int purchaseQuantity, final int expected) {
+    void getRequiredQuantityForApplyPromotion(final int purchaseQuantity, final int expected) {
         BuyGet buyGet = BuyGet.of(2, 1);
         DateRange dateRange = DateRange.of(LocalDate.of(2023, 11, 01), LocalDate.of(2023, 11, 30));
         Promotion promotion = Promotion.of(Constants.PROMOTION_NAME, buyGet, dateRange);
         PurchaseProduct purchaseProduct = PurchaseProduct.of(Constants.PRODUCT_NAME, purchaseQuantity);
 
-        int actual = purchaseProduct.calculateNeedQuantity(promotion);
+        int actual = purchaseProduct.getRequiredQuantityForApplyPromotion(promotion);
 
         assertThat(actual).isEqualTo(expected);
     }

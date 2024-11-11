@@ -6,6 +6,7 @@ import java.util.List;
 import store.domain.product.ProductInfo;
 import store.domain.product.ProductQuantity;
 import store.domain.product.PromotionProductQuantity;
+import store.enums.ErrorMessage;
 
 public class ProductInventory {
     private final List<ProductInfo> infos;
@@ -94,21 +95,21 @@ public class ProductInventory {
         return promotionQuantities.stream()
                 .filter(promotionProductQuantity -> promotionProductQuantity.isMatchProduct(purchaseProduct))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXISTS_PRODUCT.getMessage()));
     }
 
     private ProductQuantity getProductQuantity(final PurchaseProduct purchaseProduct) {
         return quantities.stream()
                 .filter(productQuantity -> productQuantity.isMatchProduct(purchaseProduct))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXISTS_PRODUCT.getMessage()));
     }
 
     private ProductInfo getProductInfo(final PurchaseProduct purchaseProduct) {
         return infos.stream()
                 .filter(productInfo -> productInfo.isMatchProduct(purchaseProduct))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXISTS_PRODUCT.getMessage()));
     }
 
     public List<ProductInfo> getInfos() {

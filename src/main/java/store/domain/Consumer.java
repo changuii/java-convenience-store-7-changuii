@@ -2,6 +2,7 @@ package store.domain;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Consumer {
@@ -73,7 +74,7 @@ public class Consumer {
     }
 
     public Bill generateBill() {
-        return Bill.from(completedPurchaseHistories);
+        return Bill.from(Collections.unmodifiableList(completedPurchaseHistories));
     }
 
     public String currentProductName() {

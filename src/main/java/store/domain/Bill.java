@@ -1,6 +1,7 @@
 package store.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Bill {
@@ -52,7 +53,7 @@ public class Bill {
     }
 
     public List<CompletedPurchaseHistory> getCompletedPurchaseHistories() {
-        return completedPurchaseHistories;
+        return Collections.unmodifiableList(completedPurchaseHistories);
     }
 
     public int getTotalPurchasePrice() {

@@ -9,7 +9,7 @@ import store.enums.OutputMessage;
 public class OutputView {
     private static final String EMPTY = "";
     private static final int EMPTY_NUM = 0;
-    private static final int NEGATIVE = -1;
+    private static final String NEGATIVE = "-";
     private static final int TAB_GROUPPING = 3;
     private static final int TAB_MAX_WIDTH = 4;
 
@@ -100,12 +100,12 @@ public class OutputView {
 
     private void printPromotionDiscount(final int promotionDiscount) {
         print(formatBillRow(formatTab(OutputMessage.BILL_RESULT_PROMOTION_DISCOUNT), EMPTY,
-                formatPrice(formatNegative(promotionDiscount))));
+                formatNegative(formatPrice((promotionDiscount)))));
     }
 
     private void printMembershipDiscount(final int membershipDiscount) {
         print(formatBillRow(formatTab(OutputMessage.BILL_RESULT_MEMBERSHIP_DISCOUNT), EMPTY,
-                formatPrice(formatNegative(membershipDiscount))));
+                formatNegative(formatPrice((membershipDiscount)))));
     }
 
     private void printCheckoutPrice(final int checkoutPrice) {
@@ -145,8 +145,8 @@ public class OutputView {
         return formatMessage(OutputMessage.PRICE_FORMAT, price);
     }
 
-    private int formatNegative(final int number) {
-        return number * NEGATIVE;
+    private String formatNegative(final String number) {
+        return NEGATIVE+number;
     }
 
     private String formatTab(final Object value) {

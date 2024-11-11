@@ -2,6 +2,7 @@ package store.component.generator;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +39,7 @@ public class PromotionGenerator {
     }
 
     private Map<String, Optional<Promotion>> initPromotions() {
-        return Map.of("null", Optional.empty());
+        return new LinkedHashMap<>(Map.of("null", Optional.empty()));
     }
 
     private Promotion parsePromotion(final String promotion) {

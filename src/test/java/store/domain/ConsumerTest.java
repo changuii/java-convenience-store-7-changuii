@@ -26,12 +26,12 @@ public class ConsumerTest {
         LocalDate start = LocalDate.of(2023, 11, 01);
         LocalDate end = LocalDate.of(2023, 11, 30);
         Promotion promotion = Promotion.of(Constants.PROMOTION_NAME, BuyGet.of(2, 1), DateRange.of(start, end));
-        List<Product> infos = List.of(Product.of(Constants.PRODUCT_NAME, 1000), Product.of("김밥", 1000));
+        List<Product> products = List.of(Product.of(Constants.PRODUCT_NAME, 1000), Product.of("김밥", 1000));
         List<ProductQuantity> quantities = List.of(ProductQuantity.of(Constants.PRODUCT_NAME, 5),
                 ProductQuantity.of("김밥", 5));
         List<PromotionProductQuantity> promotionQuantity = List.of(
                 PromotionProductQuantity.of(Constants.PRODUCT_NAME, 10, promotion));
-        productInventory = ProductInventory.of(infos, quantities, promotionQuantity);
+        productInventory = ProductInventory.of(products, quantities, promotionQuantity);
     }
 
     @DisplayName("소비자가 현재 구매 상품을 구매 완료하였다면, true 아니라면 false를 반환한다.")

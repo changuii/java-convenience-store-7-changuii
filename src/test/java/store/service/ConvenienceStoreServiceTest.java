@@ -22,7 +22,7 @@ import store.domain.product.PromotionProductQuantity;
 
 public class ConvenienceStoreServiceTest {
     private ConvenienceStoreService convenienceStoreService;
-    private List<Product> infos;
+    private List<Product> product;
     private List<ProductQuantity> quantities;
     private List<PromotionProductQuantity> promotionQuantities;
 
@@ -31,11 +31,11 @@ public class ConvenienceStoreServiceTest {
         LocalDate start = LocalDate.of(2024, 11, 01);
         LocalDate end = LocalDate.of(2024, 11, 30);
         Promotion promotion = Promotion.of("MOCK_PROMOTION", BuyGet.of(2, 1), DateRange.of(start, end));
-        infos = List.of(Product.of(Constants.PRODUCT_NAME, Constants.PRODUCT_PRICE),
+        product = List.of(Product.of(Constants.PRODUCT_NAME, Constants.PRODUCT_PRICE),
                 Product.of("김밥", Constants.PRODUCT_PRICE));
         quantities = List.of(ProductQuantity.of(Constants.PRODUCT_NAME, 5), ProductQuantity.of("김밥", 100));
         promotionQuantities = List.of(PromotionProductQuantity.of(Constants.PRODUCT_NAME, 10, promotion));
-        ProductInventory inventory = ProductInventory.of(infos, quantities, promotionQuantities);
+        ProductInventory inventory = ProductInventory.of(product, quantities, promotionQuantities);
         convenienceStoreService = ConvenienceStoreService.of(inventory, new TodayGenerator());
     }
 

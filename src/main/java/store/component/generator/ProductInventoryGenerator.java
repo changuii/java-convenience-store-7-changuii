@@ -80,7 +80,7 @@ public class ProductInventoryGenerator {
                             final List<Product> products,
                             final List<ProductQuantity> productQuantities,
                             final List<PromotionProductQuantity> promotionQuantities) {
-        addProductInfo(column[0], parseInt(column[1]), products);
+        addProduct(column[0], parseInt(column[1]), products);
         Optional<Promotion> promotion = promotions.get(column[3]);
         if (promotion.isPresent()) {
             addProductQuantities(column[0], 0, productQuantities);
@@ -90,17 +90,17 @@ public class ProductInventoryGenerator {
         addProductQuantities(column[0], parseInt(column[2]), productQuantities);
     }
 
-    private void addProductInfo(final String productName, final int productPrice,
+    private void addProduct(final String productName, final int productPrice,
                                 final List<Product> products) {
-        removeIfExsistsInfo(productName, products);
+        removeIfExsistsProduct(productName, products);
         products.add(Product.of(productName, productPrice));
     }
 
-    private void removeIfExsistsInfo(final String productName, final List<Product> products) {
+    private void removeIfExsistsProduct(final String productName, final List<Product> products) {
         products.stream()
-                .filter(productInfo -> productInfo.isMatchProductName(productName))
+                .filter(product -> product.isMatchProductName(productName))
                 .findAny()
-                .ifPresent(productInfo -> products.removeLast());
+                .ifPresent(product -> products.removeLast());
     }
 
     private void addProductQuantities(final String productName, final int productQuantity,

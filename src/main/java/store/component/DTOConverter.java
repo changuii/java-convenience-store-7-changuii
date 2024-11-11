@@ -82,9 +82,9 @@ public class DTOConverter {
 
     private List<ProductDTO> convertProductDTOs(final ProductInventory productInventory) {
         final List<ProductDTO> productDTOs = new ArrayList<>();
-        productInventory.getInfos().stream().forEach(productInfo -> {
-            addPromotionProductQuantity(productInventory.getPromotionQuantities(), productInfo, productDTOs);
-            addProductQuantity(productInventory.getQuantities(), productInfo, productDTOs);
+        productInventory.getProducts().stream().forEach(product -> {
+            addPromotionProductQuantity(productInventory.getPromotionQuantities(), product, productDTOs);
+            addProductQuantity(productInventory.getQuantities(), product, productDTOs);
         });
         return productDTOs;
     }

@@ -9,26 +9,26 @@ import store.domain.product.PromotionProductQuantity;
 import store.enums.ErrorMessage;
 
 public class ProductInventory {
-    private final List<Product> infos;
+    private final List<Product> products;
     private final List<ProductQuantity> quantities;
     private final List<PromotionProductQuantity> promotionQuantities;
 
-    public ProductInventory(final List<Product> infos, final List<ProductQuantity> quantities,
+    public ProductInventory(final List<Product> products, final List<ProductQuantity> quantities,
                             final List<PromotionProductQuantity> promotionQuantities) {
-        this.infos = infos;
+        this.products = products;
         this.quantities = quantities;
         this.promotionQuantities = promotionQuantities;
     }
 
-    public static ProductInventory of(final List<Product> infos, final List<ProductQuantity> quantities,
+    public static ProductInventory of(final List<Product> products, final List<ProductQuantity> quantities,
                                       final List<PromotionProductQuantity> promotionQuantities) {
-        return new ProductInventory(infos, quantities, promotionQuantities);
+        return new ProductInventory(products, quantities, promotionQuantities);
     }
 
     public boolean containsProduct(final PurchaseProduct purchaseProduct) {
-        return infos.stream()
-                .filter(productInfo -> productInfo.isMatchProduct(purchaseProduct))
-                .anyMatch(productInfo -> true);
+        return products.stream()
+                .filter(product -> product.isMatchProduct(purchaseProduct))
+                .anyMatch(product -> true);
     }
 
     public boolean isLessThanQuantityForPurchase(final PurchaseProduct purchaseProduct, final LocalDate today) {
@@ -49,7 +49,7 @@ public class ProductInventory {
 
     public void purchaseRegularPriceProduct(final PurchaseProduct purchaseProduct) {
         ProductQuantity productQuantity = getProductQuantity(purchaseProduct);
-        Product product = getProductInfo(purchaseProduct);
+        Product product = getProduct(purchaseProduct);
         int purchaseQuantity = productQuantity.deductQuantity(purchaseProduct);
         int totalPurchasePrice = product.calculateTotalPrice(purchaseQuantity);
 
@@ -58,7 +58,7 @@ public class ProductInventory {
 
     public void purchaseRegularPricePromotionProduct(final PurchaseProduct purchaseProduct) {
         PromotionProductQuantity promotionProductQuantity = getPromotionQuantity(purchaseProduct);
-        Product product = getProductInfo(purchaseProduct);
+        Product product = getProduct(purchaseProduct);
         int purchaseQuantity = promotionProductQuantity.deductQuantityWithoutPromotion(purchaseProduct);
         int totalPurchasePrice = product.calculateTotalPrice(purchaseQuantity);
 
@@ -67,7 +67,7 @@ public class ProductInventory {
 
     public void purchasePromotionProduct(final PurchaseProduct purchaseProduct) {
         PromotionProductQuantity promotionProductQuantity = getPromotionQuantity(purchaseProduct);
-        Product product = getProductInfo(purchaseProduct);
+        Product product = getProduct(purchaseProduct);
         int freeQuantity = promotionProductQuantity.getApplicableFreeQuantity(purchaseProduct);
         int purchaseQuantity = promotionProductQuantity.deductQuantityApplyPromotion(purchaseProduct, freeQuantity);
         int totalPurchasePrice = product.calculateTotalPrice(purchaseQuantity);
@@ -105,15 +105,15 @@ public class ProductInventory {
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXISTS_PRODUCT.getMessage()));
     }
 
-    private Product getProductInfo(final PurchaseProduct purchaseProduct) {
-        return infos.stream()
-                .filter(productInfo -> productInfo.isMatchProduct(purchaseProduct))
+    private Product getProduct(final PurchaseProduct purchaseProduct) {
+        return products.stream()
+                .filter(product -> product.isMatchProduct(purchaseProduct))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXISTS_PRODUCT.getMessage()));
     }
 
-    public List<Product> getInfos() {
-        return Collections.unmodifiableList(infos);
+    public List<Product> getProducts() {
+        return Collections.unmodifiableList(products);
     }
 
     public List<ProductQuantity> getQuantities() {

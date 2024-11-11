@@ -29,13 +29,13 @@ public class ProductInventoryGeneratorTest {
     private final ProductInventoryGenerator productInventoryGenerator;
     private final List<ProductQuantity> quantities;
     private final List<PromotionProductQuantity> promotionQuantities;
-    private final List<Product> infos;
+    private final List<Product> products;
 
     public ProductInventoryGeneratorTest() {
         productInventoryGenerator = new ProductInventoryGenerator();
         quantities = new ArrayList<>();
         promotionQuantities = new ArrayList<>();
-        infos = new ArrayList<>();
+        products = new ArrayList<>();
     }
 
     private static Stream<Arguments> provideProductLineAndPromotionsAndProductData() {
@@ -59,7 +59,7 @@ public class ProductInventoryGeneratorTest {
     void init() {
         quantities.clear();
         promotionQuantities.clear();
-        infos.clear();
+        products.clear();
     }
 
     @ParameterizedTest
@@ -124,14 +124,14 @@ public class ProductInventoryGeneratorTest {
     @CsvSource(value = {"탄산음료:100000", "김치:1000", "감자:1000000000", "삼겹살:100"}, delimiter = ':')
     void 상품인벤토리를_생성하면서_상품의_정보도_생성한다(String name, int price) {
         String input = String.format("%s,%d,10,null", name, price);
-        infos.add(Product.of(name, price));
+        products.add(Product.of(name, price));
 
         ProductInventory productInventory =
                 productInventoryGenerator.generate(Map.of("null", Optional.empty()), List.of(input));
 
-        assertThat(productInventory.getInfos())
+        assertThat(productInventory.getProducts())
                 .usingRecursiveComparison()
-                .isEqualTo(infos);
+                .isEqualTo(products);
     }
 
     private void assertThatQuantities(ProductInventory actual) {

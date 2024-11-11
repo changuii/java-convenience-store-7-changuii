@@ -1,5 +1,306 @@
 # java-convenience-store-precourse
 
+### 프로젝트 소개
+
+> 편의점에서 상품을 구매할 수 있는 편의점 애플리케이션입니다.
+>
+
+### 기능
+
+1. 편의점의 상품 목록들을 한눈에 볼 수 있습니다.
+    1. 상품 이름, 상품 가격, 상품 현재 재고, 상품 프로모션에 대한 정보를 확인할 수 있습니다.
+2. 입력하신 상품명과 수량에 맞게 상품을 구입할 수 있습니다.
+3. 만약 프로모션이 적용안되는 상품이 있거나 프로모션이 적용되지만 부족하게 가져오신 경우 저희가 고지해드립니다.
+4. 원하시는 경우, 멤버십 할인도 받을 수 있습니다.
+5. 구매하신 내역은 영수증을 통해 확인하실 수 있습니다.
+    1. 영수증에는 구매 상품 내역, 각 상품 가격, 총 구입 금액, 프로모션 할인 금액, 멤버십 할인 금액, 총 내야하실 금액 등이 표기됩니다.
+6. 이어서 구매하시고 싶으시다면 계속 하실 수 있습니다.
+
+---
+
+### 기능 예제
+
+**1. 편의점의 상품 목록들을 확인**
+
+- 아래 품목들은 기본 품목들로 초기 설정입니다. 각 상품의 프로모션 상품 정보, 일반 상품 정보 순으로 나타납니다.
+    - 프로모션이 없는 상품은 표기되지 않습니다.
+    - 일반 상품은 재고가 없더라도 정보는 표기됩니다.
+
+```
+안녕하세요. W편의점입니다.
+현재 보유하고 있는 상품입니다.
+
+- 콜라 1,000원 10개 탄산2+1
+- 콜라 1,000원 10개 
+- 사이다 1,000원 8개 탄산2+1
+- 사이다 1,000원 7개 
+- 오렌지주스 1,800원 9개 MD추천상품
+- 오렌지주스 1,800원 재고 없음 
+- 탄산수 1,200원 5개 탄산2+1
+- 탄산수 1,200원 재고 없음 
+- 물 500원 10개 
+- 비타민워터 1,500원 6개 
+- 감자칩 1,500원 5개 반짝할인
+- 감자칩 1,500원 5개 
+- 초코바 1,200원 5개 MD추천상품
+- 초코바 1,200원 5개 
+- 에너지바 2,000원 5개 
+- 정식도시락 6,400원 8개 
+- 컵라면 1,700원 1개 MD추천상품
+- 컵라면 1,700원 10개 
+```
+
+**2. 상품 구입**
+
+- 아래의 예시는 콜라 1개와 물 5개를 구매하는 예제입니다.
+    - 여러개의 상품을 구매하는 것은 가능하나, 중복된 상품을 여러개 입력하시는 것은 불가능합니다.
+
+```
+구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])
+[콜라-1],[물-5]
+```
+
+**3. 만약 프로모션이 적용되지만 부족하게 가져오신 경우 고지해드립니다.**
+
+- 콜라 제품은 2+1 행사중이기 때문에 1개를 부족하게 가져오신 예제입니다.
+    - Y를 입력하시면 1개를 무료 증정받을 수 있습니다.
+    - N을 입력하시면 무료 증정을 거부하실 수 있습니다.
+
+```
+구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])
+[콜라-2]
+
+현재 콜라은(는) 1개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)
+Y
+```
+
+**4. 만약 프로모션을 제공받지 못하는 수량이 있는 경우 고지해드립니다.**
+
+- 컵라면 제품은 1+1 행사중이기 때문에 1개를 추가로 받으셔야 하지만, 수량이 부족한 관계로 혜택을 받지 못하시는 예제입니다.
+    - Y를 입력하시면 적용되지 않는 수량을 제거하고 구매하실 수 있습니다.
+    - N을 입력하시면 프로모션 혜택이 없는 정가로 구매하실 수 있습니다.
+
+```
+- 컵라면 1,700원 1개 MD추천상품
+
+구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])
+[컵라면-1]
+
+현재 컵라면 1개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까? (Y/N)
+Y
+```
+
+**5. 원하시는 경우 정가 구매 항목에 대해서 멤버십 할인 30%를 적용해드립니다. (최대 8000원)**
+
+- 아래는 콜라를 제외한 물 10개에 멤버십 할인 30%가 적용된 예제입니다.
+
+```
+구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])
+[콜라-3],[물-10]
+
+멤버십 할인을 받으시겠습니까? (Y/N)
+Y
+==============W 편의점================
+상품명						수량			     금액
+콜라							3			       3,000
+물				  			10			     5,000
+=============증		정===============
+콜라							1			
+====================================
+총구매액					13			     8,000
+행사할인						          -1,000
+멤버십할인						          -1,500
+내실돈					     	         5,500
+```
+
+**6. 구매하신 내역은 영수증을 통해 확인하실 수 있습니다.**
+
+- 아래 예시는 모든 상품을 구매한 예제입니다.
+
+```
+==============W 편의점================
+상품명						수량					금액
+콜라							20					20,000
+사이다						15					15,000
+오렌지주스					9					  16,200
+탄산수						5					  6,000
+물				  			10					5,000
+비타민워터					6			  		9,000
+감자칩						10					15,000
+초코바						10					12,000
+에너지바					5			  		10,000
+정식도시락					8			  		51,200
+컵라면						11					18,700
+=============증		정===============
+콜라							3			
+사이다						2			
+오렌지주스					4			
+탄산수						1			
+감자칩						2			
+초코바						2			
+====================================
+총구매액					109				178,100
+행사할인										-18,800
+멤버십할인										-8,000
+내실돈								 		  151,300
+```
+
+**7. 이어서 구매하시고 싶으신 경우 이어서 진행할 수 있습니다.**
+
+- 이전 구매에서 콜라3개를 구매하여 3개가 차감되어 있습니다.
+
+```
+감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)
+Y
+
+안녕하세요. W편의점입니다.
+현재 보유하고 있는 상품입니다.
+
+- 콜라 1,000원 7개 탄산2+1
+- 콜라 1,000원 10개 
+- 사이다 1,000원 8개 탄산2+1
+- 사이다 1,000원 7개 
+- 오렌지주스 1,800원 9개 MD추천상품
+- 오렌지주스 1,800원 재고 없음 
+- 탄산수 1,200원 5개 탄산2+1
+- 탄산수 1,200원 재고 없음 
+- 물 500원 10개 
+- 비타민워터 1,500원 6개 
+- 감자칩 1,500원 5개 반짝할인
+- 감자칩 1,500원 5개 
+- 초코바 1,200원 5개 MD추천상품
+- 초코바 1,200원 5개 
+- 에너지바 2,000원 5개 
+- 정식도시락 6,400원 8개 
+- 컵라면 1,700원 1개 MD추천상품
+- 컵라면 1,700원 10개 
+
+구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])
+```
+
+### 입력 가이드
+
+**1. 물품 입력 가이드**
+
+- 물품 입력은 아래와 같은 형식으로 입력해주셔야 합니다.
+- [`상품이름`-`구매하시려는 수량`],[`상품이름`-`구매하시려는 수량`],[`상품이름`-`구매하시려는 수량`]
+- 구매하시는 상품을 추가하는 것은 제한이 없지만, 같은 상품에 대해서 두 번 입력하시는 것은 불가능합니다.
+
+```
+구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])
+[사이다-2],[감자칩-1],[오렌지주스-2]
+```
+
+**2. 프로모션 상품 추가 및 프로모션 미 적용 상품 제외, 멤버십 할인 및 재 구매 의사 입력 가이드**
+
+- 아래의 입력들은 오직 `Y` 혹은 `N` 만 입력하실 수 있습니다.
+
+```
+현재 콜라은(는) 1개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)
+현재 컵라면 1개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까? (Y/N)
+멤버십 할인을 받으시겠습니까? (Y/N)
+감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)
+```
+
+### 프로젝트 패키지 구조
+
+**Class Diagram**
+
+```mermaid
+classDiagram
+direction BT
+class Bill
+class BuyGet
+class CompletedPurchaseHistory
+class Consumer
+class ConvenienceStoreService
+class DateRange
+class InputParser
+class InputValidator
+class InputView
+class OutputView
+class Product
+class ProductInventory
+class ProductQuantity
+class Promotion
+class PromotionProductQuantity
+class PurchaseHistory
+class PurchaseProduct
+class StoreController
+
+Bill "1" *--> "completedPurchaseHistories *" CompletedPurchaseHistory 
+Consumer "1" *--> "completedPurchaseHistories *" CompletedPurchaseHistory 
+Consumer "1" *--> "purchaseProducts *" PurchaseProduct 
+ConvenienceStoreService "1" *--> "productInventory 1" ProductInventory 
+InputView "1" *--> "inputParser 1" InputParser 
+InputView "1" *--> "inputValidator 1" InputValidator 
+ProductInventory "1" *--> "infos *" Product 
+ProductInventory "1" *--> "quantities *" ProductQuantity 
+ProductInventory "1" *--> "promotionQuantities *" PromotionProductQuantity 
+Promotion "1" *--> "buyGet 1" BuyGet 
+Promotion "1" *--> "dateRange 1" DateRange 
+PromotionProductQuantity "1" *--> "promotion 1" Promotion 
+PurchaseProduct "1" *--> "purchaseHistory 1" PurchaseHistory 
+StoreController "1" *--> "convenienceStoreService 1" ConvenienceStoreService 
+StoreController "1" *--> "inputView 1" InputView 
+StoreController "1" *--> "outputView 1" OutputView 
+
+```
+
+**패키지 트리 구조**
+
+```
+store
+	├── Application.java
+	├── component
+	│   ├── DTOConverter.java
+	│   ├── FileParser.java
+	│   └── generator
+	│       ├── ConsumerGenerator.java
+	│       ├── ConvenienceStoreServiceGnerator.java
+	│       ├── LocalDateGenerator.java
+	│       ├── ProductInventoryGenerator.java
+	│       ├── PromotionGenerator.java
+	│       └── TodayGenerator.java
+	├── controller
+	│   └── StoreController.java
+	├── domain
+	│   ├── Bill.java
+	│   ├── CompletedPurchaseHistory.java
+	│   ├── Consumer.java
+	│   ├── ProductInventory.java
+	│   ├── PurchaseHistory.java
+	│   ├── PurchaseProduct.java
+	│   └── product
+	│       ├── BuyGet.java
+	│       ├── DateRange.java
+	│       ├── Product.java
+	│       ├── ProductQuantity.java
+	│       ├── Promotion.java
+	│       └── PromotionProductQuantity.java
+	├── dto
+	│   ├── BillDTO.java
+	│   ├── ProductDTO.java
+	│   ├── ProductInventoryDTO.java
+	│   └── PurchaseProductDTO.java
+	├── enums
+	│   ├── ErrorMessage.java
+	│   ├── GeneratorConstants.java
+	│   └── OutputMessage.java
+	├── factory
+	│   └── StoreControllerFactory.java
+	├── handler
+	│   └── RetryHandler.java
+	├── service
+	│   └── ConvenienceStoreService.java
+	└── view
+	    ├── InputParser.java
+	    ├── InputValidator.java
+	    ├── InputView.java
+	    └── OutputView.java
+```
+
+
 ## 기능 목록
 
 ### 입력

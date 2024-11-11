@@ -23,7 +23,7 @@ public class ProductInfo {
         return purchaseProduct.isMatchProductName(name);
     }
 
-    public boolean isMatchProductName(final String name){
+    public boolean isMatchProductName(final String name) {
         return this.name.equals(name);
     }
 

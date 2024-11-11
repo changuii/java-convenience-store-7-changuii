@@ -43,15 +43,15 @@ public class PromotionProductQuantity {
     }
 
     public int deductQuantityWithoutPromotion(final PurchaseProduct purchaseProduct) {
-        int deductQuantity = purchaseProduct.purchaseUntilAvailable(quantity);
-        quantity -= deductQuantity;
-        return deductQuantity;
+        final int deductedQuantity = purchaseProduct.purchaseUntilAvailable(quantity);
+        quantity -= deductedQuantity;
+        return deductedQuantity;
     }
 
     public int deductQuantityApplyPromotion(final PurchaseProduct purchaseProduct, final int freeQuantity) {
-        int deductQuantity = purchaseProduct.purchaseUntilAvailable(getApplicableQuantity());
-        quantity -= deductQuantity;
-        return deductQuantity - freeQuantity;
+        final int deductedQuantity = purchaseProduct.purchaseUntilAvailable(getApplicableQuantity());
+        quantity -= deductedQuantity;
+        return deductedQuantity - freeQuantity;
     }
 
     public int getApplicableFreeQuantity() {

@@ -38,8 +38,4 @@ public class Promotion {
         return promotionName;
     }
 
-    @Override
-    public String toString() {
-        return promotionName;
-    }
 }

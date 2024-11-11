@@ -20,9 +20,9 @@ public class ProductQuantity {
     }
 
     public int deductQuantity(final PurchaseProduct purchaseProduct) {
-        int deductQuantity = purchaseProduct.purchaseUntilAvailable(quantity);
-        quantity -= deductQuantity;
-        return deductQuantity;
+        final int deductedQuantity = purchaseProduct.purchaseUntilAvailable(quantity);
+        quantity -= deductedQuantity;
+        return deductedQuantity;
     }
 
     public boolean isMatchProduct(final PurchaseProduct purchaseProduct) {

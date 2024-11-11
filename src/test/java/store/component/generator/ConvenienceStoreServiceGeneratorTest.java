@@ -14,7 +14,7 @@ import store.Constants;
 import store.component.FileParser;
 import store.domain.ProductInventory;
 import store.domain.product.Promotion;
-import store.enums.StoreConfig;
+import store.enums.GeneratorConstants;
 import store.service.ConvenienceStoreService;
 
 public class ConvenienceStoreServiceGeneratorTest {
@@ -36,8 +36,8 @@ public class ConvenienceStoreServiceGeneratorTest {
 
     @Test
     void generate를_호출하면_fileParser를_통해_md_파일을_읽어온다() {
-        List<String> expected = List.of(StoreConfig.PROMOTIONS_VALUE_PATH.getValue(),
-                StoreConfig.PRODUCTS_VALUE_PATH.getValue());
+        List<String> expected = List.of(GeneratorConstants.PROMOTIONS_VALUE_PATH.getValue(),
+                GeneratorConstants.PRODUCTS_VALUE_PATH.getValue());
         mockFileParse.addFileLine(new ArrayList<>());
         mockFileParse.addFileLine(new ArrayList<>());
 

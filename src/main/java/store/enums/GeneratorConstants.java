@@ -1,6 +1,6 @@
 package store.enums;
 
-public enum StoreConfig {
+public enum GeneratorConstants {
 
     PRODUCTS_VALUE_PATH("src/main/resources/products.md"),
     PROMOTIONS_VALUE_PATH("src/main/resources/promotions.md"),
@@ -11,7 +11,7 @@ public enum StoreConfig {
 
     private final String value;
 
-    StoreConfig(final String value) {
+    GeneratorConstants(final String value) {
         this.value = value;
     }
 

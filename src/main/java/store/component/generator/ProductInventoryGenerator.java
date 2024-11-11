@@ -11,7 +11,7 @@ import store.domain.product.ProductQuantity;
 import store.domain.product.Promotion;
 import store.domain.product.PromotionProductQuantity;
 import store.enums.ErrorMessage;
-import store.enums.StoreConfig;
+import store.enums.GeneratorConstants;
 
 public class ProductInventoryGenerator {
 
@@ -27,7 +27,7 @@ public class ProductInventoryGenerator {
     }
 
     private void validateProductLineFormat(final String productLine) {
-        if (!productLine.matches(StoreConfig.PRODUCT_VALUE_REGEX.getValue())) {
+        if (!productLine.matches(GeneratorConstants.PRODUCT_VALUE_REGEX.getValue())) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
         }
     }
@@ -44,13 +44,22 @@ public class ProductInventoryGenerator {
         final List<ProductInfo> productInfos = new ArrayList<>();
         final List<ProductQuantity> productQuantities = new ArrayList<>();
         final List<PromotionProductQuantity> promotionQuantities = new ArrayList<>();
+        parseProducts(productLines, promotions, productInfos, productQuantities, promotionQuantities);
 
+        return ProductInventory.of(
+                productInfos.stream().distinct().collect(Collectors.toList()),
+                productQuantities,
+                promotionQuantities
+        );
+    }
+
+    private void parseProducts(final List<String> productLines, final Map<String, Optional<Promotion>> promotions,
+                               final List<ProductInfo> productInfos,
+                               final List<ProductQuantity> productQuantities,
+                               final List<PromotionProductQuantity> promotionQuantities) {
         productLines.forEach((productLine) -> {
             parseProduct(productLine, promotions, productInfos, productQuantities, promotionQuantities);
         });
-
-        return ProductInventory.of(productInfos.stream().distinct().collect(Collectors.toList()), productQuantities,
-                promotionQuantities);
     }
 
 
@@ -59,30 +68,30 @@ public class ProductInventoryGenerator {
                               final List<ProductQuantity> productQuantities,
                               final List<PromotionProductQuantity> promotionQuantities) {
         try {
-            String[] column = productLine.split(StoreConfig.TABLE_ROW_DELIMITER.getValue());
+            final String[] column = productLine.split(GeneratorConstants.TABLE_ROW_DELIMITER.getValue());
             validateContainPromotions(promotions, column[3]);
-            registerProduct(column, promotions, productInfos, productQuantities, promotionQuantities);
+            addProduct(column, promotions, productInfos, productQuantities, promotionQuantities);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
         }
     }
 
-    private void registerProduct(final String[] column, final Map<String, Optional<Promotion>> promotions,
-                                 final List<ProductInfo> productInfos,
-                                 final List<ProductQuantity> productQuantities,
-                                 final List<PromotionProductQuantity> promotionQuantities) {
-        registerProductInfo(column[0], parseInt(column[1]), productInfos);
+    private void addProduct(final String[] column, final Map<String, Optional<Promotion>> promotions,
+                            final List<ProductInfo> productInfos,
+                            final List<ProductQuantity> productQuantities,
+                            final List<PromotionProductQuantity> promotionQuantities) {
+        addProductInfo(column[0], parseInt(column[1]), productInfos);
         Optional<Promotion> promotion = promotions.get(column[3]);
         if (promotion.isPresent()) {
-            registerProductQuantities(column[0], 0, productQuantities);
-            registerPromotionProductQuantities(column[0], parseInt(column[2]), promotion.get(), promotionQuantities);
+            addProductQuantities(column[0], 0, productQuantities);
+            addPromotionProductQuantities(column[0], parseInt(column[2]), promotion.get(), promotionQuantities);
             return;
         }
-        registerProductQuantities(column[0], parseInt(column[2]), productQuantities);
+        addProductQuantities(column[0], parseInt(column[2]), productQuantities);
     }
 
-    private void registerProductInfo(final String productName, final int productPrice,
-                                     final List<ProductInfo> productInfos) {
+    private void addProductInfo(final String productName, final int productPrice,
+                                final List<ProductInfo> productInfos) {
         removeIfExsistsInfo(productName, productInfos);
         productInfos.add(ProductInfo.of(productName, productPrice));
     }
@@ -94,16 +103,15 @@ public class ProductInventoryGenerator {
                 .ifPresent(productInfo -> productInfos.removeLast());
     }
 
-    private void registerProductQuantities(final String productName, final int productQuantity,
-                                           final List<ProductQuantity> productQuantities) {
+    private void addProductQuantities(final String productName, final int productQuantity,
+                                      final List<ProductQuantity> productQuantities) {
         removeIfExsistsProductQuantity(productName, productQuantities);
         productQuantities.add(ProductQuantity.of(productName, productQuantity));
     }
 
-    private void registerPromotionProductQuantities(final String productName, final int productQuantity,
-                                                    final Promotion promotion,
-                                                    final List<PromotionProductQuantity> promotionQuantities) {
-
+    private void addPromotionProductQuantities(final String productName, final int productQuantity,
+                                               final Promotion promotion,
+                                               final List<PromotionProductQuantity> promotionQuantities) {
         promotionQuantities.add(PromotionProductQuantity.of(productName, productQuantity, promotion));
     }
 

@@ -10,7 +10,7 @@ public class FileParser {
 
     public List<String> readAllFiles(final String filePath) {
         try {
-            List<String> fileLines = Files.readAllLines(Paths.get(filePath));
+            final List<String> fileLines = Files.readAllLines(Paths.get(filePath));
             return fileLines;
         } catch (IOException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());

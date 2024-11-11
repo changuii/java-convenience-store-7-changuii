@@ -31,17 +31,12 @@ public class DTOConverter {
     }
 
     public BillDTO convertBillDTO(final Bill bill) {
-        List<CompletedPurchaseHistory> purchaseHistories = bill.getCompletedPurchaseHistories();
-        int totalPurchasePrice = bill.getTotalPurchasePrice();
-        int promotionDiscount = bill.getPromotionDiscount();
-        int membershipDiscount = bill.getMembershipDiscount();
-        int checkoutPrice = bill.getCheckoutPrice();
-        int totalAllQuantity = bill.getTotalAllQuantity();
-        List<ProductDTO> purchaseProducts = convertCompletedPurchaseHistoriesToPurchaseProducts(purchaseHistories);
-        List<ProductDTO> freeProducts = convertCompletedPurchaseHistoriesToFreeProducts(purchaseHistories);
-
-        return BillDTO.of(purchaseProducts, freeProducts, totalPurchasePrice, promotionDiscount, membershipDiscount,
-                checkoutPrice, bill.getTotalAllQuantity());
+        final List<CompletedPurchaseHistory> purchaseHistories = bill.getCompletedPurchaseHistories();
+        return BillDTO.of(
+                convertCompletedPurchaseHistoriesToPurchaseProducts(purchaseHistories),
+                convertCompletedPurchaseHistoriesToFreeProducts(purchaseHistories),
+                bill.getTotalPurchasePrice(), bill.getPromotionDiscount(), bill.getMembershipDiscount(),
+                bill.getCheckoutPrice(), bill.getTotalAllQuantity());
     }
 
     private List<ProductDTO> convertCompletedPurchaseHistoriesToPurchaseProducts(
@@ -69,7 +64,7 @@ public class DTOConverter {
                 .toList();
     }
 
-    private boolean freeProductExsistsCondition(ProductDTO freeProduct){
+    private boolean freeProductExsistsCondition(ProductDTO freeProduct) {
         return freeProduct.getQuantity() != EMPTY_NUMBER;
     }
 
@@ -86,7 +81,7 @@ public class DTOConverter {
     }
 
     private List<ProductDTO> convertProductDTOs(final ProductInventory productInventory) {
-        List<ProductDTO> productDTOs = new ArrayList<>();
+        final List<ProductDTO> productDTOs = new ArrayList<>();
         productInventory.getInfos().stream().forEach(productInfo -> {
             addPromotionProductQuantity(productInventory.getPromotionQuantities(), productInfo, productDTOs);
             addProductQuantity(productInventory.getQuantities(), productInfo, productDTOs);

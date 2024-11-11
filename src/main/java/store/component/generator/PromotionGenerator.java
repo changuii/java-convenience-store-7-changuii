@@ -2,7 +2,6 @@ package store.component.generator;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -10,15 +9,14 @@ import store.domain.product.BuyGet;
 import store.domain.product.DateRange;
 import store.domain.product.Promotion;
 import store.enums.ErrorMessage;
-import store.enums.StoreConfig;
+import store.enums.GeneratorConstants;
 
 public class PromotionGenerator {
 
     public Map<String, Optional<Promotion>> generate(final List<String> promotionLines) {
         validatePromotionLines(promotionLines);
-        Map<String, Optional<Promotion>> promotions = initPromotions();
+        final Map<String, Optional<Promotion>> promotions = initPromotions();
         registerPromotions(promotions, promotionLines);
-
         return promotions;
     }
 
@@ -27,7 +25,7 @@ public class PromotionGenerator {
     }
 
     private void validatePromotionLineFormat(final String promotionLine) {
-        if (!promotionLine.matches(StoreConfig.PROMOTION_VALUE_REGEX.getValue())) {
+        if (!promotionLine.matches(GeneratorConstants.PROMOTION_VALUE_REGEX.getValue())) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
         }
     }
@@ -40,19 +38,14 @@ public class PromotionGenerator {
     }
 
     private Map<String, Optional<Promotion>> initPromotions() {
-        Map<String, Optional<Promotion>> promotions = new HashMap<>();
-        promotions.put("null", Optional.empty());
-        return promotions;
+        return Map.of("null", Optional.empty());
     }
 
     private Promotion parsePromotion(final String promotion) {
         try {
-            String[] column = promotion.split(StoreConfig.TABLE_ROW_DELIMITER.getValue());
-            String promotionName = column[0];
-            BuyGet buyGet = BuyGet.of(parseInt(column[1]), parseInt(column[2]));
-            DateRange dateRange = parseDateRange(column[3], column[4]);
-
-            return Promotion.of(promotionName, buyGet, dateRange);
+            final String[] column = promotion.split(GeneratorConstants.TABLE_ROW_DELIMITER.getValue());
+            return Promotion.of(column[0], BuyGet.of(parseInt(column[1]), parseInt(column[2])),
+                    parseDateRange(column[3], column[4]));
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
         }
@@ -60,9 +53,7 @@ public class PromotionGenerator {
 
     private DateRange parseDateRange(final String startDate, final String endDate) {
         try {
-            LocalDate start = LocalDate.parse(startDate);
-            LocalDate end = LocalDate.parse(endDate);
-            return DateRange.of(start, end);
+            return DateRange.of(LocalDate.parse(startDate), LocalDate.parse(endDate));
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_FILE_FORMAT.getMessage());
         }

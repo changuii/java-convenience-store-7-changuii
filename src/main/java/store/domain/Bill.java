@@ -11,7 +11,6 @@ public class Bill {
     private int totalPurchasePriceAtRegularPrice;
     private int promotionDiscount;
     private int membershipDiscount;
-    private int checkoutPrice;
 
     private Bill(final List<CompletedPurchaseHistory> completedPurchaseHistories) {
         this.completedPurchaseHistories = new ArrayList<>();
@@ -19,7 +18,6 @@ public class Bill {
         totalAllQuantity = 0;
         promotionDiscount = 0;
         membershipDiscount = 0;
-        checkoutPrice = 0;
         settleCompletedPurchaseHistories(completedPurchaseHistories);
     }
 
@@ -48,10 +46,6 @@ public class Bill {
         membershipDiscount = (int) Math.round(totalPurchasePriceAtRegularPrice * membershipPercentage);
     }
 
-    public void calculateCheckoutPrice() {
-        checkoutPrice = totalPurchasePrice - promotionDiscount - membershipDiscount;
-    }
-
     public List<CompletedPurchaseHistory> getCompletedPurchaseHistories() {
         return Collections.unmodifiableList(completedPurchaseHistories);
     }
@@ -73,6 +67,6 @@ public class Bill {
     }
 
     public int getCheckoutPrice() {
-        return checkoutPrice;
+        return totalPurchasePrice - promotionDiscount - membershipDiscount;
     }
 }

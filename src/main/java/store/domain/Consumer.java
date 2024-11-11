@@ -39,7 +39,7 @@ public class Consumer {
     }
 
     public void deductCurrentProductQuantityAtRegularPrice(final int regularPriceQuantity) {
-        currentPurchaseProduct().deductRegularPriceQuantity(regularPriceQuantity);
+        currentPurchaseProduct().purchaseUntilAvailable(regularPriceQuantity);
     }
 
     public void purchaseProduct(final ProductInventory productInventory) {

@@ -38,10 +38,6 @@ public class PurchaseProduct {
         return purchasedQuantity;
     }
 
-    public void deductRegularPriceQuantity(final int quantity) {
-        purchaseUntilAvailable(quantity);
-    }
-
     public int getRequiredQuantityForApplyPromotion(final Promotion promotion) {
         return promotion.getRequiredQuantityForApplyPromotion(currentQuantity);
     }

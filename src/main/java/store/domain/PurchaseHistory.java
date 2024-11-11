@@ -39,6 +39,10 @@ public class PurchaseHistory {
         return CompletedPurchaseHistory.of(productName, totalPurchasePrice, quantity, promotionQuantity, freeQuantity);
     }
 
+    public boolean isEmpty(){
+        return (quantity + promotionQuantity) == 0;
+    }
+
 
 
 }

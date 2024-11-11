@@ -62,6 +62,10 @@ public class PurchaseProduct {
         return currentQuantity == 0;
     }
 
+    public boolean isEmptyPurchaseHistory(){
+        return purchaseHistory.isEmpty();
+    }
+
     public void recordRegularPricePurchaseHistory(final int quantity, final int price) {
         purchaseHistory.addPurchasePrice(price);
         purchaseHistory.addQuantity(quantity);

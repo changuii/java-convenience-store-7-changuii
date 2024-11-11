@@ -60,7 +60,7 @@ public class Consumer {
     }
 
     public void addIfCurrentPurchaseProductComplete() {
-        if (currentPurchaseProduct().isPurchaseCompleted()) {
+        if (currentPurchaseProduct().isPurchaseCompleted() && !currentPurchaseProduct().isEmptyPurchaseHistory()) {
             completedPurchaseHistories.add(currentPurchaseProduct().generateCompletedPurchaseHistory());
         }
     }

@@ -114,6 +114,15 @@ class ApplicationTest extends NsTest {
     }
 
     @Test
+    void 멤버십_할인에_프로모션을_초과하여_정가로_구매한_제품이_포함된다(){
+        assertSimpleTest(() -> {
+            run("[콜라-11]", "Y", "Y", "N");
+            assertThat(output().replaceAll("\\s", ""))
+                    .contains("콜라1111,000").contains("총구매액1111,000").contains("멤버십할인-600").contains("내실돈7,400");
+        });
+    }
+
+    @Test
     void 멤버십_할인에_N을_입력한다면_할인을_적용하지않는다() {
         assertSimpleTest(() -> {
             run("[물-10]", "N", "N");
@@ -150,6 +159,23 @@ class ApplicationTest extends NsTest {
     }
 
     @Test
+    void 프로모션_적용_상품에서_증정된_상품은_할인_금액으로_들어간다(){
+        assertSimpleTest(() -> {
+            run("[콜라-9]", "Y", "N");
+            assertThat(output().replaceAll("\\s", ""))
+                    .contains("콜라99,000").contains("총구매액99,000").contains("행사할인-3,000").contains("내실돈6,000");
+        });
+    }
+
+    @Test
+    void 멤버십_할인금액이_8000원을_넘어가면_8000원으로_고정된다(){
+        assertSimpleTest(() -> {
+            run("[물-10],[정식도시락-8]", "Y", "N");
+            assertThat(output().replaceAll("\\s", "")).contains("멤버십할인-8,000");
+        });
+    }
+
+    @Test
     void 구매할_제품과_수량의_형식이_올바르지_않다면_예외가_발생한다() {
         assertSimpleTest(() -> {
             runException("[컵라면-1],콜라-5");
@@ -170,6 +196,38 @@ class ApplicationTest extends NsTest {
         assertSimpleTest(() -> {
             runException("[콜라-21]");
             assertThat(output()).contains("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 구매하려는_상품이_중복된다면_예외가_발생한다(){
+        assertSimpleTest(() -> {
+            runException("[콜라-1],[콜라-1]");
+            assertThat(output()).contains("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 구매하려는_상품_수량이_int범위를_벗어난다면_예외가_발생한다(){
+        assertSimpleTest(() -> {
+            runException("[콜라-10000000000]");
+            assertThat(output()).contains("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 구매하려는_상품_수량이_0이하라면_예외가_발생한다(){
+        assertSimpleTest(() -> {
+            runException("[콜라-0]");
+            assertThat(output()).contains("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
+        });
+    }
+
+    @Test
+    void 사용자_응답에_Y_혹은_N이_아닌_다른값을_입력하면_예외가_발생한다(){
+        assertSimpleTest(() -> {
+            runException("[콜라-2]", "xxxxxxx");
+            assertThat(output()).contains("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");
         });
     }
 

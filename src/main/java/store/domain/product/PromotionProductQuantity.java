@@ -54,8 +54,13 @@ public class PromotionProductQuantity {
         return deductedQuantity - freeQuantity;
     }
 
-    public int getApplicableFreeQuantity() {
-        return promotion.getApplicableFreeQuantity(quantity);
+    public int getApplicableFreeQuantity(final PurchaseProduct purchaseProduct) {
+        final int productFreeQuantity = purchaseProduct.getApplicableFreeQuantity(promotion);
+        final int promotionMaxFreeQuantity = promotion.getApplicableFreeQuantity(quantity);
+        if (productFreeQuantity < promotionMaxFreeQuantity) {
+            return productFreeQuantity;
+        }
+        return promotionMaxFreeQuantity;
     }
 
 

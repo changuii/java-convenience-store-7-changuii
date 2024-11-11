@@ -33,24 +33,28 @@ public class PurchaseProduct {
             currentQuantity -= quantity;
             return quantity;
         }
-        int purchaseQuantity = currentQuantity;
+        final int purchasedQuantity = currentQuantity;
         currentQuantity = 0;
-        return purchaseQuantity;
+        return purchasedQuantity;
     }
 
     public void deductRegularPriceQuantity(final int quantity) {
         this.currentQuantity -= quantity;
     }
 
-    public int getRequiredQuantityForApplyPromotion(Promotion promotion) {
+    public int getRequiredQuantityForApplyPromotion(final Promotion promotion) {
         return promotion.getRequiredQuantityForApplyPromotion(currentQuantity);
     }
 
-    public int calculateQuantityAtRegularPrice(PromotionProductQuantity promotionProductQuantity) {
+    public int getApplicableFreeQuantity(final Promotion promotion) {
+        return promotion.getApplicableFreeQuantity(currentQuantity);
+    }
+
+    public int calculateQuantityAtRegularPrice(final PromotionProductQuantity promotionProductQuantity) {
         return currentQuantity - promotionProductQuantity.getApplicableQuantity();
     }
 
-    public boolean hasQuantitySufficientForApplyPromotion(PromotionProductQuantity promotionProductQuantity) {
+    public boolean hasQuantitySufficientForApplyPromotion(final PromotionProductQuantity promotionProductQuantity) {
         return promotionProductQuantity.getRequiredQuantityForApplyPromotion(currentQuantity) <= currentQuantity;
     }
 

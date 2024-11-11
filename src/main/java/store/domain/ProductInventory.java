@@ -67,7 +67,7 @@ public class ProductInventory {
     public void purchasePromotionProduct(final PurchaseProduct purchaseProduct) {
         PromotionProductQuantity promotionProductQuantity = getPromotionQuantity(purchaseProduct);
         ProductInfo productInfo = getProductInfo(purchaseProduct);
-        int freeQuantity = promotionProductQuantity.getApplicableFreeQuantity();
+        int freeQuantity = promotionProductQuantity.getApplicableFreeQuantity(purchaseProduct);
         int purchaseQuantity = promotionProductQuantity.deductQuantityApplyPromotion(purchaseProduct, freeQuantity);
         int totalPurchasePrice = productInfo.calculateTotalPrice(purchaseQuantity);
 

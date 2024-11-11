@@ -56,7 +56,7 @@ public class StoreController {
 
     private void printConvenienceStore(final ConvenienceStoreService convenienceStoreService) {
         outputView.printWelcomeMessage();
-        outputView.printStoreIntroduce(
+        outputView.printStoreProductsIntroduce(
                 dtoConverter.convertProductInventoryDTO(convenienceStoreService.getProductInventory()));
     }
 

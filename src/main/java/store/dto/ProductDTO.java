@@ -25,6 +25,10 @@ public class ProductDTO {
         return price;
     }
 
+    public int getTotalPrice() {
+        return price * quantity;
+    }
+
     public int getQuantity() {
         return quantity;
     }

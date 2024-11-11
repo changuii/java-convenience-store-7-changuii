@@ -4,68 +4,58 @@ import java.util.List;
 import store.dto.BillDTO;
 import store.dto.ProductDTO;
 import store.dto.ProductInventoryDTO;
+import store.enums.OutputMessage;
 
 public class OutputView {
     private static final String EMPTY = "";
     private static final int EMPTY_NUM = 0;
     private static final int NEGATIVE = -1;
-    private static final String WELCOME_MESSAGE = "안녕하세요. W편의점입니다.";
-    private static final String INTRODUCE_STORE_PRODUCTS_MESSAGE = "현재 보유하고 있는 상품입니다.";
-    private static final String PRODUCT_INFO_FORMAT = "- %s %s원 %s %s";
-    private static final String PRODUCT_QUANTITY_FORMAT = "%d개";
-    private static final String PRODUCT_QUANTITY_ZERO = "재고 없음";
-    private static final String PRICE_FORMAT = "%,d";
-    private static final String PURCHASE_PRODUCTS_INPUT_MESSAGE = "구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2],[감자칩-1])";
-    private static final String CONTINUE_CHECKOUT_MESSAGE = "감사합니다. 구매하고 싶은 다른 상품이 있나요? (Y/N)";
-    private static final String PURCHASE_QUANTITY_REGULAR_PRICE_MESSAGE =
-            "현재 %s %d개는 프로모션 할인이 적용되지 않습니다. 그래도 구매하시겠습니까? (Y/N)";
-    private static final String ADDITION_PROMOTION_PRODUCT_QUANTITY_MESSAGE =
-            "현재 %s은(는) 1개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)";
-    private static final String MEMBERSHIP_DISCOUNT_REQUEST_MESSAGE = "멤버십 할인을 받으시겠습니까? (Y/N)";
-    private static final String BILL_TITLE_MESSAGE = "==============W 편의점================";
-    private static final String BILL_ROW_FORMAT = "%s%s\t\t\t%s";
-    private static final String BILL_FREE_TITLE_MESSAGE = "=============증\t\t정===============";
-    private static final String BILL_RESULT_TITLE_MESSAGE = "====================================";
+    private static final int TAB_GROUPPING = 3;
+    private static final int TAB_MAX_WIDTH = 4;
 
-
-    public void printWelcomeMessage() {
-        System.out.println(WELCOME_MESSAGE);
+    public void printLineBreak() {
+        System.out.print(System.lineSeparator());
     }
 
-    public void printRequestContinueCheckoutMessage() {
-        printLineBreak();
-        System.out.println(CONTINUE_CHECKOUT_MESSAGE);
+    public void printWelcomeMessage() {
+        print(OutputMessage.STORE_WELCOME);
+        print(OutputMessage.INTRODUCE_STORE_PRODUCTS);
     }
 
     public void printErrorMessage(final IllegalArgumentException e) {
         printLineBreak();
-        System.out.println(e.getMessage());
+        print(e.getMessage());
     }
 
-    public void printStoreIntroduce(final ProductInventoryDTO productInventoryDTO) {
-        System.out.println(INTRODUCE_STORE_PRODUCTS_MESSAGE);
+    public void printStoreProductsIntroduce(final ProductInventoryDTO productInventoryDTO) {
         printLineBreak();
         printStoreProducts(productInventoryDTO);
+    }
+
+    private void printStoreProducts(final ProductInventoryDTO productInventoryDTO) {
+        productInventoryDTO.getProducts().stream()
+                .map(this::formatProductDTO)
+                .forEach(this::print);
         printLineBreak();
     }
 
     public void printPurchaseProductsInputMessage() {
-        System.out.println(PURCHASE_PRODUCTS_INPUT_MESSAGE);
+        print(OutputMessage.PURCHASE_PRODUCTS_INPUT);
     }
 
     public void printPurchaseQuantityAtRegularPrice(final String productName, final int quantity) {
         printLineBreak();
-        System.out.println(String.format(PURCHASE_QUANTITY_REGULAR_PRICE_MESSAGE, productName, quantity));
+        print(OutputMessage.PURCHASE_QUANTITY_AT_REGULAR_PRICE_INPUT_FORMAT, productName, quantity);
     }
 
     public void printAdditionPromotionProductQuantityMessage(final String productName) {
         printLineBreak();
-        System.out.println(String.format(ADDITION_PROMOTION_PRODUCT_QUANTITY_MESSAGE, productName));
+        print(OutputMessage.ADDITION_PROMOTION_PRODUCT_QUANTITY_INPUT_FORMAT, productName);
     }
 
     public void printMembershipDiscountRequestMessage() {
         printLineBreak();
-        System.out.println(MEMBERSHIP_DISCOUNT_REQUEST_MESSAGE);
+        print(OutputMessage.MEMBERSHIP_DISCOUNT_INPUT);
     }
 
     public void printBill(BillDTO billDTO) {
@@ -80,8 +70,8 @@ public class OutputView {
     }
 
     private void printPurchaseProduct(ProductDTO purchaseProduct) {
-        System.out.println(String.format(BILL_ROW_FORMAT, formatTab(purchaseProduct.getName()), purchaseProduct.getQuantity(),
-                formatPrice(purchaseProduct.getPrice() * purchaseProduct.getQuantity())));
+        print(formatBillRow(formatTab(purchaseProduct.getName()), purchaseProduct.getQuantity(),
+                formatPrice(purchaseProduct.getTotalPrice())));
     }
 
     private void printFreeProducts(List<ProductDTO> freeProducts) {
@@ -92,7 +82,7 @@ public class OutputView {
     }
 
     private void printFreeProduct(ProductDTO freeProduct) {
-        System.out.println(String.format(BILL_ROW_FORMAT, formatTab(freeProduct.getName()), freeProduct.getQuantity(), EMPTY));
+        print(formatBillRow(formatTab(freeProduct.getName()), freeProduct.getQuantity(), EMPTY));
     }
 
     private void printBillResult(BillDTO billDTO) {
@@ -104,73 +94,82 @@ public class OutputView {
     }
 
     private void printAllPurchasePrice(final int totalPurchaseQuantity, final int totalPurchasePrice) {
-        System.out.println(
-                String.format(BILL_ROW_FORMAT, formatTab("총구매액"), totalPurchaseQuantity, formatPrice(totalPurchasePrice)));
+        print(formatBillRow(formatTab(OutputMessage.BILL_RESULT_TOTAL_PRICE), totalPurchaseQuantity,
+                formatPrice(totalPurchasePrice)));
     }
 
     private void printPromotionDiscount(final int promotionDiscount) {
-        System.out.println(
-                String.format(BILL_ROW_FORMAT, formatTab("행사할인"), EMPTY, formatPrice(formatNegative(promotionDiscount))));
+        print(formatBillRow(formatTab(OutputMessage.BILL_RESULT_PROMOTION_DISCOUNT), EMPTY,
+                formatPrice(formatNegative(promotionDiscount))));
     }
 
     private void printMembershipDiscount(final int membershipDiscount) {
-        System.out.println(
-                String.format(BILL_ROW_FORMAT, formatTab("멤버십할인"), EMPTY, formatPrice(formatNegative(membershipDiscount))));
+        print(formatBillRow(formatTab(OutputMessage.BILL_RESULT_MEMBERSHIP_DISCOUNT), EMPTY,
+                formatPrice(formatNegative(membershipDiscount))));
     }
 
     private void printCheckoutPrice(final int checkoutPrice) {
-        System.out.println(String.format(BILL_ROW_FORMAT, formatTab("내실돈"), EMPTY, formatPrice(checkoutPrice)));
+        print(formatBillRow(formatTab(OutputMessage.BILL_RESULT_CHECKOUT_PRICE), EMPTY, formatPrice(checkoutPrice)));
     }
 
     private void printBillTitleMessage() {
-        System.out.println(BILL_TITLE_MESSAGE);
-        System.out.println(String.format(BILL_ROW_FORMAT, formatTab("상품명"), "수량", "금액"));
+        print(OutputMessage.BILL_TITLE);
+        print(formatBillRow(formatTab(OutputMessage.BILL_HEADER_PRODUCT_NAME), OutputMessage.BILL_HEADER_QUANTITY,
+                OutputMessage.BILL_HEADER_PRICE));
     }
 
     private void printBillFreeTitleMessage() {
-        System.out.println(BILL_FREE_TITLE_MESSAGE);
+        print(OutputMessage.BILL_FREE_PRODUCTS_TITLE);
     }
 
     private void printBillResultTitleMessage() {
-        System.out.println(BILL_RESULT_TITLE_MESSAGE);
+        print(OutputMessage.BILL_RESULT_TITLE);
     }
 
-    private void printStoreProducts(final ProductInventoryDTO productInventoryDTO) {
-        productInventoryDTO.getProducts().stream().forEach(this::printProduct);
+    public void printRequestContinueCheckoutMessage() {
         printLineBreak();
+        print(OutputMessage.CONTINUE_CHECKOUT_INPUT);
     }
 
-    private void printProduct(final ProductDTO productDTO) {
-        System.out.println(formatProductDTO(productDTO));
+    private String formatBillRow(final Object... values) {
+        return formatMessage(OutputMessage.BILL_ROW_FORMAT, values);
     }
 
     private String formatProductDTO(final ProductDTO productDTO) {
-        String price = formatPrice(productDTO.getPrice());
-        String quantity = formatProductQuantity(productDTO.getQuantity());
-        return String.format(PRODUCT_INFO_FORMAT, productDTO.getName(), price, quantity, productDTO.getPromotionName());
+        return formatMessage(OutputMessage.INTRODUCE_PRODUCT_INFO_FORMAT, productDTO.getName(),
+                formatPrice(productDTO.getPrice()),
+                formatProductQuantity(productDTO.getQuantity()), productDTO.getPromotionName());
     }
 
     private String formatPrice(final int price) {
-        return String.format(PRICE_FORMAT, price);
+        return formatMessage(OutputMessage.PRICE_FORMAT, price);
     }
 
     private int formatNegative(final int number) {
         return number * NEGATIVE;
     }
 
-    private String formatTab(final String value){
-        return value + "\t".repeat(Math.abs(value.length() / 3 - 4));
+    private String formatTab(final Object value) {
+        return value.toString() + "\t".repeat(getTabCount(value.toString()));
+    }
+
+    private int getTabCount(final String value) {
+        return Math.abs(value.length() / TAB_GROUPPING - TAB_MAX_WIDTH);
+    }
+
+    private String formatMessage(final Object formatMessage, final Object... values) {
+        return String.format(formatMessage.toString(), values);
     }
 
     private String formatProductQuantity(final int quantity) {
         if (quantity == 0) {
-            return PRODUCT_QUANTITY_ZERO;
+            return OutputMessage.INTRODUCE_PRODUCT_QUANTITY_ZERO.toString();
         }
-        return String.format(PRODUCT_QUANTITY_FORMAT, quantity);
+        return formatMessage(OutputMessage.INTRODUCE_PRODUCT_QUANTITY_FORMAT, quantity);
     }
 
-    public void printLineBreak() {
-        System.out.print(System.lineSeparator());
+    private void print(Object message, Object... values) {
+        System.out.println(formatMessage(message.toString(), values));
     }
 
 }

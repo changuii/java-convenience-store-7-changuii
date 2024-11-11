@@ -5,7 +5,6 @@ import java.util.List;
 import store.dto.PurchaseProductDTO;
 
 public class InputView {
-
     private final InputValidator inputValidator;
     private final InputParser inputParser;
 
@@ -15,15 +14,15 @@ public class InputView {
     }
 
     public List<PurchaseProductDTO> readPurchaseProducts() {
-        String input = Console.readLine();
+        final String input = Console.readLine();
         inputValidator.validatePurchaseProducts(input);
-        List<PurchaseProductDTO> purchaseProductDTOs = inputParser.parsePurchaseProducts(input);
+        final List<PurchaseProductDTO> purchaseProductDTOs = inputParser.parsePurchaseProducts(input);
         inputValidator.validatePurchaseProductDTOs(purchaseProductDTOs);
         return purchaseProductDTOs;
     }
 
     public boolean readAnswer() {
-        String input = Console.readLine();
+        final String input = Console.readLine();
         inputValidator.validateAnswer(input);
         return inputParser.parseAnswer(input);
     }

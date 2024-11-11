@@ -6,8 +6,6 @@ import store.dto.PurchaseProductDTO;
 import store.enums.ErrorMessage;
 
 public class InputValidator {
-
-
     private static final String PURCHASE_PRODUCTS_FORMAT_REGEX
             = "^\\[[A-Za-z0-9가-힣]+-[0-9]+\\](,\\[[A-Za-z0-9가-힣]+-[0-9]+\\])*$";
     private static final Pattern PURCHASE_PRODUCTS_FORMAT = Pattern.compile(PURCHASE_PRODUCTS_FORMAT_REGEX);
